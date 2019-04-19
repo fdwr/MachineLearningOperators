@@ -6,10 +6,6 @@ Date: 2019-04-19
 
 # Operator Equations
 
-|Hello|There|World|
-|-----|-----|-----|
-|1    |2    |3    |
-
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none; font-family:Calibri; font-size: 8em;'>
  <tr>
   <th style="width:15em">Category</td>
@@ -453,7 +449,7 @@ Date: 2019-04-19
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sum">Sum</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
-  <td>f(X, Y, Z…) = X + Y + Z…</td>
+  <td>f(X, Y, Zâ€¦) = X + Y + Zâ€¦</td>
   <td></td>
  </tr>
  <tr>
@@ -462,7 +458,7 @@ Date: 2019-04-19
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mean">Mean</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
-  <td>f(X, Y, Z…) = (X + Y + Z…) / n</td>
+  <td>f(X, Y, Zâ€¦) = (X + Y + Zâ€¦) / n</td>
   <td></td>
  </tr>
  <tr>
@@ -471,7 +467,7 @@ Date: 2019-04-19
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
-  <td>f(X, Y, Z…) = max(X, Y, Z…)</td>
+  <td>f(X, Y, Zâ€¦) = max(X, Y, Zâ€¦)</td>
   <td></td>
  </tr>
  <tr>
@@ -480,7 +476,7 @@ Date: 2019-04-19
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Min">Min</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
-  <td>f(X, Y, Z…) = min(X, Y, Z…)</td>
+  <td>f(X, Y, Zâ€¦) = min(X, Y, Zâ€¦)</td>
   <td></td>
  </tr>
  <tr>
@@ -615,7 +611,7 @@ Date: 2019-04-19
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTMAX</td>
   <td>f(x_i) = expe(x_i) / sum(expe(X))
-  Â = exp(x_i - max(X)) / sum(expe(x - max(X))) </td>
+  Ã‚Â = exp(x_i - max(X)) / sum(expe(x - max(X))) </td>
   <td></td>
  </tr>
  <tr>
@@ -625,7 +621,7 @@ Date: 2019-04-19
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
   <td>f(x_i) = loge(expe(x_i - max(X)) / sum(expe(X - max(X))))
-  Â = (x_i - max(X)) - loge(x - max(X))))</td>
+  Ã‚Â = (x_i - max(X)) - loge(x - max(X))))</td>
   <td></td>
  </tr>
  <tr>
@@ -948,7 +944,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
   <td></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
-  <td>y = (x1 + x + …) / pool_size
+  <td>y = (x1 + x + â€¦) / pool_size
   where X[N C H W] -&gt; Y[N C 1 1]</td>
   <td></td>
  </tr>
@@ -958,7 +954,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
   <td></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
-  <td>y = (x1 + x2 + …) / pool_size</td>
+  <td>y = (x1 + x2 + â€¦) / pool_size</td>
   <td></td>
  </tr>
  <tr>
@@ -967,7 +963,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
   <td></td>
   <td>DML_OPERATOR_MAX_POOLING with output being 1 element</td>
-  <td>y = max(x1 + x2 + … x_pool_size)</td>
+  <td>y = max(x1 + x2 + â€¦ x_pool_size)</td>
   <td></td>
  </tr>
  <tr>
@@ -976,7 +972,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxPool">MaxPool</a></td>
   <td></td>
   <td>DML_OPERATOR_MAX_POOLING</td>
-  <td>y = max(x1 + x2 + … x_pool_size)</td>
+  <td>y = max(x1 + x2 + â€¦ x_pool_size)</td>
   <td></td>
  </tr>
  <tr>
@@ -1118,7 +1114,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMax">ArgMax</a></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMAX</td>
-  <td>int32 {i j k ..} = maxindex(X Y Z …)</td>
+  <td>int32 {i j k ..} = maxindex(X Y Z â€¦)</td>
   <td></td>
  </tr>
  <tr>
@@ -1127,7 +1123,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMin">ArgMin</a></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMIN</td>
-  <td>int32 {i j k ..} = minindex(X Y Z …)</td>
+  <td>int32 {i j k ..} = minindex(X Y Z â€¦)</td>
   <td></td>
  </tr>
  <tr>
@@ -1184,8 +1180,8 @@ if x > lambda then y = x - bias else y = 0;</td>
   with acrossChannels=false, normalizeVariance=true, scale and bias provided</td>
   <td>y = scale * (x - mean) / sqrt(variance + epsilon) + B
   mean and variance are computed per instance per channel.
-  mean = (x0 + x1 …) / xn;
-  variance = ((x0 - xmean)^2 + (x1 - xmean)^2 …) / xn</td>
+  mean = (x0 + x1 â€¦) / xn;
+  variance = ((x0 - xmean)^2 + (x1 - xmean)^2 â€¦) / xn</td>
   <td></td>
  </tr>
  <tr>
@@ -1291,7 +1287,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>I = Activation1(clip(X * transpose(W1)
   + Initial_h1 * transpose(R1) + p .* initial_c + b1))
   F = Activation1(clip(X * transpose(W2)
-  + Initial_h1 * transpose(R2) +Â  p .* initial_c + b2))
+  + Initial_h1 * transpose(R2) +Ã‚Â  p .* initial_c + b2))
   Z = Activation2(clip(X * transpose(W3)
   + Initial_h1 * transpose(R3) + b3))
   C = Initial_h1 .* F + I .* Z
