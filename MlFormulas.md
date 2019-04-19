@@ -6,6 +6,10 @@ Date: 2019-04-19
 
 # Operator Equations
 
+|Hello|There|World|
+|-----|-----|-----|
+|1    |2    |3    |
+
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none; font-family:Calibri; font-size: 8em;'>
  <tr>
   <th style="width:15em">Category</td>
