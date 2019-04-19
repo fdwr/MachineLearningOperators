@@ -1,17 +1,17 @@
-<html>
+---
+Title: ML Operators
+Author: Dwayne Robinson
+Date: 2019-04-19
+---
 
-<head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<style>
-body
-{
-    font-family: "Calibri";
-}
-</style>
+# Links
 
-</head>
+https://github.com/onnx/onnx/blob/master/docs/Operators.md
+https://docs.microsoft.com/en-us/windows/desktop/direct3d12/dml
+https://pytorch.org/docs/stable/torch.html
+https://pytorch.org/docs/stable/nn.html
 
-<body lang=EN-US link=blue vlink=purple>
+# Operator Equations
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse;border:none'>
  <tr>
@@ -1346,6 +1346,3 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td></td>
  </tr>
 </table>
-
-</body>
-</html>
