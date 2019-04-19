@@ -118,6 +118,7 @@ body
   <td>Diagonal Matrix</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#EyeLike">EyeLike</a></td>
   <td></td>
+  <td></td>
   <td>output[i, j] = if i + k == j then 1 else 0</td>
   <td>Diagonal matrix initializer. TODO: verify equation</td>
  </tr>
@@ -264,7 +265,27 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Erf">Erf</a></td>
   <td></td>
   <td></td>
-  <td></td>
+  <td>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))
+
+    // constants
+    double a1 =  0.254829592;
+    double a2 = -0.284496736;
+    double a3 =  1.421413741;
+    double a4 = -1.453152027;
+    double a5 =  1.061405429;
+    double p  =  0.3275911;
+
+    // Save the sign of x
+    int sign = 1;
+    if (x < 0)
+        sign = -1;
+    x = fabs(x);
+
+    // A&S formula 7.1.26
+    double t = 1.0/(1.0 + p*x);
+    double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*exp(-x*x);
+    return sign * y;
+  </td>
   <td></td>
  </tr>
  <tr>
@@ -273,7 +294,7 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#IsNaN">IsNan</a></td>
   <td></td>
   <td></td>
-  <td></td>
+  <td>f(x) = isnan(x)</td>
   <td></td>
  </tr>
  <tr>
@@ -282,7 +303,7 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
   <td></td>
   <td></td>
-  <td></td>
+  <td>f(x) = select x when 0 then 0, when >0 then 1, when <0 then -1</td>
   <td></td>
  </tr>
  <tr>
@@ -407,8 +428,8 @@ body
   <td>Hyperbolic Arccosine</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
   <td></td>
-  <td>f(x) = arcosh(x)</td>
   <td></td>
+  <td>f(x) = arcosh(x)</td>
   <td></td>
  </tr>
  <tr>
@@ -416,8 +437,8 @@ body
   <td>Hyperbolic Cosine</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Cosh">Cosh</a></td>
   <td></td>
-  <td>f(x) = cosh(x)</td>
   <td></td>
+  <td>f(x) = cosh(x)</td>
   <td></td>
  </tr>
  <tr>
@@ -425,8 +446,8 @@ body
   <td>Hyperbolic Sine</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
   <td></td>
-  <td>f(x) = sinh(x)</td>
   <td></td>
+  <td>f(x) = sinh(x)</td>
   <td></td>
  </tr>
  <tr>
@@ -434,8 +455,7 @@ body
   <td>Sum</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sum">Sum</a></td>
   <td></td>
-  <td>DML_OPERATOR_ELEMENT_WISE_ADD with
-  multiple repeated inputs</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
   <td>f(X, Y, Z…) = X + Y + Z …</td>
   <td></td>
  </tr>
@@ -444,7 +464,7 @@ body
   <td>Mean</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mean">Mean</a></td>
   <td></td>
-  <td>DML_OPERATOR_ELEMENT_WISE_MEAN with repeated inputs</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
   <td>f(X, Y, Z…) = (X + Y + Z …) / n</td>
   <td></td>
  </tr>
@@ -453,8 +473,7 @@ body
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
   <td></td>
-  <td>DML_OPERATOR_ELEMENT_WISE_MAX with
-  repeated inputs</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
   <td>f(X, Y, Z…) = max(X, Y, Z …)</td>
   <td></td>
  </tr>
@@ -463,8 +482,7 @@ body
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Min">Min</a></td>
   <td></td>
-  <td>DML_OPERATOR_ELEMENT_WISE_MIN with
-  repeated inputs</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
   <td>f(X, Y, Z…) = min(X, Y, Z …)</td>
   <td></td>
  </tr>
@@ -491,15 +509,6 @@ body
   output:float32 = (input:uint8 -
   zero_point) * scale</td>
   <td></td>
- </tr>
- <tr>
-  <td>Elementwise selection</td>
-  <td></td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
-  <td></td>
-  <td></td>
-  <td>f(b, x, y) = if b then x else y</td>
-  <td>A conditional per-element if statement.</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -627,7 +636,7 @@ body
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Hardmax">Hardmax</a></td>
   <td></td>
-  <td>DML_ACTIVATION_HARDMAX</td>
+  <td>DML_OPERATOR_ACTIVATION_HARDMAX</td>
   <td>f(x) = if x_i == max(X) then 1 else 0
   *but only for first element in axis</td>
   <td></td>
@@ -672,20 +681,12 @@ body
  </tr>
  <tr>
   <td>Activation</td>
-  <td></td>
-  <td>NA (basically ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Affine">Affine</a>)</td>
-  <td></td>
-  <td>DML_OPERATOR_ACTIVATION_LINEAR</td>
-  <td>f(x) = alpha * x + beta</td>
-  <td></td>
- </tr>
- <tr>
-  <td>Activation</td>
   <td>Symmetric signal shift</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
   <td></td>
   <td></td>
-  <td></td>
+  <td>if x < -lambda then y = x + bias; 
+if x > lambda then y = x - bias else y = 0;</td>
   <td></td>
  </tr>
  <tr>
@@ -909,14 +910,6 @@ body
   <td></td>
  </tr>
  <tr>
-  <td>Data reorganization</td>
-  <td></td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Compress">Compress</a></td>
-  <td></td>
-  <td>A conditional slice. Has utterly nothing to do with data compression, despite the confusing name.</td>
-  <td></td>
- </tr>
- <tr>
   <td>Data reorganization mapping</td>
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
@@ -925,12 +918,40 @@ body
   <td></td>
  </tr>
  <tr>
+  <td>Data Reorganization</td>
+  <td></td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
+  <td></td>
+  <td>DML_OPERATOR_TOP_K</td>
+  <td>f(X) = Slice(Sort(X, axis),
+  range=0..k, axis)</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Data reorganization selection</td>
+  <td>Select elementwise</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
+  <td></td>
+  <td></td>
+  <td>f(b, x, y) = if b then x else y</td>
+  <td>A conditional per-element if statement.</td>
+ </tr>
+ <tr>
+  <td>Data reorganization selection</td>
+  <td>Select slices</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Compress">Compress</a></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>A conditional slice/join. Has utterly nothing to do with data compression, despite the confusing name.</td>
+ </tr>
+ <tr>
   <td>Pooling</td>
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
   <td></td>
-  <td>DML_OPERATOR_L2_POOLING</td>
-  <td>y = (x1^2 + x2^2 + …) / pool_size
+  <td>DML_OPERATOR_AVERAGE_POOLING</td>
+  <td>y = (x1 + x + …) / pool_size
   where X[N C H W] -&gt; Y[N C 1 1]</td>
   <td></td>
  </tr>
@@ -1113,16 +1134,6 @@ body
   <td></td>
  </tr>
  <tr>
-  <td>Reduction</td>
-  <td></td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
-  <td></td>
-  <td>DML_OPERATOR_TOP_K</td>
-  <td>f(X) = Slice(Sort(X, axis),
-  range=0..k, axis)</td>
-  <td></td>
- </tr>
- <tr>
   <td>Imaging Operators</td>
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ImageScaler">ImageScaler</a></td>
@@ -1228,6 +1239,24 @@ body
   <td></td>
  </tr>
  <tr>
+  <td>?</td>
+  <td>Nonzero Indices List</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>?</td>
+  <td>Term Frequency Inverse Document Frequency Vectorizer</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+ </tr>
+ <tr>
   <td>Aggregate DNN operators</td>
   <td>Recurrent Neural Network</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RNN">RNN</a></td>
@@ -1304,8 +1333,8 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#Scale">Scale</a></td>
   <td></td>
   <td>NA, experimental, but can use Mul with broadcasting</td>
-  <td>??</td>
-  <td></td>
+  <td>f(x) = x * scale</td>
+  <td>Just use Mul(X, scale)</td>
  </tr>
  <tr>
   <td>Deleted</td>
@@ -1314,24 +1343,6 @@ body
   <td></td>
   <td>NA, experimental</td>
   <td>??</td>
-  <td></td>
- </tr>
- <tr>
-  <td></td>
-  <td>Nonzero Indices List</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
- </tr>
- <tr>
-  <td></td>
-  <td></td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
-  <td></td>
-  <td></td>
-  <td></td>
   <td></td>
  </tr>
 </table>
