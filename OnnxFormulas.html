@@ -48,6 +48,7 @@ body
   <td></td>
   <td></td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Generation</td>
@@ -74,12 +75,14 @@ body
   <td>---</td>
   <td></td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Generation Random</td>
   <td>Random Normal Like</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormalLike">RandomNormalLike</a></td>
   <td>---</td>
+  <td></td>
   <td></td>
   <td></td>
  </tr>
@@ -90,6 +93,7 @@ body
   <td>---</td>
   <td></td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Generation Random</td>
@@ -98,12 +102,14 @@ body
   <td>---</td>
   <td></td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Generation Random</td>
   <td>Random Multinomial</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Multinomial">Multinomial</a></td>
   <td>---</td>
+  <td></td>
   <td></td>
   <td></td>
  </tr>
@@ -259,6 +265,7 @@ body
   <td></td>
   <td></td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -267,11 +274,13 @@ body
   <td></td>
   <td></td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
   <td>Sign</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
+  <td></td>
   <td></td>
   <td></td>
   <td></td>
@@ -400,6 +409,7 @@ body
   <td></td>
   <td>f(x) = arcosh(x)</td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -408,6 +418,7 @@ body
   <td></td>
   <td>f(x) = cosh(x)</td>
   <td></td>
+  <td></td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -415,6 +426,7 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
   <td></td>
   <td>f(x) = sinh(x)</td>
+  <td></td>
   <td></td>
  </tr>
  <tr>
@@ -479,6 +491,15 @@ body
   output:float32 = (input:uint8 -
   zero_point) * scale</td>
   <td></td>
+ </tr>
+ <tr>
+  <td>Elementwise selection</td>
+  <td></td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
+  <td></td>
+  <td></td>
+  <td>f(b, x, y) = if b then x else y</td>
+  <td>A conditional per-element if statement.</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -662,6 +683,7 @@ body
   <td>Activation</td>
   <td>Symmetric signal shift</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
+  <td></td>
   <td></td>
   <td></td>
   <td></td>
@@ -1144,7 +1166,6 @@ body
   <td>---</td>
   <td></td>
   <td></td>
-  <td></td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1296,19 +1317,10 @@ body
   <td></td>
  </tr>
  <tr>
-  <td>Elementwise selection</td>
-  <td></td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
-  <td></td>
-  <td></td>
-  <td>f(b, x, y) = if b then x else y</td>
-  <td>A conditional per-element if statement.</td>
-  <td></td>
- </tr>
- <tr>
   <td></td>
   <td>Nonzero Indices List</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
+  <td></td>
   <td></td>
   <td></td>
   <td></td>
@@ -1317,6 +1329,7 @@ body
   <td></td>
   <td></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
+  <td></td>
   <td></td>
   <td></td>
   <td></td>
