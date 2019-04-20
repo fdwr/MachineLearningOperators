@@ -13,4 +13,4 @@ https://pytorch.org/docs/stable/nn.html
 
 # Operator Equations
 
-[ML Formulas](MlFormulas.html) - equations at a glance
+[ML Formulas](OperatorFormulas.html) - formulas at a glance
