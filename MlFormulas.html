@@ -3,13 +3,25 @@
 <style>
 body
 {
-  font-family: Calibri
+  font-family: Calibri, Segoe UI, sans-serif;
+  background-color: #FFFFFF;
+}
+table tr:nth-child(odd) td{
+  background-color: #FFFFFF;
+}
+table tr:nth-child(even) td{
+  background-color: #F8F8FF;
+}
+td
+{
+  white-space: pre-line;
 }
 </style>
 </head>
 <body>
 
 <h1>Links</h1>
+<a href="https://fdwr.github.io/LostOnnxDocs/MlFormulas.html">This document on GitHub</a><br/>
 <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md">ONNX Operators</a><br/>
 <a href="https://docs.microsoft.com/en-us/windows/desktop/direct3d12/dml">DirectML</a><br/>
 <a href="https://pytorch.org/docs/stable/torch.html">PyTorch Torch interface</a><br/>
@@ -17,7 +29,9 @@ body
 
 <h1>Operator Equations</h1>
 
-<table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse;border:none'>
+<p>Notation: Lowercase values are scalar. Uppercase are full tensors. e.g. x is scalar, while Abs(X) returns a whole tensor with abs(x) applied to each element.</p>
+
+<table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
  <tr>
   <th style="width:15em">Category</td>
   <th>Name</td>
@@ -92,7 +106,7 @@ body
  </tr>
  <tr>
   <td>Generation Random</td>
-  <td></td>
+  <td>Random Uniform</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a></td>
   <td>---</td>
   <td></td>
@@ -186,8 +200,7 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pow">Pow</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_POW</td>
-  <td>f(x, exponent) = pow(x * scale + bias,
-  exponent)</td>
+  <td>f(x, exponent) = pow(x * scale + bias, exponent)</td>
   <td></td>
  </tr>
  <tr>
@@ -270,7 +283,7 @@ body
   <td></td>
   <td></td>
   <td>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))
-
+    <code>
     // constants
     double a1 =  0.254829592;
     double a2 = -0.284496736;
@@ -289,6 +302,7 @@ body
     double t = 1.0/(1.0 + p*x);
     double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*exp(-x*x);
     return sign * y;
+    </code>
   </td>
   <td></td>
  </tr>
@@ -298,7 +312,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#IsNaN">IsNan</a></td>
   <td></td>
   <td></td>
-  <td>f(x) = isnan(x)</td>
+  <td>f(x) = isnan(x)
+  Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>.
+  e.g.  s1111111 10000000 0000000 00000001</td>
   <td></td>
  </tr>
  <tr>
@@ -307,7 +323,10 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
   <td></td>
   <td></td>
-  <td>f(x) = select x when 0 then 0, when >0 then 1, when <0 then -1</td>
+  <td>f(x):
+      if x == 0 then 0
+      elif x > 0 then 1
+      elif x < 0 then -1</td>
   <td></td>
  </tr>
  <tr>
@@ -496,10 +515,8 @@ body
   <td>com.microsoft QuantizeLinear</td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_QUANTIZE_LINEAR</td>
-  <td>f(input:float32, scale:float32,
-  zero_point:int32)
-  output:uint8 = clamp(round(input /
-  scale) + zero_point, 0, 255)</td>
+  <td>f(input:float32, scale:float32, zero_point:int32)
+  output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</td>
   <td></td>
  </tr>
  <tr>
@@ -508,10 +525,8 @@ body
   <td>com.microsoft DequantizeLinear</td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_DEQUANTIZE_LINEAR</td>
-  <td>f(input:uint8, scale:float32,
-  zero_point:float32)
-  output:float32 = (input:uint8 -
-  zero_point) * scale</td>
+  <td>f(input:uint8, scale:float32, zero_point:float32)
+  output:float32 = (input:uint8 - zero_point) * scale</td>
   <td></td>
  </tr>
  <tr>
@@ -539,9 +554,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tanh">Tanh</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_TANH</td>
-  <td>f(x) = (1 - exp(-2 * x))/(1 + exp(-2 *
-  x))
-  = return 2 /(1 + exp(-2 * x)) - 1</td>
+  <td>f(X) = Div(Sub(1, Exp(Mul(X, -2)), Add(1, Exp(X, -2)))
+  or: f(x) = (1 - exp(-2 * x))/(1 + exp(-2 * x))
+  or: f(x) = 2 /(1 + exp(-2 * x)) - 1</td>
   <td></td>
  </tr>
  <tr>
@@ -550,9 +565,8 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ScaledTanh">ScaledTanh</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SCALED_TANH</td>
-  <td>f(x) = alpha * tanh(beta * x)
-  Decomposition: Mul(Tanh(Mul(X, beta)),
-  alpha)</td>
+  <td>f(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)
+  or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
   <td></td>
  </tr>
  <tr>
@@ -561,8 +575,8 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Relu">Relu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_RELU</td>
-  <td>f(x) = max(0, x) // or if x &gt;= 0
-  then x else 0</td>
+  <td>f(x) = max(0, x)
+  or: if x &gt;= 0 then x else 0</td>
   <td></td>
  </tr>
  <tr>
@@ -571,8 +585,7 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LeakyRelu">LeakyRelu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_LEAKY_RELU</td>
-  <td>f(x) = if x &gt;= 0 then x else alpha
-  * x</td>
+  <td>f(x) = if x &gt;= 0 then x else alpha * x</td>
   <td></td>
  </tr>
  <tr>
@@ -581,8 +594,7 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_PARAMETERIZED_RELU</td>
-  <td>f(x) = if x &gt;= 0 then x else tensor
-  slope * x</td>
+  <td>f(x) = if x &gt;= 0 then x else tensor slope * x</td>
   <td></td>
  </tr>
  <tr>
@@ -609,10 +621,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Selu">Selu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SCALED_ELU</td>
-  <td>f(x) = if x &gt; 0 then gamma * x else
-  gamma * (alpha * e^x - alpha)
-  Defaults: alpha = 1.6732, gamma =
-  1.0507</td>
+  <td>f(x, alpha = 1.6732, gamma = 1.0507):
+  if x &gt; 0 then gamma * x
+  else gamma * (alpha * e^x - alpha)</td>
   <td></td>
  </tr>
  <tr>
@@ -621,8 +632,17 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softmax">Softmax</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTMAX</td>
-  <td>f(x_i) = expe(x_i) / sum(expe(X))
-  Â = exp(x_i - max(X)) / sum(expe(x - max(X))) </td>
+  <td>f(Input, axis):
+<code><pre>
+  FlattenedX = Flatten(X, axis)
+  ExpX = Exp(FlattenedX)
+  for each ExpXBatch in FlattenedX batches
+    ReducedX = ReduceSum(ExpXBatch)
+    Output batch = ExpXBatch / ReducedX
+  endfor
+</pre></code>
+  or per batch: f(x) = expe(x) / sum(expe(X))
+  or per batch: exp(x - max(X)) / sum(expe(x - max(X)))</td>
   <td></td>
  </tr>
  <tr>
@@ -631,8 +651,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LogSoftmax">LogSoftmax</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
-  <td>f(x_i) = loge(expe(x_i - max(X)) / sum(expe(X - max(X))))
-  Â = (x_i - max(X)) - loge(x - max(X))))</td>
+  <td>f(Input, axis) = Log(Softmax(Input, axis))
+  or: f(x) = loge(expe(x - max(X)) / sum(expe(X - max(X))))
+  or: (x - max(X)) - loge(x - max(X))))</td>
   <td></td>
  </tr>
  <tr>
@@ -642,7 +663,7 @@ body
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_HARDMAX</td>
   <td>f(x) = if x_i == max(X) then 1 else 0
-  *but only for first element in axis</td>
+  *but only for first element along that axis</td>
   <td></td>
  </tr>
  <tr>
@@ -669,8 +690,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ParametricSoftplus">ParametricSoftplus</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_PARAMETRIC_SOFTPLUS</td>
-  <td>f(x) = alpha * loge(1 + expe(beta * x))
-  decomposition: Mul(alpha, Log(Add(1, Exp(Mul(beta, X)).</td>
+  <td>f(X, alpha, beta) = Mul(alpha, Log(Add(1, Exp(Mul(beta, X)).
+  or: f(x) = alpha * loge(1 + expe(beta * x))
+  </td>
   <td></td>
  </tr>
  <tr>
@@ -679,8 +701,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Affine">Affine</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY
-  with scale&amp;bias or DML_OPERATOR_ACTIVATION_LINEAR</td>
-  <td>f(x) = alpha * x + beta</td>
+  with scale and bias or DML_OPERATOR_ACTIVATION_LINEAR</td>
+  <td> f(X) = Add(beta, Mul(X, alpha))
+  or: f(x) = alpha * x + beta</td>
   <td></td>
  </tr>
  <tr>
@@ -689,8 +712,9 @@ body
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
   <td></td>
   <td></td>
-  <td>if x < -lambda then y = x + bias; 
-if x > lambda then y = x - bias else y = 0;</td>
+  <td>if x < -lambda then y = x + bias
+  elif x > lambda then y = x - bias
+  else y = 0</td>
   <td></td>
  </tr>
  <tr>
@@ -699,8 +723,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gemm">Gemm</a></td>
   <td></td>
   <td>DML_OPERATOR_MATRIX_GEMM</td>
-  <td>Y = matmul(alpha * transpose(A)),
-  transpose(B)) + beta * C</td>
+  <td>Y = matmul(alpha * transpose(A)), transpose(B)) + (beta * C)</td>
   <td></td>
  </tr>
  <tr>
@@ -927,8 +950,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
   <td></td>
   <td>DML_OPERATOR_TOP_K</td>
-  <td>f(X) = Slice(Sort(X, axis),
-  range=0..k, axis)</td>
+  <td>f(X) = Slice(SortDecreasing(X, axis), range=0..k, axis)</td>
   <td></td>
  </tr>
  <tr>
@@ -955,8 +977,8 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
   <td></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
-  <td>y = (x1 + x + …) / pool_size
-  where X[N C H W] -&gt; Y[N C 1 1]</td>
+  <td>y = (x1 + x + …) / pool_size;
+  So X[N C H W] reduces to Y[N C 1 1]</td>
   <td></td>
  </tr>
  <tr>
@@ -1000,7 +1022,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpPool">LpPool</a></td>
   <td></td>
   <td>DML_OPERATOR_LP_POOLING</td>
-  <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p) where X -&gt; Y reduced for each kernel</td>
+  <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</td>
   <td></td>
  </tr>
  <tr>
@@ -1010,7 +1032,9 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td></td>
   <td>DML_OPERATOR_LP_POOLING with output
   being 1 element</td>
-  <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p) where X[N C H W] -&gt; Y[N C 1 1] e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
+  <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p);
+  So X[N C H W] reduces to Y[N C 1 1]
+  e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
   <td></td>
  </tr>
  <tr>
@@ -1055,8 +1079,8 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSum">ReduceLogSum</a></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM</td>
-  <td>x = log(x1 + x2 + ... + xn)
-  f(X) = Log(ReduceSum(data, axes))</td>
+  <td>f(X) = Log(ReduceSum(data, axes))
+  or: x = log(x1 + x2 + ... + xn)</td>
   <td></td>
  </tr>
  <tr>
@@ -1065,9 +1089,8 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSumExp">ReduceLogSumExp</a></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM_EXP</td>
-  <td>
-  f(X) = Log(ReduceSum(Exp(data), axes))
-  x = log(exp(x1) + exp(x2) + ... + exp(xn))
+  <td>f(X) = Log(ReduceSum(Exp(data), axes))
+  or: y = log(exp(x1) + exp(x2) + ... + exp(xn))
   </td>
   <td></td>
  </tr>
@@ -1078,7 +1101,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM_SQUARE</td>
   <td>f(X) = ReduceSum(Pow(X, 2), axes)
-  x = x1^2 + x2^2 + ... + xn^2</td>
+  or: y = x1^2 + x2^2 + ... + xn^2</td>
   <td></td>
  </tr>
  <tr>
@@ -1088,7 +1111,7 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L1</td>
   <td>f(X) = ReduceSum(Abs(X), axes)
-  = Abs(x1) + Abs(x2) + ... + Abs(xn)</td>
+  or: y = abs(x1) + abs(x2) + ... + abs(xn)</td>
   <td></td>
  </tr>
  <tr>
@@ -1097,8 +1120,8 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL2">ReduceL2</a></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L2</td>
-  <td>f(X) = ReduceSum(Sqrt(X), axes)
-  x = sqrt(x1^2 + x2^2 + ... + xn^2)</td>
+  <td>f(X) = Sqrt(ReduceSum(Pow(X, 2), axes))
+  or: y = sqrt(x1^2 + x2^2 + ... + xn^2)</td>
   <td></td>
  </tr>
  <tr>
@@ -1295,12 +1318,9 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
   <td></td>
   <td>DML_OPERATOR_LSTM</td>
-  <td>I = Activation1(clip(X * transpose(W1)
-  + Initial_h1 * transpose(R1) + p .* initial_c + b1))
-  F = Activation1(clip(X * transpose(W2)
-  + Initial_h1 * transpose(R2) +Â  p .* initial_c + b2))
-  Z = Activation2(clip(X * transpose(W3)
-  + Initial_h1 * transpose(R3) + b3))
+  <td>I = Activation1(clip(X * transpose(W1) + Initial_h1 * transpose(R1) + p .* initial_c + b1))
+  F = Activation1(clip(X * transpose(W2) + Initial_h1 * transpose(R2) + p .* initial_c + b2))
+  Z = Activation2(clip(X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
   C = Initial_h1 .* F + I .* Z
   O = Activation2(clip( X * tr(W4) +
   Initial_h1 * tr(R4) + p .* initial_c + b4))
@@ -1319,7 +1339,8 @@ if x > lambda then y = x - bias else y = 0;</td>
   <td></td>
   <td>Identity actually (useful during
   training, not trained execution)</td>
-  <td>For training: f(x) = iif(randomvalue0to1() < ratio, x, 0); For forward execution: f(x) = x, or rather f(X) = Identity(X)</td>
+  <td>For training: f(x) = iif(randomvalue0to1() < ratio, x, 0);
+  For forward execution: f(x) = x, or rather f(X) = Identity(X)</td>
   <td>Selected randomly per element.</td>
  </tr>
  <tr>
