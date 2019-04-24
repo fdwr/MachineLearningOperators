@@ -1154,8 +1154,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GRU">GRU</a></td>
   <td></td>
   <td>DML_OPERATOR_GRU</td>
-  <td>Z = Activation1(clip( X *
-      transpose(W1) + Initial_h1 * transpose(R1) + b1))
+  <td>Z = Activation1(clip( X * transpose(W1) + Initial_h1 * transpose(R1) + b1))
       R = Activation1(clip( X * transpose(W2) + Initial_h1 * transpose(R2) + b2))
       C = Initial_h1 .* R
       O = Activation2(clip( X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
@@ -1177,7 +1176,7 @@ td
       Z = Activation2(clip(X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
       C = Initial_h1 .* F + I .* Z
       O = Activation2(clip( X * tr(W4) +
-      Initial_h1 * tr(R4) + p .* initial_c + b4))
+      Initial_h1 * transpose(R4) + p .* initial_c + b4))
       Y = Activation3(C) .* O
       &nbsp;
       (W = [W1, W2, W3, W4]; b1 = B[0, :] +
