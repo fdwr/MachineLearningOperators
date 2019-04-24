@@ -29,7 +29,7 @@ td
 
 <h1>Operator Equations</h1>
 
-<p>Notation: Lowercase values are scalar. Uppercase are full tensors. e.g. x is scalar, while Abs(X) returns a whole tensor with abs(x) applied to each element.</p>
+<p>Notation: Lowercase values are scalar. Uppercase are full tensors. e.g. x is scalar, while Abs(X) returns a whole tensor with abs(x) applied to each element. Any exp() and log() usage are to the natural logarithm 2.718281828 (not base 10 or 2).</p>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
  <tr>
@@ -46,7 +46,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY or DML_ACTIVATION_IDENTITY</td>
-  <td>f(x) = x</td>
+  <td>F(X) = X</td>
  </tr>
  <tr>
   <td>Generation</td>
@@ -247,6 +247,7 @@ td
   <td></td>
   <td>---</td>
   <td>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))
+      or: erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))
     <code>
     // constants
     double a1 =  0.254829592;
@@ -473,7 +474,9 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sigmoid">Sigmoid</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SIGMOID</td>
-  <td>f(x) = 1 / (1 + exp(-x))</td>
+  <td>F(X) = Reciprocal(Add(1, Exp(Neg(X))))
+      or: f(x) = 1 / (1 + exp(-x))
+      or: f(x) = exp(x) / (1 + exp(x))</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -481,7 +484,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#HardSigmoid">HardSigmoid</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_HARD_SIGMOID</td>
-  <td>f(x) = max(0, min(alpha * x + beta, 1))
+  <td>F(X) = Clip(Add(Mul(alpha, X), beta), 0, 1))
+      or: f(x) = max(0, min(alpha * x + beta, 1))
       defaults: alpha = 0.2, beta = 0.5</td>
  </tr>
  <tr>
@@ -492,7 +496,8 @@ td
   <td>DML_OPERATOR_ACTIVATION_TANH</td>
   <td>F(X) = Div(Sub(1, Exp(Mul(X, -2)), Add(1, Exp(X, -2)))
       or: f(x) = (1 - exp(-2 * x))/(1 + exp(-2 * x))
-      or: f(x) = 2 /(1 + exp(-2 * x)) - 1</td>
+      or: f(x) = 2 /(1 + exp(-2 * x)) - 1
+      or: f(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -501,7 +506,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SCALED_TANH</td>
   <td>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)
-  or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
+      or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -509,8 +514,9 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Relu">Relu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_RELU</td>
-  <td>f(x) = max(0, x)
-  or: if x &gt;= 0 then x else 0</td>
+  <td>F(X) = Max(X, 0)
+      or: f(x) = max(x, 0)
+      or: if x &gt;= 0 then x else 0</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -518,7 +524,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LeakyRelu">LeakyRelu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_LEAKY_RELU</td>
-  <td>f(x) = if x &gt;= 0 then x else alpha * x</td>
+  <td>F(X) = Where(Less(X, 0), Mul(X, alpha), X)
+      or: f(x, alpha) = if x &gt;= 0 then x else alpha * x</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -526,7 +533,9 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_PARAMETERIZED_RELU</td>
-  <td>f(x) = if x &gt;= 0 then x else tensor slope * x</td>
+  <td>F(X) = Where(Less(X, 0), Mul(X, Slope), X)
+      or: f(x, slope) = if x &gt;= 0 then x else slope * x
+      PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -534,7 +543,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ThresholdedRelu">ThresholdedRelu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_THRESHOLDED_RELU</td>
-  <td>f(x) = if x &gt; alpha then x else 0</td>
+  <td>F(X, alpha = 1) = Where(Greater(X, alpha), X, 0)
+      f(x) = if x &gt; alpha then x else 0</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -542,8 +552,9 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Elu">Elu</a></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_ELU</td>
-  <td>F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
-      or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (expe(x) - 1)</td>
+  <td>F(X, alpha = 1) = Where(Less(X, 0), Mul(Sub(Exp(X), 1), alpha))
+      or: F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
+      or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (exp(x) - 1)</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -554,7 +565,7 @@ td
   <td>F(X, alpha = 1.6732, gamma = 1.0507) = Mul(Elu(X, alpha), gamma)
       or: f(x, alpha = 1.6732, gamma = 1.0507):
       if x &gt; 0 then gamma * x
-      else gamma * alpha * (expe(x) - 1)</td>
+      else gamma * alpha * (exp(x) - 1)</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -569,8 +580,8 @@ td
     ReducedX = ReduceSum(ExpXBatch)
     Output batch = ExpXBatch / ReducedX
   endfor</pre></code>
-    or per batch: f(x) = expe(x) / sum(expe(X))
-    or per batch: expe(x - max(X)) / sum(expe(x - max(X)))</td>
+    or per batch: f(x) = exp(x) / sum(exp(X))
+    or per batch: exp(x - max(X)) / sum(exp(x - max(X)))</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -579,8 +590,8 @@ td
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
   <td>F(Input, axis) = Log(Softmax(Input, axis))
-  or: f(x) = loge(expe(x - max(X)) / sum(expe(X - max(X))))
-  or: (x - max(X)) - loge(x - max(X))))</td>
+  or: f(x) = log(exp(x - max(X)) / sum(exp(X - max(X))))
+  or: (x - max(X)) - log(x - max(X))))</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -607,7 +618,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTPLUS</td>
   <td>F(X) = Log(Add(Exp(x), 1))
-      or: f(x) = loge(1 + expe(x))</td>
+      or: f(x) = log(1 + exp(x))</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -616,7 +627,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY
   with scale and bias or DML_OPERATOR_ACTIVATION_LINEAR</td>
-  <td>F(X, alpha, beta) = Add(beta, Mul(X, alpha))
+  <td>F(X, alpha, beta) = Add(Mul(X, alpha), beta)
   or: f(x, alpha, beta) = alpha * x + beta</td>
  </tr>
  <tr>
@@ -717,7 +728,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#DynamicSlice">DynamicSlice</a></td>
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
-  <td></td>
+  <td>Crop the tensor to the given ranges for each axis. Same as slice except that inputs are not constant.</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -772,7 +783,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Shape">Shape</a></td>
   <td></td>
   <td>NA, just read the TENSOR_DESC dimensions</td>
-  <td></td>
+  <td>Return the dimensions of the tensor as a 1D tensor.</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -788,7 +799,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
   <td></td>
   <td>NA, no actual data change, just update the TENSOR_DESC</td>
-  <td></td>
+  <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -796,11 +807,11 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
   <td></td>
   <td>NA, no actual data change, just update the TENSOR_DESC</td>
-  <td></td>
+  <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
-  <td>Shape Removing 1's</td>
+  <td>Reshape Removing 1's</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
@@ -827,7 +838,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
   <td></td>
   <td>DML_OPERATOR_TOP_K</td>
-  <td>f(X) = Slice(SortDecreasing(X, axis), range=0..k, axis)</td>
+  <td>F(X) = Slice(SortDecreasing(X, axis), range=0..k, axis)</td>
  </tr>
  <tr>
   <td>Data reorganization selection</td>
@@ -836,7 +847,7 @@ td
   <td></td>
   <td>---</td>
   <td>f(b, x, y) = if b then x else y
-      // A conditional per-element if statement.
+      // A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
   </td>
  </tr>
  <tr>
@@ -845,7 +856,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Compress">Compress</a></td>
   <td></td>
   <td>---</td>
-  <td>A conditional slice/join. Has utterly nothing to do with data compression, despite the confusing name.</td>
+  <td>A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -920,7 +931,7 @@ td
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM</td>
   <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axis))
-    y = (x1 + x2 + ... + xn)</td>
+      y = (x1 + x2 + ... + xn)</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1208,7 +1219,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_PARAMETRIC_SOFTPLUS</td>
   <td>F(X, alpha, beta) = Mul(alpha, Softplus(Mul(beta, X))).
-      or: f(x, alpha, beta) = alpha * loge(1 + expe(beta * x))
+      or: f(x, alpha, beta) = alpha * log(1 + exp(beta * x))
   </td>
  </tr>
  <tr>
