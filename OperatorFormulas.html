@@ -388,14 +388,6 @@ td
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
-  <td>CosineGrad</td>
-  <td>---</a></td>
-  <td></td>
-  <td>---</td>
-  <td>f(dx, x) = sin(x) * dx</td>
- </tr>
- <tr>
-  <td>Elementwise Math Trigonometric</td>
   <td>Arctangent</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Atan">Atan</a></td>
   <td></td>
@@ -407,7 +399,7 @@ td
   <td>Hyperbolic Arccosine</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
   <td></td>
-  <td></td>
+  <td>---</td>
   <td>f(x) = arcosh(x)</td>
  </tr>
  <tr>
@@ -415,7 +407,7 @@ td
   <td>Hyperbolic Cosine</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Cosh">Cosh</a></td>
   <td></td>
-  <td></td>
+  <td>---</td>
   <td>f(x) = cosh(x)</td>
  </tr>
  <tr>
@@ -423,8 +415,17 @@ td
   <td>Hyperbolic Sine</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
   <td></td>
-  <td></td>
+  <td>---</td>
   <td>f(x) = sinh(x)</td>
+ </tr>
+ <tr>
+  <td>Elementwise Math Trigonometric</td>
+  <td>CosineGrad</td>
+  <td>Composed</a></td>
+  <td></td>
+  <td>Composed</td>
+  <td>F(Dx, X) = Mul(Sin(X), Dx)
+      f(dx, x) = sin(x) * dx</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -823,7 +824,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
-  <td></td>
+  <td>Reinterpret the view of the tensor, removing 1's for deletable axes.</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -831,14 +832,15 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
-  <td></td>
+  <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.</td>
  </tr>
  <tr>
   <td>Data reorganization mapping</td>
   <td>One Hot Along Axis</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
+  <td>---</td>
   <td></td>
-  <td></td>
+  <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -905,7 +907,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#MaxUnpool">MaxUnpool</a></td>
   <td></td>
   <td></td>
- </tr>
+  <td>Opposite of MaxPool. Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros, then write each value from the input tensor into the output tensor at the element offset from the corresponding indices array.</td>
+</tr>
  <tr>
   <td>Pooling</td>
   <td>Lebesgue Pooling</td>
