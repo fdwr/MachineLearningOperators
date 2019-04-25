@@ -388,6 +388,14 @@ td
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
+  <td>CosineGrad</td>
+  <td>---</a></td>
+  <td></td>
+  <td>---</td>
+  <td>f(dx, x) = sin(x) * dx</td>
+ </tr>
+ <tr>
+  <td>Elementwise Math Trigonometric</td>
   <td>Arctangent</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Atan">Atan</a></td>
   <td></td>
@@ -424,7 +432,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sum">Sum</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
-  <td>f(X, Y, Z…) = X + Y + Z…</td>
+  <td>f(x, y, z…) = x + y + z…</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -432,7 +440,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mean">Mean</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
-  <td>f(X, Y, Z…) = (X + Y + Z…) / n</td>
+  <td>f(x, y, z…) = (x + y + z…) / n</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -440,7 +448,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
-  <td>f(X, Y, Z…) = max(X, Y, Z…)</td>
+  <td>f(x, y, z…) = max(x, y, z…)</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -448,7 +456,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Min">Min</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
-  <td>f(X, Y, Z…) = min(X, Y, Z…)</td>
+  <td>f(x, y, z…) = min(x, y, z…)</td>
  </tr>
  <tr>
   <td>Elementwise Math Quantization</td>
@@ -577,8 +585,8 @@ td
   FlattenedX = Flatten(X, axis)
   ExpX = Exp(FlattenedX)
   for each ExpXBatch in FlattenedX batches
-    ReducedX = ReduceSum(ExpXBatch)
-    Output batch = ExpXBatch / ReducedX
+    reducedX = ReduceSum(ExpXBatch)
+    Output batch = ExpXBatch / reducedX
   endfor</pre></code>
     or per batch: f(x) = exp(x) / sum(exp(X))
     or per batch: exp(x - max(X)) / sum(exp(x - max(X)))</td>
@@ -930,7 +938,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSum">ReduceSum</a></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM</td>
-  <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axis))
+  <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
       y = (x1 + x2 + ... + xn)</td>
  </tr>
  <tr>
@@ -1042,7 +1050,10 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#If">If</a></td>
   <td></td>
   <td>---</td>
-  <td></td>
+  <td>f(cond, then_graph, else_graph, outputs...):
+      subgraph = cond ? then_graph : else_graph
+      outputs = subgraph(implictly_named_inputs_from_outer_graph)
+  </td>
  </tr>
  <tr>
   <td>Control Flow</td>
@@ -1116,8 +1127,8 @@ td
   <td>DML_OPERATOR_LP_NORMALIZATION</td>
   <td>F(X, p):
       // verify this. mean? variance not / n?
-      if p == 1: X_reduced = ReduceL1(X, axis, keepdims=1)
-      if p == 2: X_reduced = ReduceL2(X, axis, keepdims=1)
+      X_reduced = ReduceLp(X, p, axis, keepdims=1)
+      // where ReduceLP is ReduceL1 or ReduceL2 based on p
       X_reduced_broadcast = Expand(X_reduced, Shape(X))
       X_variance = Pow(X_reduced_broadcast, 2)
       Epsilon = Const(1e-9)
@@ -1130,7 +1141,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
   <td></td>
   <td></td>
-  <td>Append the coordinates of every nonzero input value to a list.</td>
+  <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved (so not [[X1,Y1,Z1], [X2,Y2,Z2]] but rather [[X1,X2], [Y1,Y1], [Z1,Z2]]).</td>
  </tr>
  <tr>
   <td>NGram</td>
@@ -1138,7 +1149,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
   <td></td>
   <td></td>
-  <td></td>
+  <td>Read input front to back, incrementing output histogram for each occurrence found of desired patterns. It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
@@ -1154,10 +1165,10 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GRU">GRU</a></td>
   <td></td>
   <td>DML_OPERATOR_GRU</td>
-  <td>Z = Activation1(clip( X * transpose(W1) + Initial_h1 * transpose(R1) + b1))
-      R = Activation1(clip( X * transpose(W2) + Initial_h1 * transpose(R2) + b2))
+  <td>Z = Activation1(clip(X * transpose(W1) + Initial_h1 * transpose(R1) + b1))
+      R = Activation1(clip(X * transpose(W2) + Initial_h1 * transpose(R2) + b2))
       C = Initial_h1 .* R
-      O = Activation2(clip( X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
+      O = Activation2(clip(X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
       Y = (1-Z) .* O + Z .* Initial_h1
       &nbsp;
       (W = [W1, W2, W3]; b1 = B[0, :] +
