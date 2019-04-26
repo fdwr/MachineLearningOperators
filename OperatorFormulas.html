@@ -1239,9 +1239,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       W = [W1, W2, W3];
       b1 = B[0, :] + B[3*hidden_size, :];
       b2 = B[1, :] + B[4*hidden_size, :];
-      b3 = B[2, :] + B[4*hidden_size, :];
-
-      todo: Typo above? Should it 5*hidden_size?</td>
+      b3 = B[2, :] + B[5*hidden_size, :];</td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
