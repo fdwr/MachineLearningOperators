@@ -29,7 +29,12 @@ td
 
 <h1>Operator Equations</h1>
 
-<p>Notation: Lowercase values are scalar. Uppercase are full tensors. e.g. x is scalar, while Abs(X) returns a whole tensor with abs(x) applied to each element. Any exp() and log() usage are to the natural logarithm 2.718281828 (not base 10 or 2).</p>
+<p>Notation:
+<li>Lowercase values are scalar. Uppercase are full tensors. So, x is scalar while X is a tensor, and abs(x) means it returns a scalar while Abs(X) returns a tensor.</li>
+<li>Any multiplication signs '*' mean elementwise multiplication (per NumPy, PyTorch, TensorFlow).</li>
+<li>Any matrix style compound dot product will explicitly use MatMul() rather than '*' to avoid unacceptable notation ambiguity.</li>
+<li>Any addition signs '+' mean elementwise addition, never the horrible notation abuse of concatenation.</li>
+<li>All exp() and log() use the natural logarithm 2.718281828 (not base 10 or 2).</li></p>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
  <tr>
@@ -235,11 +240,12 @@ td
  <tr>
   <td>Elementwise Math</td>
   <td>Threshold</td>
-  <td><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ThresholdedRelu">ThresholdedRelu</a></td>
+  <td>Max</td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_THRESHOLD</td>
-  <td>F(X, minValue=1) = Where(Greater(X, minValue), X, 0)
-      or: f(x) = max(minValue, x)</td>
+  <td>F(X, minValue) = Max(X, minValue)
+      or: f(x) = max(x, minValue)
+      notes: Not equivalent to ThresholdedRelu.</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -987,7 +993,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_ROI_POOLING (only POOLING_MAX is supported)</td>
   <td>Apply MaxPool to given input within each numbered region (batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive), and write the maximal value back to the output.
-      questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute? That's broken. What's the point of the pooled_shape when each region has a specific size anyway?
+      questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute? That's broken and inconsistent with a lot of graphics API's and Python array slice start:end notation. What's the point of the pooled_shape when each region has a specific size anyway?
   </td>
  </tr>
  <tr>
@@ -1215,7 +1221,8 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RNN">RNN</a></td>
   <td></td>
   <td>DML_OPERATOR_RNN</td>
-  <td>Y = Activation(clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B))</td>
+  <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)
+      note: </td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
@@ -1223,16 +1230,18 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GRU">GRU</a></td>
   <td></td>
   <td>DML_OPERATOR_GRU</td>
-  <td>Z = Activation1(clip(X * transpose(W1) + Initial_h1 * transpose(R1) + b1))
-      R = Activation1(clip(X * transpose(W2) + Initial_h1 * transpose(R2) + b2))
-      C = Initial_h1 .* R
-      O = Activation2(clip(X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
-      Y = (1-Z) .* O + Z .* Initial_h1
-      &nbsp;
+  <td>Z = Activation1(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + b1, -clip, +clip))
+      R = Activation1(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + b2, -clip, +clip))
+      C = Mul(Initial_h1, R)
+      O = Activation2(Clip(MatMul(X, Transpose(W3)) + MatMul(Initial_h1, Transpose(R3)) + b3, -clip, +clip))
+      Y = Mul((1-Z), O) + Mul(Z, Initial_h1)
+
       W = [W1, W2, W3];
-      b1 = B[0, :] + B[3*hidden_size];
-      b2 = B[1, :] + [4*hidden_size, :];
-      b3 = B[2, :] + [4*hidden_size, :];</td>
+      b1 = B[0, :] + B[3*hidden_size, :];
+      b2 = B[1, :] + B[4*hidden_size, :];
+      b3 = B[2, :] + B[4*hidden_size, :];
+
+      todo: Typo above? Should it 5*hidden_size?</td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
@@ -1240,16 +1249,15 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
   <td></td>
   <td>DML_OPERATOR_LSTM</td>
-  <td>I = Activation1(clip(X * transpose(W1) + Initial_h1 * transpose(R1) + p .* initial_c + b1))
-      F = Activation1(clip(X * transpose(W2) + Initial_h1 * transpose(R2) + p .* initial_c + b2))
-      Z = Activation2(clip(X * transpose(W3) + Initial_h1 * transpose(R3) + b3))
-      C = Initial_h1 .* F + I .* Z
-      O = Activation2(clip( X * tr(W4) +
-      Initial_h1 * transpose(R4) + p .* initial_c + b4))
-      Y = Activation3(C) .* O
+  <td>I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
+      F = Activation1f(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + Mul(p, initial_c) + b2), -clip, +clip)
+      Z = Activation2g(Clip(MatMul(X, Transpose(W3)) + MatMul(Initial_h1, Transpose(R3)) + b3), -clip, +clip)
+      C = Mul(Initial_h1, F) + Mul(I, Z)
+      O = Activation2g(clip(MatMul(X, Transpose(W4)) + MatMul(Initial_h1, Transpose(R4)) + Mul(p, initial_c) + b4))
+      Y = Mul(Activation3h(C), O)
       &nbsp;
       W = [W1, W2, W3, W4];
-      b1 = B[0, :] + B[4*hidden_size];
+      b1 = B[0, :] + B[4*hidden_size, :];
       b2 = B[1, :] + B[5*hidden_size, :];
       b3 = B[2, :] + B[6*hidden_size, :];
       b4 = B[3, :] + B[7*hidden_size, :];</td>
@@ -1269,7 +1277,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>Constant Fill</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConstantFill">ConstantFill</a></td>
   <td></td>
-  <td>NA experimental (can use trivially strides for broadcasting though)</td>
+  <td>Use identity with zero strides for broadcasting)</td>
   <td>f() = value</td>
  </tr>
  <tr>
