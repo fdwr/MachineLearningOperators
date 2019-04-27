@@ -67,7 +67,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
-  <td>F() = Expand(value) // scalar value</td>
+  <td>F() = Expand(value, Shape(inputOfDesiredShape)) // broadcast scalar value</td>
  </tr>
  <tr>
   <td>Generation Random</td>
