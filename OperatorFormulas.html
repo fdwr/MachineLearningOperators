@@ -652,7 +652,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
   <td></td>
   <td>---</td>
-  <td>f(lambda, bias):
+  <td>f(x, lambda, bias):
       if x < -lambda then y = x + bias
       elif x > lambda then y = x - bias
       else y = 0</td>
@@ -663,7 +663,10 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gemm">Gemm</a></td>
   <td></td>
   <td>DML_OPERATOR_MATRIX_GEMM</td>
-  <td>Y = matmul(alpha * transpose(A)), transpose(B)) + (beta * C)</td>
+  <td>F(A, B, C; alpha, beta, transA, transB; Y):
+      A2 = If(transA, Transpose(A), A)
+      B2 = If(transB, Transpose(B), B)
+      Y = MatMul(Mul(alpha, A2), B2) + Mul(beta, C)</td>
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
@@ -671,7 +674,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MatMul">MatMul</a></td>
   <td></td>
   <td>DML_OPERATOR_MATRIX_GEMM</td>
-  <td>Y = matmul(A, B)
+  <td>for all (i,j) in (h,w): y[i,j] = dot(A[i,:], B[:,j])
       notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices. A and B can have batch count dimensions, where each 2D matrix is multiplied separately.</td>
  </tr>
  <tr>
@@ -680,7 +683,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Conv">Conv</a></td>
   <td></td>
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_FORWARD</td>
-  <td>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</td>
+  <td>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b
+      notes: 'steps' affects the size of steps over the input. 'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements. A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line. 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a></td>
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
@@ -688,7 +692,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConvTranspose">ConvTranspose</a></td>
   <td></td>
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_BACKWARD</td>
-  <td>todo: Here be unnecessarily complicated dragons.</td>
+  <td>todo: Here be dragons.
+      questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -1144,7 +1149,8 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>f(x) = scale * (x - mean) / sqrt(variance + epsilon) + Bias[ci]
       mean and variance are computed per instance per channel:
       mean = (x0 + x1 …) / xn;
-      variance = ((x0 - xmean)^2 + (x1 - xmean)^2 …) / xn</td>
+      variance = ((x0 - xmean)^2 + (x1 - xmean)^2 …) / xn
+      notes: formula needs review</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1154,7 +1160,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_BATCH_NORMALIZATION</td>
   <td>y = scale * (x - batchMean) / sqrt(batchVariance + epsilon) + Bias[ci]
       notes: Statistics are computed for each channel.
-  </td>
+      notes: formula needs review</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1163,7 +1169,8 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
   <td>y = x / (bias + (alpha/size) * sum(xi^2 for every xi in the local region))^beta
-      defaults: bias = 1</td>
+      defaults: bias = 1
+      notes: formula needs review</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1197,6 +1204,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       X_variance = Pow(X_reduced_broadcast, 2)
       Epsilon = Const(1e-9)
       Output = Div(Sqrt(Add(X_variance, Epsilon)))
+      notes: formula needs review
   </td>
  </tr>
  <tr>
@@ -1265,8 +1273,8 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
   <td></td>
   <td>Identity actually (useful during training, not trained execution)</td>
-  <td>For training: F(X) = Where(Less(Random(0, 0.9999), ratio), 0, X), or f(x) = iif(random(0, 0.9999) < ratio, x, 0);
-      For forward execution: F(X) = Identity(X), or: f(x) = x
+  <td>if training: F(X) = Where(Less(Random(0, 0.9999), ratio), 0, X), or f(x) = iif(random(0, 0.9999) < ratio, x, 0);
+      if forward execution: F(X) = Identity(X), or: f(x) = x
       notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
  </tr>
  <tr>
