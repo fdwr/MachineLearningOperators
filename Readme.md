@@ -13,4 +13,4 @@ https://pytorch.org/docs/stable/nn.html
 
 # Operator Equations
 
-[Operator Formulas](OperatorFormulas.html) - formulas at a glance
+Operator Formulas at a glance: http://fdwr.github.io/LostOnnxDocs/OperatorFormulas.html
