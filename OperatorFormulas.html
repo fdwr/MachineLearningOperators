@@ -363,6 +363,14 @@ td
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
+  <td>Cosine</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cos">Cos</a></td>
+  <td></td>
+  <td>DML_OPERATOR_ELEMENT_WISE_COS</td>
+  <td>f(x) = cos(x)</td>
+ </tr>
+ <tr>
+  <td>Elementwise Math Trigonometric</td>
   <td>Tangent</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tan">Tan</a></td>
   <td></td>
@@ -387,14 +395,6 @@ td
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
-  <td>Cosine</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cos">Cos</a></td>
-  <td></td>
-  <td>DML_OPERATOR_ELEMENT_WISE_COS</td>
-  <td>f(x) = cos(x)</td>
- </tr>
- <tr>
-  <td>Elementwise Math Trigonometric</td>
   <td>Arctangent</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Atan">Atan</a></td>
   <td></td>
@@ -403,11 +403,11 @@ td
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
-  <td>Hyperbolic Arccosine</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
+  <td>Hyperbolic Sine</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
   <td></td>
   <td>---</td>
-  <td>f(x) = arcosh(x)</td>
+  <td>f(x) = sinh(x)</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -419,11 +419,38 @@ td
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
-  <td>Hyperbolic Sine</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
+  <td>Hyperbolic Tangent</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Tanh">Tanh</a></td>
   <td></td>
   <td>---</td>
-  <td>f(x) = sinh(x)</td>
+  <td>f(x) = tanh(x)</td>
+ </tr>
+ <tr>
+  <td>Elementwise Math Trigonometric</td>
+  <td>Hyperbolic Arccosine</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
+  <td></td>
+  <td>---</td>
+  <td>f(x) = arccosh(x)
+      or: log(x + sqrt(x * x - 1))</td>
+ </tr>
+ <tr>
+  <td>Elementwise Math Trigonometric</td>
+  <td>Hyperbolic Arccosine</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Asinh">Asinh</a></td>
+  <td></td>
+  <td>---</td>
+  <td>f(x) = arcsinh(x)
+      or: log(x + sqrt(x * x + 1))</td>
+ </tr>
+ <tr>
+  <td>Elementwise Math Trigonometric</td>
+  <td>Hyperbolic Arccosine</td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Atanh">Atanh</a></td>
+  <td></td>
+  <td>---</td>
+  <td>f(x) = arctanh(x)
+      or: log((1 + x) / (1 - x)) / 2</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
