@@ -44,6 +44,7 @@ td
   <th>PyTorch Name</td>
   <th>DML Name</td>
   <th>Formula</td>
+  <td>Precision</td>
  </tr>
  <tr>
   <td>Generic</td>
@@ -52,6 +53,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY or DML_ACTIVATION_IDENTITY</td>
   <td>F(X) = X</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Generation</td>
@@ -60,6 +62,7 @@ td
   <td></td>
   <td>NA just provide the tensor data</td>
   <td>F() = Value</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Generation</td>
@@ -68,6 +71,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
   <td>F() = Expand(value, Shape(inputOfDesiredShape)) // broadcast scalar value</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Generation Random</td>
@@ -76,6 +80,7 @@ td
   <td></td>
   <td>---</td>
   <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
+  <td>Unpredictable</td>
  </tr>
  <tr>
   <td>Generation Random</td>
@@ -84,6 +89,7 @@ td
   <td></td>
   <td>---</td>
   <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
+  <td>Unpredictable</td>
  </tr>
  <tr>
   <td>Generation Random</td>
@@ -95,6 +101,7 @@ td
       range = high - low // note inclusive end
       if integer: return (rand() % (range+1) + low 
       if float: (rand() / randmax) * range + low</td>
+  <td>Unpredictable</td>
  </tr>
  <tr>
   <td>Generation Random</td>
@@ -106,6 +113,7 @@ td
       range = high - low // note inclusive end
       if integer: return (rand() % (range+1) + low 
       if float: (rand() / randmax) * range + low</td>
+  <td>Unpredictable</td>
  </tr>
  <tr>
   <td>Generation Random</td>
@@ -114,6 +122,7 @@ td
   <td></td>
   <td>---</td>
   <td>??</td>
+  <td>Unpredictable</td>
  </tr>
  <tr>
   <td>Generation Matrix Multiplication</td>
@@ -124,6 +133,7 @@ td
   <td>f(k=0):
       output[i, j] = if i + k == j then 1 else 0
       notes: In other words, all output[i, i+k] = 1.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -132,6 +142,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ADD</td>
   <td>f(x, y) = x + y</td>
+  <td>&lt;1 ULP</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -140,6 +151,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_SUBTRACT</td>
   <td>f(x, y) = x - y</td>
+  <td>&lt;1 ULP</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -148,6 +160,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
   <td>f(x, y) = x * y</td>
+  <td>&lt;1 ULP</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -156,6 +169,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_DIVIDE</td>
   <td>f(x, y) = x / y</td>
+  <td>&lt;1 ULP</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -163,7 +177,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_SQRT</td>
-  <td>f(x) = sqrt(x * scale + bias)</td>
+  <td>f(x) = sqrt(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -171,7 +186,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_RECIP</td>
-  <td>f(x) = 1 / (x * scale + bias)</td>
+  <td>f(x) = 1 / (x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -179,7 +195,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pow">Pow</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_POW</td>
-  <td>f(x, exponent) = pow(x * scale + bias, exponent)</td>
+  <td>f(x, exponent) = pow(x, exponent)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -187,7 +204,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_EXP</td>
-  <td>f(x) = exp(x * scale + bias)</td>
+  <td>f(x) = exp(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -195,7 +213,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOG</td>
-  <td>f(x) = log(x * scale + bias)</td>
+  <td>f(x) = log(x)</td>
+  <td></td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -203,7 +222,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Abs">Abs</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ABS</td>
-  <td>f(x) = abs(x * scale + bias)</td>
+  <td>f(x) = abs(x)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -212,6 +232,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with scale = -1</td>
   <td>f(x) = -x</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -219,7 +240,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Ceil">Ceil</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_CEIL</td>
-  <td>f(x) = ceil(x * scale + bias)</td>
+  <td>f(x) = ceil(x)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -227,7 +249,8 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Floor">Floor</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_FLOOR</td>
-  <td>f(x) = floor(x * scale + bias)</td>
+  <td>f(x) = floor(x)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -236,6 +259,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_CLIP</td>
   <td>f(x) = clamp(x, min, max)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -246,6 +270,7 @@ td
   <td>F(X, minValue) = Max(X, minValue)
       or: f(x) = max(x, minValue)
       notes: Not equivalent to ThresholdedRelu.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -275,6 +300,7 @@ td
     return sign * y;
     </code>
   </td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -285,6 +311,7 @@ td
   <td>f(x) = isnan(x)
       Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>.
       e.g.  s1111111 10000000 0000000 00000001</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math</td>
@@ -296,6 +323,7 @@ td
       if x == 0 then 0
       elif x > 0 then 1
       elif x < 0 then -1</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -304,6 +332,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_GREATER_THAN</td>
   <td>f(x, y) = (x &gt; y)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -312,6 +341,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_LESS_THAN</td>
   <td>f(x, y) = (x &lt; y)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -320,6 +350,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_EQUALS</td>
   <td>f(x, y) = (x == y)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -328,6 +359,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_NOT</td>
   <td>f(x) = !x</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -336,6 +368,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_AND</td>
   <td>f(x, y) = x &amp;&amp; y</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -344,6 +377,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_OR</td>
   <td>f(x, y) = x || y</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Logical</td>
@@ -352,6 +386,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_XOR</td>
   <td>f(x, y) = x xor y</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -360,6 +395,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_SIN</td>
   <td>f(x) = sin(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -368,6 +404,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_COS</td>
   <td>f(x) = cos(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -376,6 +413,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_TAN</td>
   <td>f(x) = tan(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -384,6 +422,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ASIN</td>
   <td>f(x) = asin(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -392,6 +431,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ACOS</td>
   <td>f(x) = acos(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -400,6 +440,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ATAN</td>
   <td>f(x) = atan(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -408,6 +449,7 @@ td
   <td></td>
   <td>---</td>
   <td>f(x) = sinh(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -416,6 +458,7 @@ td
   <td></td>
   <td>---</td>
   <td>f(x) = cosh(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -424,6 +467,7 @@ td
   <td></td>
   <td>---</td>
   <td>f(x) = tanh(x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -433,6 +477,7 @@ td
   <td>---</td>
   <td>f(x) = arccosh(x)
       or: log(x + sqrt(x * x - 1))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -442,6 +487,7 @@ td
   <td>---</td>
   <td>f(x) = arcsinh(x)
       or: log(x + sqrt(x * x + 1))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -451,6 +497,7 @@ td
   <td>---</td>
   <td>f(x) = arctanh(x)
       or: log((1 + x) / (1 - x)) / 2</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Trigonometric</td>
@@ -460,6 +507,7 @@ td
   <td>Composed</td>
   <td>F(Dx, X) = Mul(Sin(X), Dx)
       f(dx, x) = sin(x) * dx</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -468,6 +516,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
   <td>f(x, y, z…) = x + y + z…</td>
+  <td>&lt; N-1 ULP</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -476,6 +525,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
   <td>f(x, y, z…) = (x + y + z…) / n</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -484,6 +534,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
   <td>f(x, y, z…) = max(x, y, z…)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math Reduction</td>
@@ -492,6 +543,7 @@ td
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
   <td>f(x, y, z…) = min(x, y, z…)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Elementwise Math Quantization</td>
@@ -501,6 +553,7 @@ td
   <td>DML_OPERATOR_ELEMENT_WISE_QUANTIZE_LINEAR</td>
   <td>f(input:float32, scale:float32, zero_point:int32)
       output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Elementwise Math Quantization</td>
@@ -510,6 +563,7 @@ td
   <td>DML_OPERATOR_ELEMENT_WISE_DEQUANTIZE_LINEAR</td>
   <td>f(input:uint8, scale:float32, zero_point:float32)
       output:float32 = (input:uint8 - zero_point) * scale</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -520,6 +574,7 @@ td
   <td>F(X) = Reciprocal(Add(1, Exp(Neg(X))))
       or: f(x) = 1 / (1 + exp(-x))
       or: f(x) = exp(x) / (1 + exp(x))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -530,6 +585,7 @@ td
   <td>F(X) = Clip(Add(Mul(alpha, X), beta), 0, 1))
       or: f(x) = max(0, min(alpha * x + beta, 1))
       defaults: alpha = 0.2, beta = 0.5</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -541,6 +597,7 @@ td
       or: f(x) = (1 - exp(-2 * x))/(1 + exp(-2 * x))
       or: f(x) = 2 /(1 + exp(-2 * x)) - 1
       or: f(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -550,6 +607,7 @@ td
   <td>DML_OPERATOR_ACTIVATION_SCALED_TANH</td>
   <td>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)
       or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -560,6 +618,7 @@ td
   <td>F(X) = Max(X, 0)
       or: f(x) = max(x, 0)
       or: if x &gt;= 0 then x else 0</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -569,6 +628,7 @@ td
   <td>DML_OPERATOR_ACTIVATION_LEAKY_RELU</td>
   <td>F(X) = Where(Less(X, 0), Mul(X, alpha), X)
       or: f(x, alpha) = if x &gt;= 0 then x else alpha * x</td>
+  <td>&lt;= Mul precision</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -579,6 +639,7 @@ td
   <td>F(X) = Where(Less(X, 0), Mul(X, Slope), X)
       or: f(x, slope) = if x &gt;= 0 then x else slope * x
       PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -588,6 +649,7 @@ td
   <td>DML_OPERATOR_ACTIVATION_THRESHOLDED_RELU</td>
   <td>F(X, alpha = 1) = Where(Greater(X, alpha), X, 0)
       f(x) = if x &gt; alpha then x else 0</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -598,6 +660,7 @@ td
   <td>F(X, alpha = 1) = Where(Less(X, 0), Mul(Sub(Exp(X), 1), alpha))
       or: F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
       or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (exp(x) - 1)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -609,6 +672,7 @@ td
       or: f(x, alpha = 1.6732, gamma = 1.0507):
       if x &gt; 0 then gamma * x
       else gamma * alpha * (exp(x) - 1)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -625,6 +689,7 @@ td
   endfor</pre></code>
     or per batch: f(x) = exp(x) / sum(exp(X))
     or per batch: exp(x - max(X)) / sum(exp(x - max(X)))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -635,6 +700,7 @@ td
   <td>F(Input, axis) = Log(Softmax(Input, axis))
   or: f(x) = log(exp(x - max(X)) / sum(exp(X - max(X))))
   or: (x - max(X)) - log(x - max(X))))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -644,6 +710,7 @@ td
   <td>DML_OPERATOR_ACTIVATION_HARDMAX</td>
   <td>f(x) = if x_i == max(X) then 1 else 0
       *but only for first element along that axis</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -653,6 +720,7 @@ td
   <td>DML_OPERATOR_ACTIVATION_SOFTSIGN</td>
   <td>F(X) = Div(X, (Add(Abs(X), 1)))
       or: f(x) = x / (1 + abs(x))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -662,6 +730,7 @@ td
   <td>DML_OPERATOR_ACTIVATION_SOFTPLUS</td>
   <td>F(X) = Log(Add(Exp(x), 1))
       or: f(x) = log(1 + exp(x))</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -672,6 +741,7 @@ td
   with scale and bias or DML_OPERATOR_ACTIVATION_LINEAR</td>
   <td>F(X, alpha, beta) = Add(Mul(X, alpha), beta)
   or: f(x, alpha, beta) = alpha * x + beta</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Activation</td>
@@ -683,6 +753,7 @@ td
       if x < -lambda then y = x + bias
       elif x > lambda then y = x - bias
       else y = 0</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
@@ -694,6 +765,7 @@ td
       A2 = If(transA, Transpose(A), A)
       B2 = If(transB, Transpose(B), B)
       Y = MatMul(Mul(alpha, A2), B2) + Mul(beta, C)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
@@ -703,6 +775,7 @@ td
   <td>DML_OPERATOR_MATRIX_GEMM</td>
   <td>for all (i,j) in (h,w): y[i,j] = dot(A[i,:], B[:,j])
       notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices. A and B can have batch count dimensions, where each 2D matrix is multiplied separately.</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
@@ -712,6 +785,7 @@ td
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_FORWARD</td>
   <td>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b
       notes: 'steps' affects the size of steps over the input. 'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements. A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line. 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a></td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
@@ -721,6 +795,7 @@ td
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_BACKWARD</td>
   <td>todo: Here be dragons.
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -729,6 +804,7 @@ td
   <td></td>
   <td>DML_OPERATOR_CAST</td>
   <td>f(x) = cast(x)</td>
+  <td>&lt; 1 ULP</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -737,6 +813,7 @@ td
   <td></td>
   <td>Identity with new TENSOR_DESC that flips via permuted strides</td>
   <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -745,6 +822,7 @@ td
   <td></td>
   <td>Identity with TENSOR_DESC using zero strides along broadcast dimension</td>
   <td>Broadcast any single size dimensions up to the output dimension counts</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -753,6 +831,7 @@ td
   <td></td>
   <td>DML_OPERATOR_TILE</td>
   <td>Repeat entire tensor along each axis by repeat counts.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -761,6 +840,7 @@ td
   <td></td>
   <td>DML_OPERATOR_SPLIT</td>
   <td>Split input into multiple output tensors.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -769,6 +849,7 @@ td
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
   <td>Crop the tensor to the given ranges for each axis.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -777,6 +858,7 @@ td
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
   <td>Crop the tensor to the given ranges for each axis. Same as slice except that inputs are not constant.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -785,6 +867,7 @@ td
   <td></td>
   <td>DML_OPERATOR_JOIN</td>
   <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -810,6 +893,7 @@ td
       axis = 1
       output = [[1,1], [4,3], [6,6]]
 </td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data reorganization</td>
@@ -839,6 +923,7 @@ td
   <td></td>
   <td>DML_OPERATOR_PADDING</td>
   <td>Inflate the input with zeroes on the edges</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -857,6 +942,7 @@ inputIndices = [
     ]
 
 output[outputIndices] = input[inputIndices];</code></pre></td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -875,6 +961,7 @@ outputIndices = [
     ]
 
 output[outputIndices] = input[inputIndices];</code></pre></td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -883,6 +970,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA, just read the TENSOR_DESC dimensions</td>
   <td>Return the dimensions of the tensor as a 1D tensor.</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -892,6 +980,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>NA, just compute the number of TENSOR_DESC elements</td>
   <td>Return the element count. ReduceProd(Shape(X), keepdims=0).
       note: Size is unfortunately named, inconsistently with Resize10 which accepts separate dimensions. If you want the sizes of the tensor (N C H W) rather than just the total element count, called Shape instead.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -900,6 +989,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA, no actual data change, just update the TENSOR_DESC</td>
   <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -908,6 +998,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA, no actual data change, just update the TENSOR_DESC</td>
   <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -916,6 +1007,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
   <td>Reinterpret the view of the tensor, removing 1's for deletable axes.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -924,6 +1016,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
   <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data reorganization mapping</td>
@@ -932,6 +1025,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>---</td>
   <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
@@ -940,6 +1034,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_TOP_K</td>
   <td>F(X) = Slice(SortDecreasing(X, axis), range=0..k, axis)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data reorganization selection</td>
@@ -950,6 +1045,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>f(b, x, y) = if b then x else y
       notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
   </td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Data reorganization selection</td>
@@ -958,6 +1054,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>---</td>
   <td>A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -967,6 +1064,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
   <td>y = (x1 + x2 + … + xn) / pool_size;
   So X[N C H W] reduces to Y[N C 1 1]</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -975,6 +1073,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
   <td>y = (x1 + x2 + … + xn) / pool_size</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -983,6 +1082,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_MAX_POOLING with output being 1 element</td>
   <td>y = max(x1, x2, … x_pool_size)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -991,6 +1091,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_MAX_POOLING</td>
   <td>y = max(x1, x2, … x_pool_size)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -1007,6 +1108,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_LP_POOLING</td>
   <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -1017,6 +1119,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p);
       So X[N C H W] reduces to Y[N C 1 1]
       e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Pooling</td>
@@ -1027,6 +1130,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>Apply MaxPool to given input within each numbered region (batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive), and write the maximal value back to the output.
       questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute? That's broken and inconsistent with a lot of graphics API's and Python array slice start:end notation. What's the point of the pooled_shape when each region has a specific size anyway?
   </td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1036,6 +1140,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM</td>
   <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
       y = (x1 + x2 + ... + xn)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1044,6 +1149,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_AVERAGE</td>
   <td>y = (x1 + x2 + ... + xn) / n</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1052,6 +1158,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MULTIPLY</td>
   <td>y = (x1 * x2 * ... * xn)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1061,6 +1168,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM</td>
   <td>F(X) = Log(ReduceSum(X, axes, keepdims))
       or: y = log(x1 + x2 + ... + xn)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1071,6 +1179,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>F(X) = Log(ReduceSum(Exp(X), axes, keepdims))
       or: y = log(exp(x1) + exp(x2) + ... + exp(xn))
   </td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1080,6 +1189,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM_SQUARE</td>
   <td>F(X) = ReduceSum(Pow(X, 2), axes, keepdims)
       or: y = x1^2 + x2^2 + ... + xn^2</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1089,6 +1199,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L1</td>
   <td>F(X) = ReduceSum(Abs(X), axes, keepdims)
       or: y = abs(x1) + abs(x2) + ... + abs(xn)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1098,6 +1209,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L2</td>
   <td>F(X) = Sqrt(ReduceSum(Pow(X, 2), axes, keepdims))
   or: y = sqrt(x1^2 + x2^2 + ... + xn^2)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1106,6 +1218,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MAX</td>
   <td>x = max(max(max(x1, x2), x3), ..., xn)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1114,6 +1227,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MIN</td>
   <td>x = min(min(min(x1, x2), x3), ..., xn)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1122,6 +1236,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMAX</td>
   <td>int32 {i j k ..} = maxindex(X Y Z …)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Reduction</td>
@@ -1130,6 +1245,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMIN</td>
   <td>int32 {i j k ..} = minindex(X Y Z …)</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Imaging Operators</td>
@@ -1139,6 +1255,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_UPSAMPLE_2D</td>
   <td>Y.Shape = Floor(Shape(X) * Scales)
       Y[output_i] = X[output_i / Scales]</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Control Flow</td>
@@ -1150,6 +1267,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       subgraph = cond ? then_graph : else_graph
       outputs = subgraph(implictly_named_inputs_from_outer_graph)
   </td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Control Flow</td>
@@ -1158,6 +1276,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>---</td>
   <td></td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Control Flow</td>
@@ -1166,6 +1285,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>---</td>
   <td></td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1178,6 +1298,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       mean = (x0 + x1 …) / xn;
       variance = ((x0 - xmean)^2 + (x1 - xmean)^2 …) / xn
       notes: formula needs review</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1188,6 +1309,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>y = scale * (x - batchMean) / sqrt(batchVariance + epsilon) + Bias[ci]
       notes: Statistics are computed for each channel.
       notes: formula needs review</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1198,6 +1320,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>y = x / (bias + (alpha/size) * sum(xi^2 for every xi in the local region))^beta
       defaults: bias = 1
       notes: formula needs review</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1216,6 +1339,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       X_variance = Sub(X, X_RM)
       Processed_STD = Add(STD, Epsilon)
       X_MVN = Div(X_variance, Processed_STD)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Normalization</td>
@@ -1233,6 +1357,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       Output = Div(Sqrt(Add(X_variance, Epsilon)))
       notes: formula needs review
   </td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Sparse tensor collation</td>
@@ -1241,6 +1366,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td></td>
   <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved (so not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>NGram</td>
@@ -1249,6 +1375,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>---</td>
   <td>Read input front to back, incrementing output histogram for each occurrence found of desired patterns. It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
@@ -1257,6 +1384,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_RNN</td>
   <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
@@ -1274,6 +1402,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       b1 = B[0, :] + B[3*hidden_size, :];
       b2 = B[1, :] + B[4*hidden_size, :];
       b3 = B[2, :] + B[5*hidden_size, :];</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Aggregate DNN operators</td>
@@ -1293,6 +1422,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
       b2 = B[1, :] + B[5*hidden_size, :];
       b3 = B[2, :] + B[6*hidden_size, :];
       b4 = B[3, :] + B[7*hidden_size, :];</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Training</td>
@@ -1303,6 +1433,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>if training: F(X) = Where(Less(Random(0, 0.9999), ratio), 0, X), or f(x) = iif(random(0, 0.9999) < ratio, x, 0);
       if forward execution: F(X) = Identity(X), or: f(x) = x
       notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
+  <td>Unpredictable</td>
  </tr>
  <tr>
   <td>Deleted / Generation</td>
@@ -1311,6 +1442,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>Use identity with zero strides for broadcasting</td>
   <td>f() = value</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Deleted / Generation</td>
@@ -1319,6 +1451,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA experimental</td>
   <td>f() = values</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Deleted / Activation</td>
@@ -1329,6 +1462,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>F(X, alpha, beta) = Mul(alpha, Softplus(Mul(beta, X))).
       or: f(x, alpha, beta) = alpha * log(1 + exp(beta * x))
   </td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Deleted</td>
@@ -1337,6 +1471,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>NA, experimental</td>
   <td>??</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Deleted / Data Reorganization</td>
@@ -1345,6 +1480,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
   <td>Crop the tensor to the given ranges for each axis. Crop is confusing and redundant. Just use Slice.</td>
+  <td>Exact</td>
  </tr>
  <tr>
   <td>Deleted</td>
@@ -1354,6 +1490,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>Same as Mul with broadcasting</td>
   <td>F(X) = Mul(X, scale)
       or: f(x) = x * scale</td>
+  <td>&lt;= Mul precision</td>
  </tr>
  <tr>
   <td>Deleted / Imaging Operators</td>
@@ -1363,6 +1500,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>DML_OPERATOR_VALUE_SCALE_2D</td>
   <td>F(X) = Add(Mul(X, scale), Reshape(Const(bias), [X.shape.C, 1, 1]))
       or: f(x, scale, bias) = x * scale + bias</td>
+  <td>Precision TBD</td>
  </tr>
  <tr>
   <td>Deleted / Code Execution</td>
@@ -1371,6 +1509,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>Experimental to execute arbitrary Python code.</td>
   <td>??</td>
+  <td>Unpredictable</td>
  </tr>
 </table>
 
