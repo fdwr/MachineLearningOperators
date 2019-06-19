@@ -35,6 +35,7 @@ td
 <li>Any matrix style compound dot product will explicitly use MatMul() rather than '*' to avoid unacceptable notation ambiguity.</li>
 <li>Any addition signs '+' mean elementwise addition, never the horrible notation abuse of concatenation.</li>
 <li>All exp() and log() use the natural logarithm 2.718281828 (not base 10 or 2).</li></p>
+<li>The pseudocode below uses a few undefined functions, but their trivial behavior should be obvious enough to implement. e.g. min,max,ones,zeroes</li></p>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
  <tr>
@@ -280,8 +281,10 @@ td
   <td>---</td>
   <td>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))
       or: erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))
-    <code>
-    // constants
+<pre><code>
+double f(double x)
+{
+    // Polynomial approximation constants.
     double a1 =  0.254829592;
     double a2 = -0.284496736;
     double a3 =  1.421413741;
@@ -289,17 +292,17 @@ td
     double a5 =  1.061405429;
     double p  =  0.3275911;
 
-    // Save the sign of x
+    // Save the sign of x.
     int sign = 1;
-    if (x < 0) sign = -1;
+    if (x &lt; 0) sign = -1;
     x = fabs(x);
 
-    // A&S formula 7.1.26
+    // Approximate the formula A&S 7.1.26:
+    // 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))
     double t = 1.0/(1.0 + p*x);
     double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t*exp(-x*x);
     return sign * y;
-    </code>
-  </td>
+}</pre></code></td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -309,8 +312,10 @@ td
   <td></td>
   <td>---</td>
   <td>f(x) = isnan(x)
-      Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>.
-      e.g.  s1111111 10000000 0000000 00000001</td>
+      where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
+      Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>. The sign is ignored.
+      e.g. s1111111 10000000 0000000 00000001 - float32
+      e.g. s1111100 00000001 - float16</td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -321,8 +326,8 @@ td
   <td>---</td>
   <td>f(x):
       if x == 0 then 0
-      elif x > 0 then 1
-      elif x < 0 then -1</td>
+      elif x &gt; 0 then 1
+      elif x &lt; 0 then -1</td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -750,8 +755,8 @@ td
   <td></td>
   <td>---</td>
   <td>f(x, lambda, bias):
-      if x < -lambda then y = x + bias
-      elif x > lambda then y = x - bias
+      if x &lt; -lambda then y = x + bias
+      elif x &gt; lambda then y = x - bias
       else y = 0</td>
   <td>Precision TBD</td>
  </tr>
@@ -784,7 +789,33 @@ td
   <td></td>
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_FORWARD</td>
   <td>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b
-      notes: 'steps' affects the size of steps over the input. 'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements. A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line. 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a></td>
+      notes: 'steps' affects the size of steps over the input. 'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements. A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line. 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
+<code><pre>
+function F(input, filterWeights, dilations, strides, kernel_shape, pads; output)
+  startPads = pads[0..pads.size/2]
+  endPads = pads[pads.size/2..pads.size]
+  // todo: compute output size
+  // output.shape = (input.shape + startPads + endPads) // todo: consider strides and kernel size
+  for each outputCoordinate in output
+    output[outputCoordinate] = ConvolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
+  endfor
+endfunction
+
+function ConvolveKernel(input, filterWeights, firstInputCoordinate, dilations)
+  // 2D example only todo:Figure out what 'group' does and what 'M' is?
+  result = 0
+  // todo: How do 'M' and 'C' factor into this?
+  for y=0..&lt;filterWeights.shape[2]
+    for x=0..&lt;filterWeights.shape[3]
+      inputCoordinate = firstInputCoordinate + ([y,x] * dilations)
+      if (input.contains(inputCoordinate)) // check coordinates within tensor
+        result += filterWeights[y,x] * input[inputCoordinate]
+      endif
+    endfor // x
+  endfor // y
+  return result
+endfunction
+</pre></code></td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -811,8 +842,18 @@ td
   <td>Transpose</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Transpose">Transpose</a></td>
   <td></td>
-  <td>Identity with new TENSOR_DESC that flips via permuted strides</td>
-  <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with new TENSOR_DESC that flips via permuted strides</td>
+  <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
+<code><pre>
+function F(input, perm):
+  N = input.rank
+  assert(perm.size == input.rank)
+  for i=0..&lt;N do output.shape[i] = input.shape[perm[i]]
+  for each inputCoordinate in input
+    for i=0..&lt;N do outputCoordinate[i] = inputCoordinate[perm[i]]
+    output[outputCoordinate] = input[inputCoordinate]
+  endfor
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -820,8 +861,49 @@ td
   <td>Broadcast</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Expand">Expand</a></td>
   <td></td>
-  <td>Identity with TENSOR_DESC using zero strides along broadcast dimension</td>
-  <td>Broadcast any single size dimensions up to the output dimension counts</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with TENSOR_DESC using zero strides along broadcast dimension</td>
+  <td>Broadcast any single size dimensions up to the output dimension counts. Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
+<code><pre>
+function F(input, shape)
+  output.shape = BroadcastShape(input.shape, shape)
+  N = output.rank
+  inputShape = PadLeadingValues(input.shape, N, 1)
+  for each outputCoordinate in output
+    for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
+    output[outputCoordinate] = inputData[inputCoordinate]
+  endfor
+endfunction
+
+function PadLeadingValues(shape, paddedSize, padValue)
+  // Right align. e.g. shape=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
+  paddedSize = max(padddedSize, shape.size)
+  padCount = paddedSize - shape.size
+  for i=0..&lt;paddedSize
+    paddedShape[i] = i &lt; padCount ? padValue : shape[i - padCount]
+  endfor
+  return paddedShape
+endfunction</pre></code></td>
+  <td>Exact</td>
+ </tr>
+ <tr>
+  <td>Data Reorganization</td>
+  <td>BroadcastShape</td>
+  <td>No ONNX equivalent</a></td>
+  <td></td>
+  <td>NA</td>
+  <td>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.
+<code><pre>
+function F(shapes...)
+  N = 0
+  for each shape in shapes do N = max(N, shape.size) // Determine the largest rank in shapes
+  broadcastedShape = ones(N) // [1,1,...]
+  for each shape in shapes
+    paddedShape = PadLeadingValues(shape, N, 1) // Right align. e.g. N=4 with [H,W] -&gt; [1,1,H,W]
+    for i=0..&lt;N do assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
+    for i=0..&lt;N do broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
+  endfor
+  return broadcastedShape
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -830,7 +912,18 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tile">Tile</a></td>
   <td></td>
   <td>DML_OPERATOR_TILE</td>
-  <td>Repeat entire tensor along each axis by repeat counts.</td>
+  <td>Repeat entire tensor along each axis by repeat counts.
+<code><pre>
+function F(input, repeats)
+  N = input.rank
+  assert(repeats.size == input.rank)
+  for i=0..&lt;N do assert(repeats[i] &gt; 0)
+  output.shape = input.shape * repeats // elementwise multiply per axis
+  for each outputCoordinate in output
+    for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] % input.shape[i]
+    output[outputCoordinate] = inputData[inputCoordinate]
+  endfor
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -848,7 +941,27 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a></td>
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
-  <td>Crop the tensor to the given ranges for each axis.</td>
+  <td>Crop the tensor to the given ranges for each axis.
+<code><pre>function F(input, starts, ends, axes, steps)
+  N = input.rank
+  if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
+  if starts.empty then starts = zeroes(N) // [0,0,0,...]
+  if ends.empty then ends = input.shape
+  if steps.empty then steps = ones(N) // [1,1,1,...]
+  assert(axes.size == input.rank || axes.size == 0)
+  assert(starts.size == axes.size)
+  assert(ends.size == axes.size)
+  assert(steps.size == axes.size)
+  starts = max(starts, zeroes(N))
+  ends = min(ends, input.shape)
+  ends = max(ends, starts)
+
+  for i=0..&lt;N do output.shape[i] = ceil((ends[i] - starts[i]) / steps[i]) // negative steps unhandled!
+  for each outputCoordinate in output
+    for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] * steps[i] + starts[i]
+    output[outputCoordinate] = inputData[inputCoordinate]
+  endfor
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -857,7 +970,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#DynamicSlice">DynamicSlice</a></td>
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
-  <td>Crop the tensor to the given ranges for each axis. Same as slice except that inputs are not constant.</td>
+  <td>Crop the tensor to the given ranges for each axis. Same as slice except that inputs are not constant and may come from the output of another operator.</td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -969,7 +1082,9 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Shape">Shape</a></td>
   <td></td>
   <td>NA, just read the TENSOR_DESC dimensions</td>
-  <td>Return the dimensions of the tensor as a 1D tensor.</td>
+  <td>Return the dimensions of the tensor as a 1D tensor.
+      F(input): return input.shape
+  </td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -1430,7 +1545,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
   <td></td>
   <td>Identity actually (useful during training, not trained execution)</td>
-  <td>if training: F(X) = Where(Less(Random(0, 0.9999), ratio), 0, X), or f(x) = iif(random(0, 0.9999) < ratio, x, 0);
+  <td>if training: F(X) = Where(Less(Random(0, 0.9999), ratio), 0, X), or f(x) = iif(random(0, 0.9999) &lt; ratio, x, 0);
       if forward execution: F(X) = Identity(X), or: f(x) = x
       notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
   <td>Unpredictable</td>
@@ -1440,7 +1555,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>Constant Fill</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConstantFill">ConstantFill</a></td>
   <td></td>
-  <td>Use identity with zero strides for broadcasting</td>
+  <td>Use DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides for broadcasting</td>
   <td>f() = value</td>
   <td>Exact</td>
  </tr>
