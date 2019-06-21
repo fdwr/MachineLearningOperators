@@ -35,7 +35,7 @@ td
 <li>Any matrix style compound dot product will explicitly use MatMul() rather than '*' to avoid unacceptable notation ambiguity.</li>
 <li>Any addition signs '+' mean elementwise addition, never the horrible notation abuse of concatenation.</li>
 <li>All exp() and log() use the natural logarithm 2.718281828 (not base 10 or 2).</li></p>
-<li>The pseudocode below uses a few undefined functions, but their trivial behavior should be obvious enough to implement. e.g. min,max,ones,zeroes</li></p>
+<li>The pseudocode below uses a few undefined functions, but their trivial behavior should be obvious to implement. e.g. min,max,ones,zeroes,iif,assert</li></p>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
  <tr>
@@ -784,14 +784,14 @@ double f(double x)
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
-  <td>Convolution</td>
+  <td>Convolve</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Conv">Conv</a></td>
   <td></td>
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_FORWARD</td>
   <td>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b
       notes: 'steps' affects the size of steps over the input. 'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements. A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line. 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
 <code><pre>
-function F(input, filterWeights, dilations, strides, kernel_shape, pads; output)
+function Convolve(input, filterWeights, dilations, strides, kernel_shape, pads; output)
   startPads = pads[0..pads.size/2]
   endPads = pads[pads.size/2..pads.size]
   // todo: compute output size
@@ -820,7 +820,7 @@ endfunction
  </tr>
  <tr>
   <td>Matrix Multiplication</td>
-  <td>Convolution Tranposed</td>
+  <td>Convolve Tranposed</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConvTranspose">ConvTranspose</a></td>
   <td></td>
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_BACKWARD</td>
@@ -845,7 +845,7 @@ endfunction
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with new TENSOR_DESC that flips via permuted strides</td>
   <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code><pre>
-function F(input, perm):
+function Transpose(input, perm):
   N = input.rank
   assert(perm.size == input.rank)
   for i=0..&lt;N do output.shape[i] = input.shape[perm[i]]
@@ -864,7 +864,7 @@ endfunction</pre></code></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with TENSOR_DESC using zero strides along broadcast dimension</td>
   <td>Broadcast any single size dimensions up to the output dimension counts. Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code><pre>
-function F(input, shape)
+function Broadcast(input, shape)
   output.shape = BroadcastShape(input.shape, shape)
   N = output.rank
   inputShape = PadLeadingValues(input.shape, N, 1)
@@ -872,6 +872,29 @@ function F(input, shape)
     for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
     output[outputCoordinate] = inputData[inputCoordinate]
   endfor
+endfunction</pre></code></td>
+  <td>Exact</td>
+ </tr>
+ <tr>
+  <td>Data Reorganization</td>
+  <td>BroadcastShape</td>
+  <td>No ONNX equivalent</a></td>
+  <td></td>
+  <td>NA</td>
+  <td>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.
+<code><pre>
+function BroadcastShape(shapes...)
+  N = 0
+  for each shape in shapes do N = max(N, shape.size) // Determine the largest rank in shapes
+  broadcastedShape = ones(N) // [1,1,...]
+  for each shape in shapes // Take the max of all shape dimensions.
+    paddedShape = PadLeadingValues(shape, N, 1) // Right align. e.g. N=4 with [H,W] -&gt; [1,1,H,W]
+    for i=0..&lt;N do
+      assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
+      broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
+    endfor
+  endfor
+  return broadcastedShape
 endfunction
 
 function PadLeadingValues(shape, paddedSize, padValue)
@@ -887,34 +910,13 @@ endfunction</pre></code></td>
  </tr>
  <tr>
   <td>Data Reorganization</td>
-  <td>BroadcastShape</td>
-  <td>No ONNX equivalent</a></td>
-  <td></td>
-  <td>NA</td>
-  <td>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.
-<code><pre>
-function F(shapes...)
-  N = 0
-  for each shape in shapes do N = max(N, shape.size) // Determine the largest rank in shapes
-  broadcastedShape = ones(N) // [1,1,...]
-  for each shape in shapes
-    paddedShape = PadLeadingValues(shape, N, 1) // Right align. e.g. N=4 with [H,W] -&gt; [1,1,H,W]
-    for i=0..&lt;N do assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
-    for i=0..&lt;N do broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
-  endfor
-  return broadcastedShape
-endfunction</pre></code></td>
-  <td>Exact</td>
- </tr>
- <tr>
-  <td>Data Reorganization</td>
   <td>Tile</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tile">Tile</a></td>
   <td></td>
   <td>DML_OPERATOR_TILE</td>
   <td>Repeat entire tensor along each axis by repeat counts.
 <code><pre>
-function F(input, repeats)
+function Tile(input, repeats)
   N = input.rank
   assert(repeats.size == input.rank)
   for i=0..&lt;N do assert(repeats[i] &gt; 0)
@@ -942,7 +944,7 @@ endfunction</pre></code></td>
   <td></td>
   <td>DML_OPERATOR_SLICE</td>
   <td>Crop the tensor to the given ranges for each axis.
-<code><pre>function F(input, starts, ends, axes, steps)
+<code><pre>function Slice(input, starts, ends, axes, steps)
   N = input.rank
   if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
   if starts.empty then starts = zeroes(N) // [0,0,0,...]
@@ -1112,7 +1114,22 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
   <td></td>
   <td>NA, no actual data change, just update the TENSOR_DESC</td>
-  <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).</td>
+  <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
+
+      Flatten(input, axis):
+      InputShape = Shape(input)
+      ShapeFrontHalf = Slice(InputShape; ends=axis)
+      ShapeBackHalf = Slice(InputShape; starts=axis)
+      NewShape = Concat(axis=0, ReduceProd(ShapeFrontHalf), ReduceProd(ShapeBackHalf))
+      Output = Reshape(input, NewShape)
+
+<code><pre>
+function Flatten(input, axis)
+  output = input
+  inputShape = input.shape
+  output.shape = join(reduceprod(inputShape[0..axis]), reduceprod(inputShape[axis..oldShape.size]))
+  return output
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -1121,7 +1138,27 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
-  <td>Reinterpret the view of the tensor, removing 1's for deletable axes.</td>
+  <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
+
+<code><pre>
+function ReshapeDeletingOnes(input, axes)
+  outputShape = input.shape
+  if axes.empty
+    axes = arange(0, outputShape.size)
+  else // !axes.empty
+    for i in axes do assert(outputShape[i] == 1)
+    axes = removeDupes(sort(axes))
+  endif
+  axes = reverse(axes)
+  for i in axes // work from back to front
+    if outputShape[i] == 1
+      outputShape.deleteAt(i)
+    endif
+  endfor
+  output = input
+  output.shape = outputShape
+  return output
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -1130,7 +1167,19 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
   <td></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
-  <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.</td>
+  <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
+
+<code><pre>
+function ReshapeInsertingOnes(input, axes)
+  output = input
+  outputShape = input.shape
+  axes = removeDupes(sort(axes))
+  for i in axes
+    outputShape.insertAt(i, 1)
+  endfor
+  output.shape = outputShape
+  return output
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -1148,7 +1197,7 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
   <td></td>
   <td>DML_OPERATOR_TOP_K</td>
-  <td>F(X) = Slice(SortDecreasing(X, axis), range=0..k, axis)</td>
+  <td>TopK(X, K, axis) = Slice(SortDecreasing(X, axis), starts=0, ends=K, axes=axis)</td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -1178,7 +1227,14 @@ output[outputIndices] = input[inputIndices];</code></pre></td>
   <td></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
   <td>y = (x1 + x2 + … + xn) / pool_size;
-  So X[N C H W] reduces to Y[N C 1 1]</td>
+      So X[N C H W] reduces to Y[N C 1 1]
+
+      GlobalAveragePool(X):
+      InputShape = Shape(X)
+      SpatialDimensions = Slice(InputShape; starts=2) // skip leading N and C dimensions.
+      NewShape = Unsqueeze(SpatialDimensions, Const([0,1]) // Prepend with [1,1]
+      Output = AveragePool(X, kernel_shape=NewShape))
+  </td>
   <td>Precision TBD</td>
  </tr>
  <tr>
