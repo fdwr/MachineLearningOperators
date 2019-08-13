@@ -67,7 +67,7 @@ td
  </tr>
  <tr>
   <td>Generation</td>
-  <td>Constant Fill Like</td>
+  <td>Constant Of Shape</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
@@ -131,9 +131,16 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#EyeLike">EyeLike</a></td>
   <td></td>
   <td>---</td>
-  <td>f(k=0):
-      output[i, j] = if i + k == j then 1 else 0
-      notes: In other words, all output[i, i+k] = 1.</td>
+  <td>Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code><pre>
+function EyeLike(input, k=0):
+  for every input.shape.batch // shape[0..&lt;rank-2] anything beyond 2D.
+    for i=0..&lt;input.shape.h // shape[rank-2]
+      for j=0..&lt;input.shape.w // shape[rank-1]
+        output[i, j] = (if i + k == j then 1 else 0)
+      endfor
+    endfor
+  endfor
+endfunction</pre></code></td>
   <td>Exact</td>
  </tr>
  <tr>
@@ -205,7 +212,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_EXP</td>
-  <td>f(x) = exp(x)</td>
+  <td>f(x) = expₑ(x)</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -214,7 +221,7 @@ td
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
   <td></td>
   <td>DML_OPERATOR_ELEMENT_WISE_LOG</td>
-  <td>f(x) = log(x)</td>
+  <td>f(x) = logₑ(x)</td>
   <td></td>
  </tr>
  <tr>
@@ -300,7 +307,7 @@ double f(double x)
     // Approximate the formula A&S 7.1.26:
     // 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))
     double t = 1.0/(1.0 + p*x);
-    double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t*exp(-x*x);
+    double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t*expₑ(-x*x);
     return sign * y;
 }</pre></code></td>
   <td>Precision TBD</td>
@@ -481,7 +488,7 @@ double f(double x)
   <td></td>
   <td>---</td>
   <td>f(x) = arccosh(x)
-      or: log(x + sqrt(x * x - 1))</td>
+      or: logₑ(x + sqrt(x * x - 1))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -491,7 +498,7 @@ double f(double x)
   <td></td>
   <td>---</td>
   <td>f(x) = arcsinh(x)
-      or: log(x + sqrt(x * x + 1))</td>
+      or: logₑ(x + sqrt(x * x + 1))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -501,7 +508,7 @@ double f(double x)
   <td></td>
   <td>---</td>
   <td>f(x) = arctanh(x)
-      or: log((1 + x) / (1 - x)) / 2</td>
+      or: logₑ((1 + x) / (1 - x)) / 2</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -577,8 +584,8 @@ double f(double x)
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SIGMOID</td>
   <td>F(X) = Reciprocal(Add(1, Exp(Neg(X))))
-      or: f(x) = 1 / (1 + exp(-x))
-      or: f(x) = exp(x) / (1 + exp(x))</td>
+      or: f(x) = 1 / (1 + expₑ(-x))
+      or: f(x) = expₑ(x) / (1 + expₑ(x))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -599,9 +606,9 @@ double f(double x)
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_TANH</td>
   <td>F(X) = Div(Sub(1, Exp(Mul(X, -2)), Add(1, Exp(X, -2)))
-      or: f(x) = (1 - exp(-2 * x))/(1 + exp(-2 * x))
-      or: f(x) = 2 /(1 + exp(-2 * x)) - 1
-      or: f(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))</td>
+      or: f(x) = (1 - expₑ(-2 * x))/(1 + expₑ(-2 * x))
+      or: f(x) = 2 /(1 + expₑ(-2 * x)) - 1
+      or: f(x) = (expₑ(x) - expₑ(-x)) / (expₑ(x) + expₑ(-x))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -664,7 +671,7 @@ double f(double x)
   <td>DML_OPERATOR_ACTIVATION_ELU</td>
   <td>F(X, alpha = 1) = Where(Less(X, 0), Mul(Sub(Exp(X), 1), alpha))
       or: F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
-      or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (exp(x) - 1)</td>
+      or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (expₑ(x) - 1)</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -676,7 +683,7 @@ double f(double x)
   <td>F(X, alpha = 1.6732, gamma = 1.0507) = Mul(Elu(X, alpha), gamma)
       or: f(x, alpha = 1.6732, gamma = 1.0507):
       if x &gt; 0 then gamma * x
-      else gamma * alpha * (exp(x) - 1)</td>
+      else gamma * alpha * (expₑ(x) - 1)</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -692,8 +699,8 @@ double f(double x)
     reducedX = ReduceSum(ExpXBatch)
     Output batch = ExpXBatch / reducedX
   endfor</pre></code>
-    or per batch: f(x) = exp(x) / sum(exp(X))
-    or per batch: exp(x - max(X)) / sum(exp(x - max(X)))</td>
+    or per batch: f(x) = expₑ(x) / sum(expₑ(X))
+    or per batch: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -703,8 +710,8 @@ double f(double x)
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
   <td>F(Input, axis) = Log(Softmax(Input, axis))
-  or: f(x) = log(exp(x - max(X)) / sum(exp(X - max(X))))
-  or: (x - max(X)) - log(x - max(X))))</td>
+  or: f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))
+  or: (x - max(X)) - logₑ(x - max(X))))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -734,7 +741,7 @@ double f(double x)
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTPLUS</td>
   <td>F(X) = Log(Add(Exp(x), 1))
-      or: f(x) = log(1 + exp(x))</td>
+      or: f(x) = logₑ(1 + expₑ(x))</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -1339,7 +1346,7 @@ endfunction</pre></code></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM</td>
   <td>F(X) = Log(ReduceSum(X, axes, keepdims))
-      or: y = log(x1 + x2 + ... + xn)</td>
+      or: y = logₑ(x1 + x2 + ... + xn)</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -1349,7 +1356,7 @@ endfunction</pre></code></td>
   <td></td>
   <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM_EXP</td>
   <td>F(X) = Log(ReduceSum(Exp(X), axes, keepdims))
-      or: y = log(exp(x1) + exp(x2) + ... + exp(xn))
+      or: y = logₑ(expₑ(x1) + expₑ(x2) + ... + expₑ(xn))
   </td>
   <td>Precision TBD</td>
  </tr>
@@ -1632,7 +1639,7 @@ endfunction</pre></code></td>
   <td></td>
   <td>DML_OPERATOR_ACTIVATION_PARAMETRIC_SOFTPLUS</td>
   <td>F(X, alpha, beta) = Mul(alpha, Softplus(Mul(beta, X))).
-      or: f(x, alpha, beta) = alpha * log(1 + exp(beta * x))
+      or: f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))
   </td>
   <td>Precision TBD</td>
  </tr>
