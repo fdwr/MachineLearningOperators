@@ -1517,7 +1517,14 @@ endfunction</pre></code></td>
       STD = Sqrt(Variance)
       X_variance = Sub(X, X_RM)
       Processed_STD = Add(STD, Epsilon)
-      X_MVN = Div(X_variance, Processed_STD)</td>
+      X_MVN = Div(X_variance, Processed_STD)
+
+      data_mean = np.mean(input_data, axes, keepdims=1)
+      data_mean_squared = np.power(data_mean, 2)
+      data_squared = np.power(input_data, 2)
+      data_squared_mean = np.mean(data_squared, axes, keepdims=1)
+      std = np.sqrt(data_squared_mean - data_mean_squared)
+      expected_output = (input_data - data_mean) / (std + 1e-9)</td>
   <td>Precision TBD</td>
  </tr>
  <tr>
