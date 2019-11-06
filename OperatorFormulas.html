@@ -1742,8 +1742,11 @@ endfunction</pre></code></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
   <td></td>
   <td>Identity actually (useful during training, not trained execution)</td>
-  <td>if training: F(X) = Where(Less(Random(0, 0.9999), ratio), 0, X), or f(x) = iif(random(0, 0.9999) &lt; ratio, x, 0);
-      if forward execution: F(X) = Identity(X), or: f(x) = x
+  <td>if training:
+<code><pre>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
+or f(x) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</pre></code>
+For forward execution, ratio is 0, and so it's equivalent to:
+<code><pre>F(X) = Identity(X)</pre></code>
       notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
   <td>Unpredictable</td>
  </tr>
@@ -1783,6 +1786,9 @@ https://github.com/onnx/onnx/pull/1908
 ## NonMaxSuppression
 
 https://github.com/onnx/onnx/pull/1703
+https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression  
+tf.image.non_max_suppression
+https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/kernels/non_max_suppression_op.cc
 
 ## StringNormalizer
 
@@ -1854,6 +1860,8 @@ https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitShift
 
 https://github.com/onnx/onnx/pull/2030  
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#CumSum
+tf.math.cumsum
+https://www.tensorflow.org/api_docs/python/tf/math/cumsum
 
 Tally the cumulative summation along a given axis.
 output size = input size  
