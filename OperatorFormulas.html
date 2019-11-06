@@ -1890,12 +1890,9 @@ https://github.com/onnx/onnx/pull/1927
 
 Gaussian Error Linear Units (GELUs)
 
-https://arxiv.org/abs/1606.08415
-GELU = 0.5*x*(1 + tanh[2/π(x + 0.044715 * x^3)])
+https://arxiv.org/abs/1606.08415 GELU = 0.5*x*(1 + tanh[2/π(x + 0.044715 * x^3)])
 
-https://github.com/huggingface/pytorch-openai-transformer-lm/blob/master/model_pytorch.py#L14-L15
-def gelu(x):
-    return 0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
+https://github.com/huggingface/pytorch-openai-transformer-lm/blob/master/model_pytorch.py#L14-L15 def gelu(x):     return 0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
 
 https://github.com/microsoft/onnxruntime/pull/2293/files
     const T x = input[idx];
@@ -1905,11 +1902,40 @@ https://github.com/microsoft/onnxruntime/pull/2293/files
 
 https://github.com/apache/incubator-mxnet/pull/14449/files
 
-const float GELU_CUBIC_CONSTANT = 0.044715;
-const float GELU_ROOT_2_OVER_PI = 0.7978845608028654;
+    const float GELU_CUBIC_CONSTANT = 0.044715;
+    const float GELU_ROOT_2_OVER_PI = 0.7978845608028654;
 
-return 0.5 * x * f(x)
-f: return 1.0 + mx.nd.tanh(g(x))
-g: return ROOT_TWO_OVER_PI * (x + CUBE_CONSTANT * x * x * x)
+    return 0.5 * x * f(x)
+    f: return 1.0 + mx.nd.tanh(g(x))
+    g: return ROOT_TWO_OVER_PI * (x + CUBE_CONSTANT * x * x * x)
+
+## Mod
+
+https://github.com/onnx/onnx/pull/1874  
+https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod  
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.mod.html  
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.fmod.html  
+
+numpy.fmod / numpy.mod
+
+The 'fmod' attribute selects between Python vs C signs, which when set really means (a) truncate division toward zero (b) result's sign follows dividend.
+Note HLSL says "The % operator is defined only in cases where either both sides are positive or both sides are negative", and so it's likely unsuitable to implement this operator. https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-operators
+
+``` c
+    // The C++11 specification says a % b always resolves to the sign of a:
+    //
+    //  x = [8,  8, -8, -8]
+    //  y = [3, -3,  3, -3]
+    //  z = [2,  2, -2, -2] -- C fmod(), C %, or numpy.fmod())
+    //
+    // In Python, a % b (assuming non-zero) has the same sign as b:
+    //
+    //  x = [8,  8, -8, -8]
+    //  y = [3, -3,  3, -3]
+    //  z = [2, -1,  1, -2] -- Python % or numpy.mod
+    //
+    Mod(x, y, fmod) = if fmod == 1 then return x - (y * TruncateTowardZero(x / y)) // like C
+                                   else return x - (y * Floor(x / y)) // like Python
+```
 
 -->
