@@ -240,7 +240,7 @@ double f(double x)
   <td>Elementwise Math</td>
   <td>Is Not a Number</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#IsNaN">IsNan</a></td>
-  <td>---</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_IS_NAN</td>
   <td>f(x) = isnan(x)
       where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
       Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>. The sign is ignored.
@@ -267,7 +267,7 @@ endfor
   <td>Elementwise Math</td>
   <td>Sign</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
-  <td>---</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_SIGN</td>
   <td><code><pre>Sign(x):
     if x == 0 then 0
     elif x &gt; 0 then 1
@@ -1188,7 +1188,7 @@ endfunction</pre></code></td>
   <td>Data reorganization mapping</td>
   <td>One Hot Along Axis</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
-  <td>---</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_ONE_HOT</td>
   <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
   <td>Exact</td>
  </tr>
@@ -1204,7 +1204,7 @@ endfunction</pre></code></td>
   <td>Data reorganization selection</td>
   <td>Select elementwise</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
-  <td>---</td>
+  <td>DML_OPERATOR_ELEMENT_WISE_IF</td>
   <td>f(b, x, y) = if b then x else y
       notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
   </td>
