@@ -645,23 +645,28 @@ endfunction</code></td>
       else gamma * alpha * (expₑ(x) - 1)</td>
   <td>Precision TBD</td>
  </tr>
- <tr class="activationOperator">
-  <td>Activation</td>
+ <tr class="activationOperator normalizationOperator">
+  <td>Activation / Normalization</td>
   <td>Soft Maximum</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softmax">Softmax</a></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTMAX</td>
-  <td><details><summary>Divide all the elements in each batch by the sum.</summary>
-<code>function F(Input, axis):
-  FlattenedX = Flatten(X, axis)
-  ExpX = Exp(FlattenedX)
-  for each ExpXBatch in FlattenedX batches
-    reducedX = ReduceSum(ExpXBatch)
-    Output batch = ExpXBatch / reducedX
-  endfor
-endfunction</code>
+  <td><details><summary>Raise all elements to e, and divide all the elements in each batch by that batch's sum.</summary>
+<code>function SoftMax2D(Input; Output; axis):
+  MaxInput = ReduceMax(Input, axes=[1], keepdims=1)
+  ExpInput = Exp(Input - MaxInput)
+  ReducedExpInput = ReduceSum(ExpInput, axis=[1], keepdims=1)
+  Output = ExpInput / ReducedExpInput
+endfunction
+
+function F(Input; Output; axis):
+  FlattenedInput = Flatten(Input, axis) // Flatten to 2D
+  NormalizedInput = SoftMax2D(FlattenedInput)
+  Output = Reshape(NormalizedInput, Shape(X))
+endfunction
+</code>
 
     or per batch: f(x) = expₑ(x) / sum(expₑ(X))
-    or per batch: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</details></td>
+    or per batch for more numerical stability: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</details></td>
   <td>Precision TBD</td>
  </tr>
  <tr class="activationOperator">
