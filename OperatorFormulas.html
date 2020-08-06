@@ -1019,7 +1019,21 @@ endfunction</code></details></td>
   <td>Contenate</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Concat">Concat</a></td>
   <td>DML_OPERATOR_JOIN</td>
-  <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}</td>
+  <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
+<code>function Concat(inputs, axis)
+  sizesAlongAxis = []
+  for each input in inputs
+    sizesAlongAxis.append(input.shape[axis])
+  endfor
+  outputOffsets = CumSum(axisSizes)
+  for each inputIndex from 0 up to inputs.count
+    input = inputs[inputIndex]
+    outputOffset = outputOffset[inputIndex]
+    for each index from 0 up to axis
+      output[..., outputOffset + index, ...] = input[..., index, ...]
+    endfor
+  endfor
+</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
