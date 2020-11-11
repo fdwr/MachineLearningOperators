@@ -1527,12 +1527,22 @@ Output = AveragePool(X, kernel_shape=NewShape))</details></td>
   <td>Normalization</td>
   <td>Instance Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
-  <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with acrossChannels=false, normalizeVariance=true, scale and bias provided</td>
+  <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with acrossChannels=false, normalizeVariance=true, scale and bias provided<br/>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes except the first two (N,C).</td>
   <td>f(x) = scale * (x - mean) / sqrt(variance + epsilon) + Bias[ci]
-      mean and variance are computed per instance per channel:
-      mean = (x0 + x1 …) / xn;
-      variance = ((x0 - xmean)^2 + (x1 - xmean)^2 …) / xn
-      notes: formula needs review</td>
+
+mean and variance are computed per batch per channel (only spatial dimensions):
+
+axes = [2,3, ..., inputRank-1] // Exclude axes {0,1}
+mean = (x0 + x1 + …) / xn;
+variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
+
+ONNX:
+mean = ReduceAverage(axes, keepdims=true)
+variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)
+
+NumPy:
+mean = np.mean(x, axis=axes, keepdims=True)
+variance = np.var(x, axis=axes, keepdims=True)</td>
   <td>Precision TBD</td>
  </tr>
  <tr class="normalizationOperator">
@@ -1540,9 +1550,23 @@ Output = AveragePool(X, kernel_shape=NewShape))</details></td>
   <td>Batch Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BatchNormalization">BatchNormalization</a></td>
   <td>DML_OPERATOR_BATCH_NORMALIZATION</td>
-  <td>y = scale * (x - batchMean) / sqrt(batchVariance + epsilon) + Bias[ci]
-      notes: Statistics are computed for each channel.
-      notes: formula needs review</td>
+  <td>f(X) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
+
+Statistics are precomputed for each channel (across batch and spatial dimensions),
+then reshaped to be input-compatible.
+
+axes = [0,2, ..., inputRank-1] // Exclude axes {2}
+mean = (x0 + x1 + …) / xn;
+variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
+
+ONNX:
+mean = ReduceAverage(axes, keepdims=true)
+variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)
+
+NumPy:
+mean = np.var(x, axis=axes, keepdims=True)
+variance = np.mean(x, axis=axes, keepdims=True)
+</td>
   <td>Precision TBD</td>
  </tr>
  <tr class="normalizationOperator">
@@ -1550,7 +1574,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</details></td>
   <td>Local Response Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
   <td>DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
-  <td>y = x / (bias + (alpha/size) * sum(xi^2 for every xi in the local region))^beta
+  <td>f(x) = x / (bias + (alpha/size) * sum(xi^2 for every xi in the local region))^beta
       defaults: bias = 1
       notes: formula needs review</td>
   <td>Precision TBD</td>
@@ -1561,7 +1585,12 @@ Output = AveragePool(X, kernel_shape=NewShape))</details></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
   <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION</td>
   <td><details><summary>For each output element, subtract the mean, and divide by standard deviation.</summary>
-<code>
+f(X) = (X - mean) / standardDeviation
+f(X) = (X - mean) / sqrt(variance + epsilon)
+f(X) = (X - mean(X)) / sqrt(mean((X - mean(X))^2))
+f(X) = (X - mean(X)) / sqrt(mean(X^2) - mean(X)^2))
+
+ONNX:
 Exponent = Const(2.0)
 Epsilon = Const(1e-9)
 X_RM = ReduceMean(X)
@@ -1574,12 +1603,14 @@ X_variance = Sub(X, X_RM)
 Processed_STD = Add(STD, Epsilon)
 X_MVN = Div(X_variance, Processed_STD)
 
-data_mean = np.mean(input_data, axes, keepdims=1)
-data_mean_squared = np.power(data_mean, 2)
-data_squared = np.power(input_data, 2)
-data_squared_mean = np.mean(data_squared, axes, keepdims=1)
-std = np.sqrt(data_squared_mean - data_mean_squared)
-expected_output = (input_data - data_mean) / (std + 1e-9)</code></details></td>
+NumPy:
+dataMean = np.mean(inputData, axes, keepdims=1)
+dataMeanSquared = np.power(dataMean, 2)
+dataSquared = np.power(inputData, 2)
+dataSquareMeaned = np.mean(dataSquared, axes, keepdims=1)
+std = np.sqrt(dataSquareMeaned - dataMeanSquared)
+output = (inputData - dataMean) / (std + 1e-9)</details>
+</td>
   <td>Precision TBD</td>
  </tr>
  <tr class="normalizationOperator">
