@@ -1525,10 +1525,10 @@ Output = AveragePool(X, kernel_shape=NewShape))</details></td>
  </tr>
  <tr class="normalizationOperator">
   <td>Normalization</td>
-  <td>Instance Normalization</td>
+  <td>Per-Channel Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
   <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with acrossChannels=false, normalizeVariance=true, scale and bias provided<br/>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes except the first two (N,C).</td>
-  <td>f(x) = scale * (x - mean) / sqrt(variance + epsilon) + Bias[ci]
+  <td>InstanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
 
 mean and variance are computed per batch per channel (only spatial dimensions):
 
@@ -1550,7 +1550,7 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   <td>Batch Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BatchNormalization">BatchNormalization</a></td>
   <td>DML_OPERATOR_BATCH_NORMALIZATION</td>
-  <td>f(X) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
+  <td>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
 
 Statistics are precomputed for each channel (across batch and spatial dimensions),
 then reshaped to be input-compatible.
@@ -1585,10 +1585,10 @@ variance = np.mean(x, axis=axes, keepdims=True)
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
   <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION</td>
   <td><details><summary>For each output element, subtract the mean, and divide by standard deviation.</summary>
-f(X) = (X - mean) / standardDeviation
-f(X) = (X - mean) / sqrt(variance + epsilon)
-f(X) = (X - mean(X)) / sqrt(mean((X - mean(X))^2))
-f(X) = (X - mean(X)) / sqrt(mean(X^2) - mean(X)^2))
+MeanVarianceNormalization(X) = (X - mean) / standardDeviation
+MeanVarianceNormalization(X) = (X - mean) / sqrt(variance + epsilon)
+MeanVarianceNormalization(X) = (X - mean(X)) / sqrt(mean((X - mean(X))^2))
+MeanVarianceNormalization(X) = (X - mean(X)) / sqrt(mean(X^2) - mean(X)^2))
 
 ONNX:
 Exponent = Const(2.0)
