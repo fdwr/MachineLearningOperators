@@ -1525,12 +1525,12 @@ Output = AveragePool(X, kernel_shape=NewShape))</details></td>
  </tr>
  <tr class="normalizationOperator">
   <td>Normalization</td>
-  <td>Per-Channel Normalization</td>
+  <td>Spatial Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
   <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with acrossChannels=false, normalizeVariance=true, scale and bias provided<br/>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes except the first two (N,C).</td>
-  <td>InstanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
+  <td>InstanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
-mean and variance are computed per batch per channel (only spatial dimensions):
+Mean and variance are computed across spatial dimensions DHW, independently per batch per channel NC:
 
 axes = [2,3, ..., inputRank-1] // Exclude axes {0,1}
 mean = (x0 + x1 + …) / xn;
@@ -1552,10 +1552,9 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   <td>DML_OPERATOR_BATCH_NORMALIZATION</td>
   <td>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
 
-Statistics are precomputed for each channel (across batch and spatial dimensions),
-then reshaped to be input-compatible.
+Statistics are precomputed across batch and spatial dimensions NDHW (and not just the batch dimension, as the name would misleadingly lead you believe) independently for each channel C, then reshaped to be input size compatible.
 
-axes = [0,2, ..., inputRank-1] // Exclude axes {2}
+axes = [0,2, ..., inputRank-1] // Exclude axes {1}
 mean = (x0 + x1 + …) / xn;
 variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
 
@@ -1567,6 +1566,28 @@ NumPy:
 mean = np.var(x, axis=axes, keepdims=True)
 variance = np.mean(x, axis=axes, keepdims=True)
 </td>
+  <td>Precision TBD</td>
+ </tr>
+ <tr class="normalizationOperator">
+  <td>Normalization</td>
+  <td>Spatial&Channel Normalization</td>
+  <td>NA</td>
+  <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes except the first batch (N).</td>
+  <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + Bias
+
+Mean and variance are computed across spatial&channel dimensions CDHW, independently per batch N:
+
+axes = [1,2,3, ..., inputRank-1] // Exclude axes {0}
+mean = (x0 + x1 + …) / xn;
+variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
+
+ONNX:
+mean = ReduceAverage(axes, keepdims=true)
+variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)
+
+NumPy:
+mean = np.mean(x, axis=axes, keepdims=True)
+variance = np.var(x, axis=axes, keepdims=True)</td>
   <td>Precision TBD</td>
  </tr>
  <tr class="normalizationOperator">
