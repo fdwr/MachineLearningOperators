@@ -693,7 +693,7 @@ endfunction
   <td>Soft Sign</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softsign">Softsign</a></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTSIGN</td>
-  <td>F(X) = Div(X, (Add(Abs(X), 1)))
+  <td>F(X) = Div(X, Add(Abs(X), 1))
       or: f(x) = x / (1 + abs(x))</td>
   <td>Precision TBD</td>
  </tr>
