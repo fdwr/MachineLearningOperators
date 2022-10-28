@@ -239,8 +239,8 @@ endfunction</code></td>
   <td>Error Function</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Erf">Erf</a></td>
   <td>---</td>
-  <td><details><summary><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
-or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code></summary>
+  <td><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
+or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code>
 <code>
 double f(double x)
 {
@@ -262,7 +262,7 @@ double f(double x)
     double t = 1.0/(1.0 + p*x);
     double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t*expₑ(-x*x);
     return sign * y;
-}</code></details></td>
+}</code></td>
   <td>Precision TBD</td>
  </tr>
  <tr class="elementwiseOperator">
@@ -650,7 +650,7 @@ endfunction</code></td>
   <td>Soft Maximum</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softmax">Softmax</a></td>
   <td>DML_OPERATOR_ACTIVATION_SOFTMAX</td>
-  <td><details><summary>Raise all elements to e, and divide all the elements in each batch by that batch's sum.</summary>
+  <td>Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 <code>function SoftMax2D(Input; Output; axis):
   MaxInput = ReduceMax(Input, axes=[1], keepdims=1)
   ExpInput = Exp(Input - MaxInput)
@@ -666,7 +666,7 @@ endfunction
 </code>
 
     or per batch: f(x) = expₑ(x) / sum(expₑ(X))
-    or per batch for more numerical stability: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</details></td>
+    or per batch for more numerical stability: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</td>
   <td>Precision TBD</td>
  </tr>
  <tr class="activationOperator">
@@ -824,7 +824,7 @@ endfunction</code></td>
   <td>Convolve</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Conv">Conv</a></td>
   <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_FORWARD</td>
-  <td><details><summary>Every output element is the convolution of the filter with the corresponding input elements.</summary>
+  <td>Every output element is the convolution of the filter with the corresponding input elements.
   <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</code>
       notes: 'steps' affects the size of steps over the input.
       'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements.
@@ -855,7 +855,7 @@ function ConvolveKernel(input, filterWeights, firstInputCoordinate, dilations)
   endfor // y
   return result
 endfunction
-</code></details></td>
+</code></td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -880,7 +880,7 @@ endfunction
   <td>Transpose</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Transpose">Transpose</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with new TENSOR_DESC that flips via permuted strides</td>
-  <td><details><summary>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.</summary>
+  <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
 function Transpose(input, perm):
   N = input.rank
@@ -890,7 +890,7 @@ function Transpose(input, perm):
     for i=0..&lt;N do outputCoordinate[i] = inputCoordinate[perm[i]]
     output[outputCoordinate] = input[inputCoordinate]
   endfor
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -898,7 +898,7 @@ endfunction</code></details></td>
   <td>Broadcast</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Expand">Expand</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with TENSOR_DESC using zero strides along broadcast dimension</td>
-  <td><details><summary>Broadcast any single size dimensions up to the output dimension counts. Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.</summary>
+  <td>Broadcast any single size dimensions up to the output dimension counts. Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
 function Broadcast(input, shape)
   output.shape = BroadcastShape(input.shape, shape)
@@ -908,7 +908,7 @@ function Broadcast(input, shape)
     for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
     output[outputCoordinate] = inputData[inputCoordinate]
   endfor
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -916,7 +916,7 @@ endfunction</code></details></td>
   <td>BroadcastShape</td>
   <td>No ONNX equivalent</a></td>
   <td>NA</td>
-  <td><details><summary>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.</summary>
+  <td>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.
 <code>
 function BroadcastShape(shapes...)
   N = 0
@@ -940,7 +940,7 @@ function PadLeadingValues(shape, paddedSize, padValue)
     paddedShape[i] = i &lt; padCount ? padValue : shape[i - padCount]
   endfor
   return paddedShape
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -948,7 +948,7 @@ endfunction</code></details></td>
   <td>Tile</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tile">Tile</a></td>
   <td>DML_OPERATOR_TILE</td>
-  <td><details><summary>Repeat entire tensor along each axis by repeat counts.</summary>
+  <td>Repeat entire tensor along each axis by repeat counts.
 <code>
 function Tile(input, repeats)
   N = input.rank
@@ -959,7 +959,7 @@ function Tile(input, repeats)
     for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] % input.shape[i]
     output[outputCoordinate] = inputData[inputCoordinate]
   endfor
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -975,7 +975,7 @@ endfunction</code></details></td>
   <td>Slice</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a></td>
   <td>DML_OPERATOR_SLICE</td>
-  <td><details><summary>Crop the tensor to the given ranges for each axis.</summary>
+  <td>Crop the tensor to the given ranges for each axis.
 <code>function Slice(input, starts, ends, axes, steps)
   N = input.rank
   if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
@@ -995,7 +995,7 @@ endfunction</code></details></td>
     for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] * steps[i] + starts[i]
     output[outputCoordinate] = inputData[inputCoordinate]
   endfor
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1050,7 +1050,7 @@ endfunction</code></details></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherElements">GatherElements</a><br/>
       <a href="https://pytorch.org/docs/stable/torch.html#torch.gather">torch.gather</a></td>
   <td>---</td>
-  <td><details><summary>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.</summary>
+  <td>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
 output = input
 for each coordinate in indices tensor
@@ -1076,7 +1076,7 @@ input = [[1,2],[3,4],[5,6]]
 indices = [[0,0],[1,0],[1,1]]
 axis = 1
 output = [[1,1], [4,3], [6,6]]
-</code></details></td>
+</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1085,7 +1085,7 @@ output = [[1,1], [4,3], [6,6]]
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterElements">ScatterElements</a>
       <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor.scatter_">tensor.scatter_</a></td>
   <td>---</td>
-  <td><details><summary>Opposite of gather. Write values from updates into data at the given indices. If two output element indices overlap, there is no documented winner, but last write wins in practice.</summary>
+  <td>Opposite of gather. Write values from updates into data at the given indices. If two output element indices overlap, there is no documented winner, but last write wins in practice.
 <code>
 output = input
 for each coordinate in indices tensor
@@ -1107,7 +1107,7 @@ self[i][j][ index[i][j][k] ] = src[i][j][k]  # if dim == 2
       axis = 0
       output = [[1, 11, 3, 21, 5]]
 </code>
-  </details></td>
+  </td>
   <td>Exact</td>
 </tr>
  <tr class="reorganizationOperator">
@@ -1123,7 +1123,7 @@ self[i][j][ index[i][j][k] ] = src[i][j][k]  # if dim == 2
   <td>Space To Depth</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#SpaceToDepth">SpaceToDepth</a></td>
   <td>DML_OPERATOR_SPACE_TO_DEPTH</td>
-  <td><details><summary>Rearrange blocks of elements.</summary>
+  <td>Rearrange blocks of elements.
 <code>
 channelCountDivBlockCount = channelCount / (blockSize * blockSize);
 inputIndices = [
@@ -1133,7 +1133,7 @@ inputIndices = [
     (outputIndices.channel / channelCountDivBlockCount) % blockSize + (outputIndices.width  * blockSize)
     ]
 
-output[outputIndices] = input[inputIndices];</code></details></td>
+output[outputIndices] = input[inputIndices];</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1141,7 +1141,7 @@ output[outputIndices] = input[inputIndices];</code></details></td>
   <td>Depth To Space</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DepthToSpace">DepthToSpace</a></td>
   <td>DML_OPERATOR_DEPTH_TO_SPACE</td>
-  <td><details><summary>Rearrange blocks of elements.</summary>
+  <td>Rearrange blocks of elements.
 <code>
 channelCountDivBlockCount = channelCount / (blockSize * blockSize);
 outputIndices = [
@@ -1151,7 +1151,7 @@ outputIndices = [
     (inputIndices.channel / channelCountDivBlockCount) % blockSize + (inputIndices.width  * blockSize)
     ]
 
-output[outputIndices] = input[inputIndices];</code></details></td>
+output[outputIndices] = input[inputIndices];</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1186,7 +1186,7 @@ output[outputIndices] = input[inputIndices];</code></details></td>
   <td>Reshape To 2D</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
   <td>NA, no actual data change, just update the TENSOR_DESC</td>
-  <td><details><summary>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).</summary>
+  <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
 
 <code>
 aggregate Flatten(input, axis)
@@ -1204,7 +1204,7 @@ function Flatten(input, axis)
   inputShape = input.shape
   output.shape = join(reduceprod(inputShape[0..axis]), reduceprod(inputShape[axis..oldShape.size]))
   return output
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1212,7 +1212,7 @@ endfunction</code></details></td>
   <td>Reshape Removing 1's</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
-  <td><details><summary>Reinterpret the view of the tensor, removing 1's for deletable axes.</summary>
+  <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
 
 <code>
 function ReshapeDeletingOnes(input, axes)
@@ -1232,7 +1232,7 @@ function ReshapeDeletingOnes(input, axes)
   output = input
   output.shape = outputShape
   return output
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1240,7 +1240,7 @@ endfunction</code></details></td>
   <td>Reshape Inserting 1's</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
   <td>NA, just rearrange the TENSOR_DESC</td>
-  <td><details><summary>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.</summary>
+  <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
 
 <code>
 function ReshapeInsertingOnes(input, axes)
@@ -1252,7 +1252,7 @@ function ReshapeInsertingOnes(input, axes)
   endfor
   output.shape = outputShape
   return output
-endfunction</code></details></td>
+endfunction</code></td>
   <td>Exact</td>
  </tr>
  <tr class="reorganizationOperator">
@@ -1294,7 +1294,7 @@ endfunction</code></details></td>
   <td>Reverse axes</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/pull/1804">Reverse</a></td>
   <td>---</td>
-  <td><details><summary>Reverse all the elements along the given axes.</summary>
+  <td>Reverse all the elements along the given axes.
 <code>
 output.shape = input.shape
 for every inputCoordinate in input tensor
@@ -1306,7 +1306,7 @@ for every inputCoordinate in input tensor
 
     output[outputCoordinate] = input[inputCoordinate]
 endfor
-</code></details></td>
+</code></td>
   <td>Exact</td>
  </tr>
  <tr class="poolingOperator">
@@ -1314,14 +1314,14 @@ endfor
   <td>Global Average Pooling</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
   <td>DML_OPERATOR_AVERAGE_POOLING</td>
-  <td><details><summary>Average all elements in each pool. y = (x1 + x2 + … + xn) / pool_size;</summary>
+  <td>Average all elements in each pool. y = (x1 + x2 + … + xn) / pool_size;
 So X[N C H W] reduces to Y[N C 1 1]
 
 GlobalAveragePool(X):
 InputShape = Shape(X)
 SpatialDimensions = Slice(InputShape; starts=2) // skip leading N and C dimensions.
 NewShape = Unsqueeze(SpatialDimensions, Const([0,1]) // Prepend with [1,1]
-Output = AveragePool(X, kernel_shape=NewShape))</details></td>
+Output = AveragePool(X, kernel_shape=NewShape))</td>
   <td>Precision TBD</td>
  </tr>
  <tr class="poolingOperator">
@@ -1605,7 +1605,8 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   <td>Mean Variance Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
   <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION</td>
-  <td><details><summary>For each output element, subtract the mean, and divide by standard deviation.</summary>
+  <td>For each output element, subtract the mean, and divide by standard deviation.
+
 MeanVarianceNormalization(X) = (X - mean) / standardDeviation
 MeanVarianceNormalization(X) = (X - mean) / sqrt(variance + epsilon)
 MeanVarianceNormalization(X) = (X - mean(X)) / sqrt(mean((X - mean(X))^2))
@@ -1630,7 +1631,7 @@ dataMeanSquared = np.power(dataMean, 2)
 dataSquared = np.power(inputData, 2)
 dataSquareMeaned = np.mean(dataSquared, axes, keepdims=1)
 std = np.sqrt(dataSquareMeaned - dataMeanSquared)
-output = (inputData - dataMean) / (std + 1e-9)</details>
+output = (inputData - dataMean) / (std + 1e-9)
 </td>
   <td>Precision TBD</td>
  </tr>
@@ -1639,7 +1640,7 @@ output = (inputData - dataMean) / (std + 1e-9)</details>
   <td>Lebesgue Length Normalization</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpNormalization">LpNormalization</a></td>
   <td>DML_OPERATOR_LP_NORMALIZATION</td>
-  <td><details><summary><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula</summary>
+  <td><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
 <code>aggregate F(X, p)
     // TODO: verify this. mean? variance not / n?
     X_reduced = ReduceLp(X, p, axis, keepdims=1)
@@ -1648,7 +1649,7 @@ output = (inputData - dataMean) / (std + 1e-9)</details>
     X_variance = Pow(X_reduced_broadcast, 2)
     Epsilon = Const(1e-9)
     Output = Div(X, Sqrt(Add(X_variance, Epsilon)))
-endaggregate</code></details></td>
+endaggregate</code></td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -1680,7 +1681,7 @@ endaggregate</code></details></td>
   <td>Gated Recurrent Unit</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GRU">GRU</a></td>
   <td>DML_OPERATOR_GRU</td>
-  <td><details><summary>Iteratively apply matrix multiplication. TODO: Need better summary.</summary>
+  <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
 Z = Activation1(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + b1, -clip, +clip))
 R = Activation1(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + b2, -clip, +clip))
@@ -1707,7 +1708,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
   <td>Long Short Term Memory</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
   <td>DML_OPERATOR_LSTM</td>
-  <td><details><summary>Iteratively apply matrix multiplication. TODO: Need better summary.</summary>
+  <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
 I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
 F = Activation1f(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + Mul(p, initial_c) + b2), -clip, +clip)
@@ -1720,7 +1721,7 @@ W = [W1, W2, W3, W4];
 b1 = B[0, :] + B[4*hidden_size, :];
 b2 = B[1, :] + B[5*hidden_size, :];
 b3 = B[2, :] + B[6*hidden_size, :];
-b4 = B[3, :] + B[7*hidden_size, :];</code></details></td>
+b4 = B[3, :] + B[7*hidden_size, :];</code></td>
   <td>Precision TBD</td>
  </tr>
  <tr>
@@ -1728,11 +1729,11 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></details></td>
   <td>Dropout</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
   <td>Identity actually (useful during training, not trained execution)</td>
-  <td><details><summary>For each element, randomly zero it or multiply it by 1 / (1 - ratio).</summary>
+  <td>For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 <code>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
 or f(x) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</code>
 For forward execution, ratio is 0, and so it's equivalent to: <code>F(X) = Identity(X)</code>
-notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</details></td>
+notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
   <td>Unpredictable</td>
  </tr>
  <tr>
