@@ -128,7 +128,7 @@ endfunction</code></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Add">Add</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_ADD</td>
   <td><code>f(x, y) = x + y</code></td>
-  <td>&lt;1 ULP</td>
+  <td>1 ULP</td>
  </tr>
  <tr class="elementwiseOperator">
   <td>Elementwise Math</td>
@@ -136,7 +136,7 @@ endfunction</code></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sub">Sub</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_SUBTRACT</td>
   <td><code>f(x, y) = x - y</code></td>
-  <td>&lt;1 ULP</td>
+  <td>1 ULP</td>
  </tr>
  <tr class="elementwiseOperator">
   <td>Elementwise Math</td>
@@ -144,7 +144,7 @@ endfunction</code></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mul">Mul</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
   <td><code>f(x, y) = x * y</code></td>
-  <td>&lt;1 ULP</td>
+  <td>1 ULP</td>
  </tr>
  <tr class="elementwiseOperator">
   <td>Elementwise Math</td>
@@ -152,7 +152,7 @@ endfunction</code></td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Div">Div</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_DIVIDE</td>
   <td><code>f(x, y) = x / y</code></td>
-  <td>&lt;1 ULP</td>
+  <td>1 ULP</td>
  </tr>
  <tr class="elementwiseOperator">
   <td>Elementwise Math</td>
@@ -167,8 +167,8 @@ endfunction</code></td>
   <td>Reciprocal</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
   <td>DML_OPERATOR_ELEMENT_WISE_RECIP</td>
-  <td><code>f(x) = 1 / (x)</code></td>
-  <td>Precision TBD</td>
+  <td><code>f(x) = 1 / x</code></td>
+  <td>1 ULP</td>
  </tr>
  <tr class="elementwiseOperator">
   <td>Elementwise Math</td>
@@ -311,7 +311,7 @@ endfunction</code></td>
   <td>Same as Mul with broadcasting</td>
   <td>F(X) = Mul(X, scale)
       or: f(x) = x * scale</td>
-  <td>&lt;= Mul precision</td>
+  <td>1 ULP</td>
  </tr>
  <tr class="elementwiseOperator">
   <td>Elementwise Math (Deleted)</td>
@@ -1008,14 +1008,6 @@ endfunction</code></td>
  </tr>
  <tr class="reorganizationOperator">
   <td>Data Reorganization</td>
-  <td>Slice Dynamic</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#DynamicSlice">DynamicSlice</a></td>
-  <td>DML_OPERATOR_SLICE</td>
-  <td>Crop the tensor to the given ranges for each axis. Same as slice except that inputs are not constant and may come from the output of another operator.</td>
-  <td>Exact</td>
- </tr>
- <tr class="reorganizationOperator">
-  <td>Data Reorganization</td>
   <td>Contenate</td>
   <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Concat">Concat</a></td>
   <td>DML_OPERATOR_JOIN</td>
@@ -1047,8 +1039,7 @@ endfunction</code></td>
  <tr class="reorganizationOperator">
   <td>Data Reorganization</td>
   <td>Gather Elements</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherElements">GatherElements</a><br/>
-      <a href="https://pytorch.org/docs/stable/torch.html#torch.gather">torch.gather</a></td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherElements">GatherElements</a><br/><a href="https://pytorch.org/docs/stable/torch.html#torch.gather">torch.gather</a></td>
   <td>---</td>
   <td>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
@@ -1082,8 +1073,7 @@ output = [[1,1], [4,3], [6,6]]
  <tr class="reorganizationOperator">
   <td>Data reorganization</td>
   <td>Scatter Elements</td>
-  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterElements">ScatterElements</a>
-      <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor.scatter_">tensor.scatter_</a></td>
+  <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterElements">ScatterElements</a><br/><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor.scatter_">torch.tensor.scatter_</a></td>
   <td>---</td>
   <td>Opposite of gather. Write values from updates into data at the given indices. If two output element indices overlap, there is no documented winner, but last write wins in practice.
 <code>
