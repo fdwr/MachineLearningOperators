@@ -1050,9 +1050,9 @@ for each coordinate in indices tensor
     output[coordinate] = input[inputCoordinate]
 endfor
 
-out[i][j][k] = input[ index[i][j][k] ][j][k]  # if dim == 0
-out[i][j][k] = input[i][ index[i][j][k] ][k]  # if dim == 1
-out[i][j][k] = input[i][j][ index[i][j][k] ]  # if dim == 2
+output[i][j][k] = input[ index[i][j][k] ][j][k]  # if dim == 0
+output[i][j][k] = input[i][ index[i][j][k] ][k]  # if dim == 1
+output[i][j][k] = input[i][j][ index[i][j][k] ]  # if dim == 2
 </code>
 
 e.g.
@@ -1084,14 +1084,14 @@ for each coordinate in indices tensor
     output[outputCoordinate] = updates[coordinate]
 endfor
 
-self[ index[i][j][k] ][j][k] = src[i][j][k]  # if dim == 0
-self[i][ index[i][j][k] ][k] = src[i][j][k]  # if dim == 1
-self[i][j][ index[i][j][k] ] = src[i][j][k]  # if dim == 2
+output[ index[i][j][k] ][j][k] = input[i][j][k]  # if dim == 0
+output[i][ index[i][j][k] ][k] = input[i][j][k]  # if dim == 1
+output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
 </code>
 
 <code>
       e.g.
-      data = [[1, 2, 3, 4, 5]]
+      data = [[1, 2, 3, 4, 5]] // data == input
       indices = [[1, 3]]
       updates = [[11, 21]]
       axis = 0
