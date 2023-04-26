@@ -1604,26 +1604,6 @@ variance = np.mean(x, axis=axes, keepdims=True)
   </tr>
   <tr class="normalizationOperator">
     <td>Normalization</td>
-    <td>Local Response Normalization</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
-    <td>DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
-    <td>For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
-
-LRN(x, localSize, scaleAlpha, powerBeta, bias) = x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta
-defaults: bias = 1
-
-Decomposition:
-Radius = LocalSize / 2
-axes = if CrossChannel then {C} else {H,W}
-PoolingWindowSizes = ConstructWindowSizes(axes, Rank, 1 + Radius) // dimension = 1 + Radius along axes, 1's elsewhere
-Summed = PoolSum(Pow(Input, 2), axes, PoolingWindowSizes) * Alpha / LocalSize
-Biased = Summed + Bias
-Output = Input / Pow(Biased, Beta)
-  </td>
-    <td>Precision TBD</td>
-  </tr>
-  <tr class="normalizationOperator">
-    <td>Normalization</td>
     <td>Mean Variance Normalization</td>
     <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
     <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION</td>
@@ -1655,6 +1635,26 @@ dataSquareMeaned = np.mean(dataSquared, axes, keepdims=1)
 std = np.sqrt(dataSquareMeaned - dataMeanSquared)
 output = (inputData - dataMean) / (std + 1e-9)
 </td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="normalizationOperator">
+    <td>Normalization</td>
+    <td>Local Response Normalization</td>
+    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
+    <td>DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
+    <td>For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
+
+LRN(x, localSize, scaleAlpha, powerBeta, bias) = x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta
+defaults: bias = 1
+
+Decomposition:
+Radius = LocalSize / 2
+axes = if CrossChannel then {C} else {H,W}
+PoolingWindowSizes = ConstructWindowSizes(axes, Rank, 1 + Radius) // dimension = 1 + Radius along axes, 1's elsewhere
+Summed = PoolSum(Pow(Input, 2), axes, PoolingWindowSizes) * Alpha / LocalSize
+Biased = Summed + Bias
+Output = Input / Pow(Biased, Beta)
+  </td>
     <td>Precision TBD</td>
   </tr>
   <tr class="normalizationOperator">
