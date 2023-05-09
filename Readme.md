@@ -1,12 +1,10 @@
 ---
-Title: ML Operators
-Author: Dwayne Robinson
-Date: 2019-04-19
+title: Lost ONNX Docs
+author: Dwayne Robinson
+published-on: 2019-04-19
+date: 2023-04-26
 ---
-
-# Operator Equations
-
-Operator Formulas at a glance: http://fdwr.github.io/LostOnnxDocs/OperatorFormulas.html
+\>\>\> http://fdwr.github.io/LostOnnxDocs/OperatorFormulas.html \<\<\<
 
 # External Links
 
