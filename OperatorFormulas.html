@@ -156,19 +156,27 @@ endfunction</code></td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
-    <td>Square root</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_SQRT</td>
-    <td><code>f(x) = sqrt(x)</code></td>
-    <td>Precision TBD</td>
-  </tr>
-  <tr class="elementwiseOperator">
-    <td>Elementwise Math</td>
     <td>Reciprocal</td>
     <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
     <td>DML_OPERATOR_ELEMENT_WISE_RECIP</td>
     <td><code>f(x) = 1 / x</code></td>
     <td>1 ULP</td>
+  </tr>
+  <tr class="elementwiseOperator">
+    <td>Elementwise Math</td>
+    <td>Modulus Truncate</td>
+    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
+    <td>DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
+    <td><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
+    <td>2 ULP</td>
+  </tr>
+  <tr class="elementwiseOperator">
+    <td>Elementwise Math</td>
+    <td>Modulus Floor</td>
+    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
+    <td>DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
+    <td><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
+    <td>2 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
@@ -180,10 +188,26 @@ endfunction</code></td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
+    <td>Root</td>
+    <td>ONNX NA</td>
+    <td>DML_OPERATOR_ELEMENT_WISE_RECIP & POW</td>
+    <td><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="elementwiseOperator">
+    <td>Elementwise Math</td>
+    <td>Square root</td>
+    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
+    <td>DML_OPERATOR_ELEMENT_WISE_SQRT</td>
+    <td><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="elementwiseOperator">
+    <td>Elementwise Math</td>
     <td>Expnonent</td>
     <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
     <td>DML_OPERATOR_ELEMENT_WISE_EXP</td>
-    <td><code>f(x) = expₑ(x)</code></td>
+    <td><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
@@ -191,7 +215,7 @@ endfunction</code></td>
     <td>Logarithm</td>
     <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
     <td>DML_OPERATOR_ELEMENT_WISE_LOG</td>
-    <td><code>f(x) = logₑ(x)</code></td>
+    <td><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
