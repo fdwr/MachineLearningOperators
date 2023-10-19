@@ -816,9 +816,9 @@ endfunction
 output.shape = input.shape
 output.type = if exists(dtype) then dtype else input.type
 function EyeLike(input, k=0):
-  for each coordinate in output tensor
-    output[coordinate] = if coordinate.h + k == coordinate.w then 1 else 0
-  endfor
+    for each coordinate in output tensor
+        output[coordinate] = if coordinate.h + k == coordinate.w then 1 else 0
+    endfor
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -856,28 +856,28 @@ endfunction</code></td>
       'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
 <code>
 function Convolve(input, filterWeights, dilations, strides, kernel_shape, pads; output)
-  startPads = pads[0..pads.size/2]
-  endPads = pads[pads.size/2..pads.size]
-  // todo: compute output size
-  // output.shape = (input.shape + startPads + endPads) // todo: consider strides and kernel size
-  for each outputCoordinate in output
-    output[outputCoordinate] = ConvolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
-  endfor
+    startPads = pads[0..pads.size/2]
+    endPads = pads[pads.size/2..pads.size]
+    // todo: compute output size
+    // output.shape = (input.shape + startPads + endPads) // todo: consider strides and kernel size
+    for each outputCoordinate in output
+        output[outputCoordinate] = ConvolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
+    endfor
 endfunction
 
 function ConvolveKernel(input, filterWeights, firstInputCoordinate, dilations)
-  // 2D example only todo:Figure out what 'group' does and what 'M' is?
-  result = 0
-  // todo: How do 'M' and 'C' factor into this?
-  for y=0..&lt;filterWeights.shape[2]
-    for x=0..&lt;filterWeights.shape[3]
-      inputCoordinate = firstInputCoordinate + ([y,x] * dilations)
-      if (input.contains(inputCoordinate)) // check coordinates within tensor
-        result += filterWeights[y,x] * input[inputCoordinate]
-      endif
-    endfor // x
-  endfor // y
-  return result
+    // 2D example only todo:Figure out what 'group' does and what 'M' is?
+    result = 0
+    // todo: How do 'M' and 'C' factor into this?
+    for y=0..&lt;filterWeights.shape[2]
+        for x=0..&lt;filterWeights.shape[3]
+            inputCoordinate = firstInputCoordinate + ([y,x] * dilations)
+            if (input.contains(inputCoordinate)) // check coordinates within tensor
+                result += filterWeights[y,x] * input[inputCoordinate]
+            endif
+        endfor // x
+    endfor // y
+    return result
 endfunction
 </code></td>
     <td>Precision TBD</td>
@@ -907,13 +907,13 @@ endfunction
     <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
 function Transpose(input, perm):
-  N = input.rank
-  assert(perm.size == input.rank)
-  for i=0..&lt;N do output.shape[i] = input.shape[perm[i]]
-  for each inputCoordinate in input
-    for i=0..&lt;N do outputCoordinate[i] = inputCoordinate[perm[i]]
-    output[outputCoordinate] = input[inputCoordinate]
-  endfor
+    N = input.rank
+    assert(perm.size == input.rank)
+    for i=0..&lt;N do output.shape[i] = input.shape[perm[i]]
+    for each inputCoordinate in input
+        for i=0..&lt;N do outputCoordinate[i] = inputCoordinate[perm[i]]
+        output[outputCoordinate] = input[inputCoordinate]
+    endfor
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -925,13 +925,13 @@ endfunction</code></td>
     <td>Broadcast any single size dimensions up to the output dimension counts. Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
 function Broadcast(input, shape)
-  output.shape = BroadcastShape(input.shape, shape)
-  N = output.rank
-  inputShape = PadLeadingValues(input.shape, N, 1)
-  for each outputCoordinate in output
-    for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
-    output[outputCoordinate] = inputData[inputCoordinate]
-  endfor
+    output.shape = BroadcastShape(input.shape, shape)
+    N = output.rank
+    inputShape = PadLeadingValues(input.shape, N, 1)
+    for each outputCoordinate in output
+        for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
+        output[outputCoordinate] = inputData[inputCoordinate]
+    endfor
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -943,27 +943,27 @@ endfunction</code></td>
     <td>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.
 <code>
 function BroadcastShape(shapes...)
-  N = 0
-  for each shape in shapes do N = max(N, shape.size) // Determine the largest rank in shapes
-  broadcastedShape = ones(N) // [1,1,...]
-  for each shape in shapes // Take the max of all shape dimensions.
-    paddedShape = PadLeadingValues(shape, N, 1) // Right align. e.g. N=4 with [H,W] -&gt; [1,1,H,W]
-    for i=0..&lt;N do
-      assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
-      broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
+    N = 0
+    for each shape in shapes do N = max(N, shape.size) // Determine the largest rank in shapes
+    broadcastedShape = ones(N) // [1,1,...]
+    for each shape in shapes // Take the max of all shape dimensions.
+        paddedShape = PadLeadingValues(shape, N, 1) // Right align. e.g. N=4 with [H,W] -&gt; [1,1,H,W]
+        for i=0..&lt;N do
+            assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
+            broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
+        endfor
     endfor
-  endfor
-  return broadcastedShape
+    return broadcastedShape
 endfunction
 
 function PadLeadingValues(shape, paddedSize, padValue)
-  // Right align. e.g. shape=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
-  paddedSize = max(padddedSize, shape.size)
-  padCount = paddedSize - shape.size
-  for i=0..&lt;paddedSize
-    paddedShape[i] = i &lt; padCount ? padValue : shape[i - padCount]
-  endfor
-  return paddedShape
+    // Right align. e.g. shape=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
+    paddedSize = max(padddedSize, shape.size)
+    padCount = paddedSize - shape.size
+    for i=0..&lt;paddedSize
+        paddedShape[i] = i &lt; padCount ? padValue : shape[i - padCount]
+    endfor
+    return paddedShape
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -975,14 +975,14 @@ endfunction</code></td>
     <td>Repeat entire tensor along each axis by repeat counts.
 <code>
 function Tile(input, repeats)
-  N = input.rank
-  assert(repeats.size == input.rank)
-  for i=0..&lt;N do assert(repeats[i] &gt; 0)
-  output.shape = input.shape * repeats // elementwise multiply per axis
-  for each outputCoordinate in output
-    for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] % input.shape[i]
-    output[outputCoordinate] = inputData[inputCoordinate]
-  endfor
+    N = input.rank
+    assert(repeats.size == input.rank)
+    for i=0..&lt;N do assert(repeats[i] &gt; 0)
+    output.shape = input.shape * repeats // elementwise multiply per axis
+    for each outputCoordinate in output
+        for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] % input.shape[i]
+        output[outputCoordinate] = inputData[inputCoordinate]
+    endfor
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -1001,24 +1001,24 @@ endfunction</code></td>
     <td>DML_OPERATOR_SLICE</td>
     <td>Crop the tensor to the given ranges for each axis.
 <code>function Slice(input, starts, ends, axes, steps)
-  N = input.rank
-  if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
-  if starts.empty then starts = zeroes(N) // [0,0,0,...]
-  if ends.empty then ends = input.shape
-  if steps.empty then steps = ones(N) // [1,1,1,...]
-  assert(axes.size == input.rank || axes.size == 0)
-  assert(starts.size == axes.size)
-  assert(ends.size == axes.size)
-  assert(steps.size == axes.size)
-  starts = max(starts, zeroes(N))
-  ends = min(ends, input.shape)
-  ends = max(ends, starts)
+    N = input.rank
+    if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
+    if starts.empty then starts = zeroes(N) // [0,0,0,...]
+    if ends.empty then ends = input.shape
+    if steps.empty then steps = ones(N) // [1,1,1,...]
+    assert(axes.size == input.rank || axes.size == 0)
+    assert(starts.size == axes.size)
+    assert(ends.size == axes.size)
+    assert(steps.size == axes.size)
+    starts = max(starts, zeroes(N))
+    ends = min(ends, input.shape)
+    ends = max(ends, starts)
 
-  for i=0..&lt;N do output.shape[i] = ceil((ends[i] - starts[i]) / steps[i]) // negative steps unhandled!
-  for each outputCoordinate in output
-    for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] * steps[i] + starts[i]
-    output[outputCoordinate] = inputData[inputCoordinate]
-  endfor
+    for i=0..&lt;N do output.shape[i] = ceil((ends[i] - starts[i]) / steps[i]) // negative steps unhandled!
+    for each outputCoordinate in output
+        for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] * steps[i] + starts[i]
+        output[outputCoordinate] = inputData[inputCoordinate]
+    endfor
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -1037,18 +1037,18 @@ endfunction</code></td>
     <td>DML_OPERATOR_JOIN</td>
     <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 <code>function Concat(inputs, axis)
-  sizesAlongAxis = []
-  for each input in inputs
-    sizesAlongAxis.append(input.shape[axis])
-  endfor
-  outputOffsets = CumSum(axisSizes)
-  for each inputIndex from 0 up to inputs.count
-    input = inputs[inputIndex]
-    outputOffset = outputOffset[inputIndex]
-    for each index from 0 up to axis
-      output[..., outputOffset + index, ...] = input[..., index, ...]
+    sizesAlongAxis = []
+    for each input in inputs
+        sizesAlongAxis.append(input.shape[axis])
     endfor
-  endfor
+    outputOffsets = CumSum(axisSizes)
+    for each inputIndex from 0 up to inputs.count
+        input = inputs[inputIndex]
+        outputOffset = outputOffset[inputIndex]
+        for each index from 0 up to axis
+            output[..., outputOffset + index, ...] = input[..., index, ...]
+        endfor
+    endfor
 </code></td>
     <td>Exact</td>
   </tr>
@@ -1145,7 +1145,7 @@ inputIndices = [
     outputIndices.channel % channelCountDivBlockCount,
     (outputIndices.channel / channelCountDivBlockCount) / blockSize + (outputIndices.height * blockSize),
     (outputIndices.channel / channelCountDivBlockCount) % blockSize + (outputIndices.width  * blockSize)
-    ]
+]
 
 output[outputIndices] = input[inputIndices];</code></td>
     <td>Exact</td>
@@ -1163,7 +1163,7 @@ outputIndices = [
     inputIndices.channel % channelCountDivBlockCount,
     (inputIndices.channel / channelCountDivBlockCount) / blockSize + (inputIndices.height * blockSize),
     (inputIndices.channel / channelCountDivBlockCount) % blockSize + (inputIndices.width  * blockSize)
-    ]
+]
 
 output[outputIndices] = input[inputIndices];</code></td>
     <td>Exact</td>
@@ -1214,10 +1214,10 @@ endaggregate
 
 <code>
 function Flatten(input, axis)
-  output = input
-  inputShape = input.shape
-  output.shape = join(reduceprod(inputShape[0..axis]), reduceprod(inputShape[axis..oldShape.size]))
-  return output
+    output = input
+    inputShape = input.shape
+    output.shape = join(reduceprod(inputShape[0..axis]), reduceprod(inputShape[axis..oldShape.size]))
+    return output
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -1230,22 +1230,22 @@ endfunction</code></td>
 
 <code>
 function ReshapeDeletingOnes(input, axes)
-  outputShape = input.shape
-  if axes.empty
-    axes = arange(0, outputShape.size)
-  else // !axes.empty
-    for i in axes do assert(outputShape[i] == 1)
-    axes = removeDupes(sort(axes))
-  endif
-  axes = reverse(axes)
-  for i in axes // work from back to front
-    if outputShape[i] == 1
-      outputShape.deleteAt(i)
+    outputShape = input.shape
+    if axes.empty
+        axes = arange(0, outputShape.size)
+    else // !axes.empty
+        for i in axes do assert(outputShape[i] == 1)
+        axes = removeDupes(sort(axes))
     endif
-  endfor
-  output = input
-  output.shape = outputShape
-  return output
+    axes = reverse(axes)
+    for i in axes // work from back to front
+        if outputShape[i] == 1
+            outputShape.deleteAt(i)
+        endif
+    endfor
+    output = input
+    output.shape = outputShape
+    return output
 endfunction</code></td>
     <td>Exact</td>
   </tr>
@@ -1258,14 +1258,14 @@ endfunction</code></td>
 
 <code>
 function ReshapeInsertingOnes(input, axes)
-  output = input
-  outputShape = input.shape
-  axes = removeDupes(sort(axes))
-  for i in axes
-    outputShape.insertAt(i, 1)
-  endfor
-  output.shape = outputShape
-  return output
+    output = input
+    outputShape = input.shape
+    axes = removeDupes(sort(axes))
+    for i in axes
+        outputShape.insertAt(i, 1)
+    endfor
+    output.shape = outputShape
+    return output
 endfunction</code></td>
     <td>Exact</td>
   </tr>
