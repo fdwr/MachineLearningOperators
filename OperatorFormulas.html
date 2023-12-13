@@ -42,6 +42,7 @@ td
 .mpsColumn { display: none; }
 .mlxColumn { display: none; }
 .ncnnColumn { display: none; }
+.cntkColumn { display: none; }
 .futureColumn { display: none; }
 
 /* Show hidden content when the checkbox is checked */
@@ -67,6 +68,7 @@ td
 #toggleMpsColumn:checked ~ * .mpsColumn { display: table-cell; }
 #toggleMlxColumn:checked ~ * .mlxColumn { display: table-cell; }
 #toggleNcnnColumn:checked ~ * .ncnnColumn { display: table-cell; }
+#toggleCntkColumn:checked ~ * .cntkColumn { display: table-cell; }
 
 </style>
 </head>
@@ -112,6 +114,8 @@ td
 <input type="checkbox" id="toggleMpsColumn" checked="on"/><label for="toggleMpsColumn">MPS (Apple <b>M</b>etal <b>P</b>erformance <b>S</b>haders) <a href="https://developer.apple.com/documentation/metalperformanceshaders">(info)</a></label><br/>
 <input type="checkbox" id="toggleMlxColumn" checked="on"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
 <input type="checkbox" id="toggleNcnnColumn" checked="on"/><label for="toggleNcnnColumn">NCNN (<b>T</b>en<b>c</b>ent <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/">(info)</a> <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(ops)</a></label><br/>
+<input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">NCNN (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
+
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
   <tr>
@@ -131,6 +135,7 @@ td
     <th class="mpsColumn">MPS</th>
     <th class="mlxColumn">MLX</th>
     <th class="ncnnColumn">NCNN</th>
+    <th class="cntkColumn">CNTK</th>
     <th class="futureColumn">(for future additions)</th>
     <th valign="top">Formula</th>
     <th>Precision</th>
@@ -153,6 +158,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>Identity(X) = X</code></td>
     <td>Exact</td>
@@ -174,6 +180,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>Constant() = Value</code></td>
     <td>Exact</td>
@@ -195,6 +202,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>ConstantOfShape(scalarTensorValue, inputOfDesiredShape) = Expand(scalarTensorValue, Shape(inputOfDesiredShape))</code></td>
     <td>Exact</td>
@@ -216,6 +224,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x + y</code></td>
     <td>1 ULP</td>
@@ -237,6 +246,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x - y</code></td>
     <td>1 ULP</td>
@@ -258,6 +268,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x * y</code></td>
     <td>1 ULP</td>
@@ -279,6 +290,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x / y</code></td>
     <td>1 ULP</td>
@@ -300,6 +312,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = 1 / x</code></td>
     <td>1 ULP</td>
@@ -321,6 +334,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
     <td>2 ULP</td>
@@ -342,6 +356,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
     <td>2 ULP</td>
@@ -363,6 +378,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, exponent) = pow(x, exponent)</code></td>
     <td>Precision TBD</td>
@@ -384,6 +400,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
     <td>Precision TBD</td>
@@ -405,6 +422,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
     <td>Precision TBD</td>
@@ -426,6 +444,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
     <td>Precision TBD</td>
@@ -447,6 +466,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
     <td>Precision TBD</td>
@@ -468,6 +488,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = abs(x)</code></td>
     <td>Exact</td>
@@ -489,6 +510,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = -x</code></td>
     <td>Exact</td>
@@ -510,6 +532,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = ceil(x)</code></td>
     <td>Exact</td>
@@ -531,6 +554,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = floor(x)</code></td>
     <td>Exact</td>
@@ -552,6 +576,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = clamp(x, min, max)</code></td>
     <td>Exact</td>
@@ -573,6 +598,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
 or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code>
@@ -617,6 +643,7 @@ double f(double x)
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = isnan(x)
       where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
@@ -642,6 +669,7 @@ double f(double x)
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>output.shape = input.shape
 for every coordinate in input tensor
@@ -670,6 +698,7 @@ endfor
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>function Sign(x)
     if x == 0 then 0
@@ -695,6 +724,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Mul(X, scale)
       or: f(x) = x * scale</td>
@@ -717,6 +747,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Add(Mul(X, scale), Unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]
       or: f(x, scale, bias) = x * scale + bias</td>
@@ -739,6 +770,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x == y)</td>
     <td>Exact</td>
@@ -760,6 +792,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &gt; y)</td>
     <td>Exact</td>
@@ -781,6 +814,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &lt; y)</td>
     <td>Exact</td>
@@ -802,6 +836,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &gt; y)</td>
     <td>Exact</td>
@@ -823,6 +858,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &lt; y)</td>
     <td>Exact</td>
@@ -844,6 +880,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = ~x</td>
     <td>Exact</td>
@@ -865,6 +902,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &amp; y</td>
     <td>Exact</td>
@@ -886,6 +924,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x | y</td>
     <td>Exact</td>
@@ -907,6 +946,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x ^ y</td>
     <td>Exact</td>
@@ -928,6 +968,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &lt;&lt; y</td>
     <td>Exact</td>
@@ -949,6 +990,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &gt;&gt; y</td>
     <td>Exact</td>
@@ -970,6 +1012,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = add one to count for each set bit in x</td>
     <td>Exact</td>
@@ -991,6 +1034,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = !x</td>
     <td>Exact</td>
@@ -1012,6 +1056,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &amp;&amp; y</td>
     <td>Exact</td>
@@ -1033,6 +1078,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x || y</td>
     <td>Exact</td>
@@ -1054,6 +1100,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = !!x xor !!y</td>
     <td>Exact</td>
@@ -1075,6 +1122,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = sin(x)</td>
     <td>Precision TBD</td>
@@ -1096,6 +1144,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = cos(x)</td>
     <td>Precision TBD</td>
@@ -1117,6 +1166,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = tan(x)</td>
     <td>Precision TBD</td>
@@ -1138,6 +1188,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = asin(x)</td>
     <td>Precision TBD</td>
@@ -1159,6 +1210,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = acos(x)</td>
     <td>Precision TBD</td>
@@ -1180,6 +1232,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = atan(x)</td>
     <td>Precision TBD</td>
@@ -1201,6 +1254,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = sinh(x)</td>
     <td>Precision TBD</td>
@@ -1222,6 +1276,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = cosh(x)</td>
     <td>Precision TBD</td>
@@ -1243,6 +1298,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = tanh(x)</td>
     <td>Precision TBD</td>
@@ -1264,6 +1320,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = arccosh(x)
       or: logₑ(x + sqrt(x * x - 1))</td>
@@ -1286,6 +1343,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = arcsinh(x)
       or: logₑ(x + sqrt(x * x + 1))</td>
@@ -1308,6 +1366,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = arctanh(x)
       or: logₑ((1 + x) / (1 - x)) / 2</td>
@@ -1331,6 +1390,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(Dx, X) = Mul(Sin(X), Dx)
       f(dx, x) = sin(x) * dx</td>
@@ -1353,6 +1413,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = x + y + z…</td>
     <td>&lt; N-1 ULP</td>
@@ -1374,6 +1435,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = (x + y + z…) / n</td>
     <td>Precision TBD</td>
@@ -1395,6 +1457,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = max(x, y, z…)</td>
     <td>Exact</td>
@@ -1416,6 +1479,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, minValue) = Max(X, minValue)
       or: f(x) = max(x, minValue)
@@ -1439,6 +1503,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = min(x, y, z…)</td>
     <td>Exact</td>
@@ -1460,6 +1525,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(input:float32, scale:float32, zero_point:int32)
       return output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</td>
@@ -1482,6 +1548,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(input:uint8, scale:float32, zero_point:float32)
       return output:float32 = (input - zero_point) * scale</td>
@@ -1504,6 +1571,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Reciprocal(Add(1, Exp(Neg(X))))
       or: f(x) = 1 / (1 + expₑ(-x))
@@ -1527,6 +1595,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Clip(Add(Mul(alpha, X), beta), 0, 1)
       or: f(x) = max(0, min(alpha * x + beta, 1))
@@ -1550,6 +1619,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Div(Sub(1, Exp(Mul(X, -2)), Add(1, Exp(X, -2)))
       or: f(x) = (1 - expₑ(-2 * x))/(1 + expₑ(-2 * x))
@@ -1574,6 +1644,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)
       or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
@@ -1596,6 +1667,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Max(X, 0)
       or: f(x) = max(x, 0)
@@ -1619,6 +1691,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Where(Less(X, 0), Mul(X, alpha), X)
       or: f(x, alpha) = if x &gt;= 0 then x else alpha * x</td>
@@ -1641,6 +1714,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Where(Less(X, 0), Mul(X, Slope), X)
       or: f(x, slope) = if x &gt;= 0 then x else slope * x
@@ -1664,6 +1738,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha = 1) = Where(Greater(X, alpha), X, 0)
       f(x) = if x &gt; alpha then x else 0</td>
@@ -1686,6 +1761,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha = 1) = Where(Less(X, 0), Mul(Sub(Exp(X), 1), alpha))
       or: F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
@@ -1709,6 +1785,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha = 1.6732, gamma = 1.0507) = Mul(Elu(X, alpha), gamma)
       or: f(x, alpha = 1.6732, gamma = 1.0507):
@@ -1733,6 +1810,7 @@ DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 <code>function SoftMax2D(Input; Output; axis):
@@ -1770,6 +1848,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(Input, axis) = Log(Softmax(Input, axis))
   or: f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))
@@ -1793,6 +1872,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = if x_i == max(X) then 1 else 0
       *but only for first element along that axis</td>
@@ -1815,6 +1895,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Div(X, Add(Abs(X), 1))
       or: f(x) = x / (1 + abs(x))</td>
@@ -1837,6 +1918,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Log(Add(Exp(x), 1))
       or: f(x) = logₑ(1 + expₑ(x))</td>
@@ -1861,6 +1943,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Add(Mul(X, alpha), beta)
   or: f(x, alpha, beta) = alpha * x + beta</td>
@@ -1883,6 +1966,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, lambda, bias):
       if x &lt; -lambda then y = x + bias
@@ -1907,6 +1991,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Mul(alpha, Softplus(Mul(beta, X))).
       or: f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))
@@ -1930,6 +2015,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
@@ -1951,6 +2037,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
@@ -1972,6 +2059,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
@@ -1996,6 +2084,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
@@ -2020,6 +2109,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Unpredictable</td>
@@ -2041,6 +2131,7 @@ DML_OPERATOR_ACTIVATION_LINEAR</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
 output.shape = input.shape
@@ -2069,6 +2160,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(A, B, C; alpha, beta, transA, transB; Y):
       A2 = If(transA, Transpose(A), A)
@@ -2093,6 +2185,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])
       It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
@@ -2118,6 +2211,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Every output element is the convolution of the filter with the corresponding input elements.
   <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</code>
@@ -2172,6 +2266,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>todo: Here be dragons.
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
@@ -2194,6 +2289,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = cast(x)</td>
     <td>&lt; 1 ULP</td>
@@ -2216,6 +2312,7 @@ endfunction
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
@@ -2248,6 +2345,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Broadcast any single size dimensions up to the output dimension counts.
 Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
@@ -2280,6 +2378,7 @@ endfunction</code></td>
     <td class="mpsColumn">NA</td>
     <td class="mlxColumn">NA</td>
     <td class="ncnnColumn">NA</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
 Any single size dimensions are stretched to the output dimension size.
@@ -2326,6 +2425,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Repeat entire tensor along each axis by repeat counts.
 <code>
@@ -2358,6 +2458,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Split input into multiple output tensors.</td>
     <td>Exact</td>
@@ -2379,6 +2480,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Crop the tensor to the given ranges for each axis.
 <code>function Slice(input, starts, ends, axes, steps)
@@ -2420,6 +2522,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Crop the tensor to the given ranges for each axis. Crop is confusing and redundant. Just use Slice.</td>
     <td>Exact</td>
@@ -2441,6 +2544,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 <code>function Concat(inputs, axis)
@@ -2476,6 +2580,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Exact</td>
@@ -2497,6 +2602,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
@@ -2544,6 +2650,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>TODO</code></td>
     <td>Exact</td>
@@ -2565,6 +2672,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Opposite of gather. Write values from updates into data at the given indices. If two output element indices overlap, there is no documented winner, but last write wins in practice.
 <code>
@@ -2608,6 +2716,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>TODO</code></td>
     <td>Exact</td>
@@ -2629,6 +2738,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Inflate the input with zeroes on the edges</td>
     <td>Exact</td>
@@ -2650,6 +2760,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Rearrange blocks of elements.
 <code>
@@ -2681,6 +2792,7 @@ output[outputIndices] = input[inputIndices];</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Rearrange blocks of elements.
 <code>
@@ -2712,6 +2824,7 @@ output[outputIndices] = input[inputIndices];</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return the dimensions of the tensor as a 1D tensor.
       F(input): return input.shape
@@ -2735,6 +2848,7 @@ output[outputIndices] = input[inputIndices];</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return the element count. ReduceProd(Shape(X), keepdims=0).
 note: <code>Size</code> is unfortunately named, inconsistently so with <code>Resize-10</code> which accepts separate dimensions. 🙃
@@ -2758,6 +2872,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
     <td>Exact</td>
@@ -2779,6 +2894,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
 
@@ -2818,6 +2934,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
 
@@ -2859,6 +2976,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
 
@@ -2892,6 +3010,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
     <td>Exact</td>
@@ -2913,6 +3032,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>TopK(X, K, axis) = Slice(SortDecreasing(X, axis), starts=0, ends=K, axes=axis)</td>
     <td>Exact</td>
@@ -2934,6 +3054,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(b, x, y) = if b then x else y
       notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
@@ -2957,6 +3078,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
     <td>Exact</td>
@@ -2978,6 +3100,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reverse all the elements along the given axes.
 <code>
@@ -3011,6 +3134,7 @@ endfor
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Average all elements in each pool. y = (x1 + x2 + … + xn) / pool_size;
 So X[N C H W] reduces to Y[N C 1 1]
@@ -3039,6 +3163,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1 + x2 + … + xn) / pool_size</td>
     <td>Precision TBD</td>
@@ -3060,6 +3185,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = max(x1, x2, … x_pool_size)</td>
     <td>Exact</td>
@@ -3081,6 +3207,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = max(x1, x2, … x_pool_size)</td>
     <td>Exact</td>
@@ -3102,6 +3229,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Opposite of MaxPool.
 Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros.
@@ -3125,6 +3253,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</td>
     <td>Precision TBD</td>
@@ -3146,6 +3275,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p);
       So X[N C H W] reduces to Y[N C 1 1]
@@ -3169,6 +3299,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Apply MaxPool to given input within each numbered region (batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive), and write the maximal value back to the output.
 questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute?
@@ -3193,6 +3324,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
       y = (x1 + x2 + ... + xn)</td>
@@ -3215,6 +3347,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1 + x2 + ... + xn) / n</td>
     <td>Precision TBD</td>
@@ -3236,6 +3369,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1 * x2 * ... * xn)</td>
     <td>Precision TBD</td>
@@ -3257,6 +3391,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Log(ReduceSum(X, axes, keepdims))
       or: y = logₑ(x1 + x2 + ... + xn)</td>
@@ -3279,6 +3414,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Log(ReduceSum(Exp(X), axes, keepdims))
       or: y = logₑ(expₑ(x1) + expₑ(x2) + ... + expₑ(xn))
@@ -3302,6 +3438,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = ReduceSum(Pow(X, 2), axes, keepdims)
       or: y = x1^2 + x2^2 + ... + xn^2</td>
@@ -3324,6 +3461,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = ReduceSum(Abs(X), axes, keepdims)
       or: y = abs(x1) + abs(x2) + ... + abs(xn)</td>
@@ -3346,6 +3484,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Sqrt(ReduceSum(Pow(X, 2), axes, keepdims))
   or: y = sqrt(x1^2 + x2^2 + ... + xn^2)</td>
@@ -3368,6 +3507,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>x = max(max(max(x1, x2), x3), ..., xn)</td>
     <td>Exact</td>
@@ -3389,6 +3529,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>x = min(min(min(x1, x2), x3), ..., xn)</td>
     <td>Exact</td>
@@ -3410,6 +3551,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>int32 {i j k ..} = maxindex(X Y Z …)</td>
     <td>Exact</td>
@@ -3431,6 +3573,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>int32 {i j k ..} = minindex(X Y Z …)</td>
     <td>Exact</td>
@@ -3452,6 +3595,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Y.Shape = Floor(Shape(X) * Scales)
       Y[output_i] = X[output_i / Scales]</td>
@@ -3474,6 +3618,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(cond, then_graph, else_graph, outputs...):
       subgraph = cond ? then_graph : else_graph
@@ -3498,6 +3643,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:CODE</td>
     <td>Exact</td>
@@ -3519,6 +3665,7 @@ questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can tha
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:CODE</td>
     <td>Exact</td>
@@ -3545,6 +3692,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>InstanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
@@ -3585,6 +3733,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
@@ -3621,6 +3770,7 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + Bias
 
@@ -3656,6 +3806,7 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
 
@@ -3694,6 +3845,7 @@ variance = np.mean(x, axis=axes, keepdims=True)
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>For each output element, subtract the mean, and divide by standard deviation.
 
@@ -3742,6 +3894,7 @@ output = (inputData - dataMean) / (std + 1e-9)
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
 
@@ -3775,6 +3928,7 @@ Output = Input / Pow(Biased, Beta)
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
 <code>aggregate F(X, p)
@@ -3805,6 +3959,7 @@ endaggregate</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved (so not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
     <td>Exact</td>
@@ -3826,6 +3981,7 @@ endaggregate</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Read input front to back, incrementing output histogram for each occurrence found of desired patterns.
 It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
@@ -3848,6 +4004,7 @@ It's basically a word count algorithm with the output histogram size equalling t
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
     <td>Precision TBD</td>
@@ -3869,6 +4026,7 @@ It's basically a word count algorithm with the output histogram size equalling t
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
@@ -3901,6 +4059,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>function ConstantFill(dtype, extra_shape, input_as_shape, shape, value; inputOfDesiredShape)
     assert(!exists(shape) || !input_as_shape)
@@ -3929,6 +4088,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>unknown</td>
     <td>Exact</td>
@@ -3950,6 +4110,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>???</td>
     <td>Precision TBD</td>
@@ -3971,6 +4132,7 @@ endfunction</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
@@ -4005,6 +4167,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 <code>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
@@ -4030,6 +4193,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
     <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>???</td>
     <td>Unpredictable</td>
@@ -4594,6 +4758,7 @@ From https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html:
         SliceBySizeLayerParams sliceBySize = 1470;
         Convolution3DLayerParams convolution3d = 1471;
 
+
 https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md
 
 AbsVal
@@ -4681,5 +4846,367 @@ TanH
 Threshold
 Tile
 UnaryOp
+
+
+https://microsoft.github.io/CNTK-R/reference/index.html
+
+All functions	
+activation_identity	Identity Function For CNTK Operations
+Activation	Activation Layer
+all_devices	All Devices
+arraymixin_as_array	ArrayMixin As Array
+ArrayMixin	Array Mixin
+arrayview_from_data	ArrayView From Data
+arrayview_from_dense	ArrayView From Dense Data
+arrayview_slice_view	ArrayView Slice View
+as_block	As Block
+as_composite	As Composite
+asvalue	Value Form Matrix
+AttentionModel	Attention Model
+AveragePooling	Average Pooling Layer
+Base64ImageDeserializer	Base64ImageDeserializer
+BatchNormalization	BatchNormalization
+block_momentum_distributed_learner	Block Momentum Distributed Learner
+CheckpointConfig	New Checkpoint Config
+classification_error	Classification Error Between Target and Predicted
+CloneMethod	CloneMethod
+CNTKAxis	CNTKAxis
+CNTKCrosstalk	CNTK Implementation for Crosstalk
+comm_barrier	Communicator Barrier
+comm_current_worker	Communicator Current Worker
+comm_finalize	Communicator Finalize
+comm_is_main	Communicator Is On Main Node
+comm_num_workers	Number of Communicator Nodes
+comm_rank	Communicator Rank
+comm_workers	Communicator Workers
+Communicator	New Communicator
+Constant	Constant
+Conv2DArgs	Convolution2D Arguments
+Conv2DAttr	Conv2D Variable Attribute
+Convolution	Convolution
+Convolution1D	Convolution1D
+Convolution2D	Two Dimensional Convolutional Layer
+Convolution3D	Convolution3D
+ConvolutionTranspose	ConvolutionTranspose
+ConvolutionTranspose1D	ConvolutionTranspose1D
+ConvolutionTranspose2D	ConvolutionTranspose2D
+ConvolutionTranspose3D	ConvolutionTranspose3D
+cpu_descriptor	CPU Descriptor
+create_new_leading_axis	Create New Leading Axis
+Crosstalk	Crosstalk Base Class
+CrossValidationConfig	New Cross Validation Configuration
+ct_assign	Assign Crosstalk Value
+ct_compare	Compare Crosstalk Var
+ct_fetch	Fetch Crosstalk Var
+ct_is_param	CNTKCrosstalk Var is Parameter
+ct_load_all_params	Load All CNTKCrosstalk Params From Files
+ct_load_raw_value	Load Crosstalk Raw Value
+ct_load	Load Crosstalk Vars
+ct_next_pass	Next Crosstalk Pass
+ct_register_funcs	Register Crosstalk Var Type Getter/Setters
+ct_reset	Reset Crosstalk Vars
+ct_save_all_params	Save All CNTKCrosstalk Params to Files
+ct_save_all	Save All Crosstalk Vars
+ct_save	Save Crosstalk Vars
+ct_set_data	Set CNTKCrosstalk Mapped Data
+ct_set_workdir	Set Crosstalk Working Directory
+ct_watch	Watch Crosstalk Variable
+CTFDeserializer	CTFDeserializer
+data_parallel_distributed_learner	New Data Parallel Distributed Learner
+debug_model	Debug Model
+default_options_for	Default Options For
+default_options	Default Options
+default_override_or	Default Override Or
+default_sample_dir	Default Sample Dir
+default_sample_url	Default Sample URL
+Delay	Delay
+Dense	Dense
+DeviceDescriptor	Create Device Descriptor
+DeviceKind	Create Device Kind
+disable_profiler	Disable Profiler
+DistributedLearner	Distributed Learner
+Dropout	Dropout
+dump_function	Dump Function
+dump_signature	Dump Signature
+edit_distance_error	Edit Distance Error
+EmbedAttr	EmbedAttr
+Embedding	Embedding
+enable_profiler	Enable Profiler
+eval_test_minibatch	Test Evaluator Minibatch
+Evaluator	Evaluator
+find_func_param	Find Parameter in Function - CNTKCrosstalk
+Fold	Fold
+For	CNTK Function For Loop Construct
+ForwardDeclaration	ForwardDeclaration
+func_backward	Propogate Function Backward
+func_clone	Clone Function
+func_eval	Evaluate Function
+func_find_all_with_name	Find All Functions With Name
+func_find_by_name	Find Function By Name
+func_forward	Compute Function Forward
+func_grad	Compute Function Gradient
+func_load	Load Function Model
+func_replace_placeholder	Replace Function Placeholder
+func_replace_placeholders	Replace Function Placeholders
+func_restore	Restore Function
+func_save	Save Function
+func_set_attribute	Set Function Attribute
+func_test	Test Function Model
+func_train	Train Function Model
+FuncInfo	Variable Setter/Getter Functions
+Function	CNTK Function
+get_all_axes	Get All Axes
+get_all_static_axes	Get All Static Axes
+get_communicator	Get Distributed Communicator
+get_default_batch_axis	Get Default Batch Axis
+get_default_dynamic_axis	Get Default Dynamic Axis
+get_default_override	Get Default Override
+get_global_option	Get Global Option
+get_gpu_properties	Get GPU Properties
+get_learning_rate	Get Learner Learning Rate
+get_logging_trace_level	Get Logging Trace Level
+get_minibatch_checkpoint_state	Get Minibatch Checkpoint State
+get_static_axis_index	Get Static Axis Index
+GlobalAveragePooling	GlobalAveragePooling
+GlobalMaxPooling	GlobalMaxPooling
+graph_depth_first_search	Graph - Depth First Search
+graph_find_all_with_name	Graph - Find All With Name
+graph_find_by_name	Graph - Find By Name
+GRU	GRU
+HTKFeatureDeserializer	HTKFeatureDeserializer
+HTKMLFDeserializer	Base64ImageDeserializer
+ImageDeserializer	ImageDeserializer
+init_bilinear	Bilinear Initializer
+init_glorot_normal	Glorot Normal Initializer
+init_glorot_uniform	Glorot Uniform Initializer
+init_he_normal	He Normal Initializer
+init_he_uniform	He Uniform Initializer
+init_normal	Normal Initializer
+init_truncated_normal	Truncated Normal Initializer
+init_uniform	Uniform Initializer
+init_with_rank	Initializer With Rank
+init_xavier	Xavier Initializer
+install_samples	Install Samples
+IO_INFINITELY_REPEAT	IO_INFINITELY_REPEAT
+is_default_override	Is Default Override
+Label	Label
+LayerNormalization	LayerNormalization
+learner_momentum_sgd	Creates a Momentum SGD learner instance to learn the parameters.
+Learner	Learner
+log_number_of_parameters	Log Number of Parameters
+loss_binary_cross_entropy	Binary Cross Entropy Loss
+loss_cosine_distance_negative_samples	Cosine Distance NEgative Samples Loss
+loss_cosine_distance	Cosine Distance Loss
+loss_cross_entropy_with_softmax	Cross Entropy Loss with Softmax for Multiclass Classification
+loss_lambda_rank	Lambda Rank Loss
+loss_squared_error	Squared Error Loss
+loss_weighted_binary_cross_entropy	Weighted Binary Cross Entropy Loss
+LSTM	LSTM
+MaxPooling	Max-Pooling Layer Factory
+mb_as_sequences	Minibatch Data As Sequences
+mb_stream_info	Minibatch Stream Info
+mb_stream_infos	Minibatch Stream Infos
+MinibatchData	MinibatchData
+MinibatchSource	Minibatch Source
+MinibatchSourceFromData	MinibatchSourceFromData
+module_is_unreleased	Module Is Unreleased
+mpi_communicator	New MPI Communicator
+native_user_function	Create Native UserFunction
+NDArrayView	Create an NDArrayView Instance
+ndcg_at_1	NDCG at 1
+next_minibatch	Next Minibatch
+on_train_cross_validation_end	On Training Cross Validation End
+op_abs	Absolute Value
+op_alias	Alias
+op_argmax	Argmax Across Axis
+op_argmin	Argmin Across Axis
+op_assign	Assign
+op_associative_multi_arg	Associative Multi-Arg
+op_batch_normalization	Batch Normalization
+op_ceil	Ceiling
+op_clip	Clip
+op_combine	Combine
+op_constant	It creates a constant tensor initialized from a numpy array
+op_convolution_transpose	Convolution Transpose
+op_convolution	Convolution
+op_cos	Element-wise Cosine
+op_dim_mean_variance_normalize	Per-dimension Mean-variance Normalization
+op_dropout	Dropout
+op_element_divide	Element-wise Division
+op_element_max	Element Max
+op_element_min	Element Min
+op_element_select	Element Select
+op_element_times	Element Times
+op_elu	Elu
+op_equal	Equal Comparison
+op_exp	Element-wise Exponential
+op_floor	Floor
+op_forward_backward	Forward-Backward
+op_gather	Gather
+op_greater_equal	Element-wise Greater Equal Comparison
+op_greater	Element-wise Greater Comparison
+op_hardmax	Hardmax
+op_input_variable	Create input for network
+op_labels_to_graph	Labels To Graph
+op_leaky_relu	Leaky Relu
+op_less_equal	Element-wise Less Equal Comparison
+op_less	Element-wise Less Comparison
+op_log_add_exp	Log Add Exp
+op_log	Element-wise Natural Log
+op_minus	Minus
+op_negate	Element-wise Negation
+op_not_equal	Element-wise Not Equal Comparison
+op_one_hot	Create One-Hot Encoding
+op_optimized_rnnstack	Optimized RNN Stack
+op_output_variable	Output Variable
+op_param_relu	Parametric ReLU
+op_parameter	Parameter
+op_placeholder	Placeholder
+op_plus	Addition of Two Tensors
+op_pooling	Pooling
+op_pow	Power Computation
+op_random_sample_inclusion_frequency	Random Sample Inclusion Frequency
+op_random_sample	Random Sample
+op_reciprocal	Element-wise Reciprocal
+op_reconcile_dynamic_axes	Reconcile Dynamic Axes
+op_reduce_log_sum_exp	Reduce Max Across Axis
+op_reduce_max	Reduce Max Across Axis
+op_reduce_mean	Reduce Mean Across Axis
+op_reduce_min	Reduce Minimum Across Axis
+op_reduce_prod	Reduce Prod Across Axis
+op_reduce_sum	Reduce Sum Across Axis
+op_relu	Rectified Linear Units Operation
+op_reshape	Reshape
+op_roipooling	Region of Interest Pooling
+op_round	Element-wise Rounding
+op_sigmoid	Element-wise Sigmoid
+op_sin	Element-wise Sine
+op_slice	Slice
+op_softmax	Softmax
+op_softplus	Softplus
+op_splice	Concatenate Across Axis
+op_sqrt	Element-wise Square-root
+op_square	Element-wise Square
+op_stop_gradient	Stop Gradient
+op_swap_axes	Swap Axes
+op_tanh	Hyperbolic tan
+op_times_transpose	One Element Times Another Transposed Element
+op_times	Matrix Product
+op_to_sequence_like	To Sequence Like
+op_to_sequence	To Sequence
+op_transpose	Transpose
+op_unpooling	Unpooling
+Parameter	Parameter
+PastValueWindow	Past Value Window
+printer_end_progress_print	Printer - End Progress Pring
+printer_log	Printer - Log
+printer_on_training_update_end	Printer - On Training Update End
+printer_on_write_distributed_sync_update	Printer - On Write Distributed Sync Update
+printer_on_write_test_summary	Printer - On Write Test Summary
+printer_on_write_test_update	any writer
+printer_on_write_training_summary	Printer - On Write Training Summary
+printer_on_write_training_update	Printer - Training Update on Write
+printer_write	Printer - Write
+ProgressPrinter	Create Progress Printer
+rand_bernoulli_like	Random Bernoulli Like
+rand_bernoulli	Random Bernoulli Distribution
+rand_gumbel_like	Random Gumbel Like Distribution
+rand_gumbel	Random Gumbel Distribution
+rand_normal_like	Random Normal Like Distribution
+rand_normal	Random Normal Distribution
+rand_uniform_like	Random Uniform Like Distribution
+rand_uniform	Random Uniform Distribution
+Record	Record
+Recurrence	Recurrence
+RecurrenceFrom	Recurrence From
+register_native_user_function	Register Native UserFunction
+register_udf_deserialize_callback	Register UDF Deserialize Callback
+reset_learning_rate	Reset Learner Learning Rate
+ResNetBlock	ResNet Block
+restore_mb_from_checkpoint	Restore Minibatch From Checkpoint
+restore_trainer_from_checkpoint	Restore Trainer From Checkpoint
+RnnArgs	RNN Variable Arguments
+RnnAttr	RNN Variable Attributes
+RRNStep	RNNStep
+save_as_legacy_model	Save As Legacy Model
+save_trainer_checkpoint	Save Trainer Checkpoint
+seq_broadcast_as	Broadcast Sequence As
+seq_delay	Delay Sequence
+seq_first	First Element of Sequence
+seq_future_value	Sequence Future Value
+seq_gather	Sequence Gather
+seq_input_variable	Sequence Network Input Variable
+seq_is_first	Sequence Is First
+seq_is_last	Sequence Is Last
+seq_last	Get Last Sequence Element
+seq_past_value	Get Past Sequence Value
+seq_reduce_max	Reduce Sequence Max
+seq_reduce_sum	Reduce Sequence Element Sum
+seq_scatter	Sequence Scatter
+seq_slice	Sequence Slice
+seq_softmax	Sequence Softmax
+seq_unpack	Sequence Unpack
+seq_where	Sequence Where
+sequence_to_cntk_text_format	Convert Sequence to CNTK Text Format
+Sequential	Sequential Higher-Order Wrapper for Layer Definitions
+SequentialClique	Sequential Clique
+sess_minibatch_size_schedule	Create a Minibatch Size Schedule
+sess_training_session	Create Training Session Object
+set_checked_mode	Set Checked Mode
+set_computation_network_trace_level	Set Computation Network Trace Level
+set_excluded_devices	Set Excluded Devices
+set_global_option	Set Global Option
+set_logging_trace_level	Set Logging Trace Level
+Stabilizer	Stabilizer
+start_profiler	Start Profiler
+stop_profiler	Stop Profiler
+StreamConfiguration	Stream Configuration
+StreamDef	StreamDef
+StreamDefs	StreamDefs
+StreamInformation	StreamInformation
+summarize_test_progress	Summarize Evaluator Test Progress
+summarize_training_progress	Summarize Training Progress
+tensorboard_close	Close Tensorboard
+tensorboard_flush	Flush Tensorboard
+tensorboard_write_value	TensorBoard Write Value
+TensorBoardProgressWriter	New TensorBoard Progress Writer
+TensorOpsMixin	TensorOpsMixin
+test_minibatch	Test Minibatch
+TestConfig	New Test Configuration
+TraceLevel	Trace Level
+train_minibatch	Train Minibatch
+train_on_session	Train On TrainingSession
+Trainer	Trainer
+TrainingSession	New Training Configuration
+TrainingSummaryProgressCallback	Training Summary Progress Callback
+transform_color	Color Transform
+transform_crop	Crop Transform
+transform_mean	Mean Transform
+transform_scale	Scale Transform
+try_set_default_device	Try Set Default Device
+UnfoldFrom	Unfold From
+unknown_dynamic_axes	Unknown Dynamic Axes
+UntestedBranchError	Untested Branch Error
+updated_record_with	Updated Record With
+use_default_device	Use Default Device
+user_function	User Defined Function
+userfunc_clone	Clone UserFunction
+userfunc_deserialize	Deserialize UserFunction
+userfunc_infer_outputs	Infer Outputs of UserFunction
+userfunc_serialize	Serialize UserFunction
+UserFunction	User Function
+UserLearner	UserLearner
+usermb_next_minibatch	UserMinibatch Next Minibatch
+UserMinibatchSource	UserMinibatchSource
+value_as_matrix	Value As Matrix
+value_as_sequences	Get Value As Sequence of Matrices
+value_create	Create a Value Object
+value_one_hot	Value as One Hot
+Value	New Value Instance
+Variable	Variable
+VariableMixin	Variable Mixin
+VarInfo	Variable Information
+visualize_network	Visualize Network Architecture
+WorkerDescriptor	New Distributed Worker Descriptor
 
 -->
