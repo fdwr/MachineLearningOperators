@@ -14,7 +14,7 @@ table tr:nth-child(even) td{
 }
 td
 {
-  white-space: pre-wrap;
+  white-space: pre; /*not pre-wrap;*/
   vertical-align: top;
 }
  
@@ -27,6 +27,23 @@ td
 .reductionOperator { visibility: collapse; }
 .normalizationOperator { visibility: collapse; }
 
+/* visibility: collapse doesn't appear to work as expected for columns using Chrome. So use display: none instead. */
+.webnnColumn { display: none; }
+.onnxColumn { display: none; }
+.dmlColumn { display: none; }
+.xnnPackColumn { display: none; }
+.stableHloColumn { display: none; }
+.tosaColumn { display: none; }
+.numpyColumn { display: none; }
+.tensorFlowColumn { display: none; }
+.pytorchColumn { display: none; }
+.coreMlColumn { display: none; }
+.bnnsColumn { display: none; }
+.mpsColumn { display: none; }
+.mlxColumn { display: none; }
+.ncnnColumn { display: none; }
+.futureColumn { display: none; }
+
 /* Show hidden content when the checkbox is checked */
 #toggleElementwiseOperators:checked ~ * .elementwiseOperator { visibility: visible; }
 #toggleActivationOperators:checked ~ * .activationOperator { visibility: visible; } 
@@ -35,6 +52,21 @@ td
 #toggleControlFlowOperators:checked ~ * .controlFlowOperator { visibility: visible; } 
 #toggleReductionOperators:checked ~ * .reductionOperator { visibility: visible; }
 #toggleNormalizationOperators:checked ~ * .normalizationOperator { visibility: visible; }
+
+#toggleWebnnColumn:checked ~ * .webnnColumn { display: table-cell; }
+#toggleOnnxColumn:checked ~ * .onnxColumn { display: table-cell; }
+#toggleDmlColumn:checked ~ * .dmlColumn { display: table-cell; }
+#toggleXnnPackColumn:checked ~ * .xnnPackColumn { display: table-cell; }
+#toggleStableHloColumn:checked ~ * .stableHloColumn { display: table-cell; }
+#toggleTosaColumn:checked ~ * .tosaColumn { display: table-cell; }
+#toggleNumpyColumn:checked ~ * .numpyColumn { display: table-cell; }
+#toggleTensorFlowColumn:checked ~ * .tensorFlowColumn { display: table-cell; }
+#togglePytorchColumn:checked ~ * .pytorchColumn { display: table-cell; }
+#toggleCoreMlColumn:checked ~ * .coreMlColumn { display: table-cell; }
+#toggleBnnsColumn:checked ~ * .bnnsColumn { display: table-cell; }
+#toggleMpsColumn:checked ~ * .mpsColumn { display: table-cell; }
+#toggleMlxColumn:checked ~ * .mlxColumn { display: table-cell; }
+#toggleNcnnColumn:checked ~ * .ncnnColumn { display: table-cell; }
 
 </style>
 </head>
@@ -65,204 +97,483 @@ td
 <input type="checkbox" id="toggleReductionOperators" checked="on"/><label for="toggleReductionOperators">Reduction operators</label><br/>
 <input type="checkbox" id="toggleNormalizationOperators" checked="on"/><label for="toggleNormalizationOperators">Normalization operators</label><br/>
 <input type="checkbox" id="toggleControlFlowOperators" checked="on"/><label for="toggleControlFlowOperators">Control flow operators</label><br/>
+<br/>
+<input type="checkbox" id="toggleWebnnColumn" checked="on"/><label for="toggleWebnnColumn">WebNN (W3C <b>Web</b> <b>N</b>eural <b>N</b>etwork) <a href="https://www.w3.org/TR/webnn/">(info)</a></label><br/>
+<input type="checkbox" id="toggleOnnxColumn" checked="on"/><label for="toggleOnnxColumn">ONNX (<b>O</b>pen <b>N</b>eural <b>N</b>etwork E<b>x</b>change) <a href="https://onnx.ai/">(info)</a></label><br/>
+<input type="checkbox" id="toggleDmlColumn" checked="on"/><label for="toggleDmlColumn">DirectML (Microsoft <b>Direct</b> <b>M</b>achine <b>L</b>earning) <a href="https://learn.microsoft.com/en-us/windows/ai/directml/dml-intro">(info)</a></label><br/>
+<input type="checkbox" id="toggleXnnPackColumn" checked="on"/><label for="toggleXnnPackColumn">XNNPACK (Google <b>X</b> <b>N</b>eural <b>N</b>etwork <b>Pack</b>age) <a href="https://github.com/google/XNNPACK">(info)</a></label><br/>
+<input type="checkbox" id="toggleStableHloColumn" checked="on"/><label for="toggleStableHloColumn">StableHLO (OpenXLA <b>Stable</b> <b>H</b>igh <b>L</b>evel <b>O</b>ptimizer) <a href="https://github.com/openxla/stablehlo/blob/main/docs/spec.md">(info)</a></label><br/>
+<input type="checkbox" id="toggleTosaColumn" checked="on"/><label for="toggleTosaColumn">TOSA (ARM <b>T</b>ensor <b>O</b>perator <b>S</b>et <b>A</b>rchitecture) <a href="https://mlir.llvm.org/docs/Dialects/TOSA/">(info)</a></label><br/>
+<input type="checkbox" id="toggleNumpyColumn" checked="on"/><label for="toggleNumpyColumn">NumPy (<b>Num</b>erical <b>Py</b>thon) <a href="https://numpy.org/">(info)</a></label><br/>
+<input type="checkbox" id="toggleTensorFlowColumn" checked="on"/><label for="toggleTensorFlowColumn">TensorFlow (Google's TensorFlow) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
+<input type="checkbox" id="togglePytorchColumn" checked="on"/><label for="togglePytorchColumn">PyTorch (<b>Py</b>thon <b>Torch</b>, originally by Meta) <a href="https://pytorch.org/">(info)</a></label><br/>
+<input type="checkbox" id="toggleCoreMlColumn" checked="on"/><label for="toggleCoreMlColumn">CoreML (Apple <b>Core</b> <b>M</b>achine <b>L</b>earning) <a href="https://developer.apple.com/machine-learning/core-ml/">(info)</a></label><br/>
+<input type="checkbox" id="toggleBnnsColumn" checked="on"/><label for="toggleBnnsColumn">BNNS (Apple <b>B</b>asic <b>N</b>eural <b>N</b>etwork <b>S</b>ubroutines) <a href="https://developer.apple.com/documentation/accelerate/bnns">(info)</a></label><br/>
+<input type="checkbox" id="toggleMpsColumn" checked="on"/><label for="toggleMpsColumn">MPS (Apple <b>M</b>etal <b>P</b>erformance <b>S</b>haders) <a href="https://developer.apple.com/documentation/metalperformanceshaders">(info)</a></label><br/>
+<input type="checkbox" id="toggleMlxColumn" checked="on"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
+<input type="checkbox" id="toggleNcnnColumn" checked="on"/><label for="toggleNcnnColumn">NCNN (<b>T</b>en<b>c</b>ent <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(info)</a></label><br/>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
   <tr>
-    <th style="width:15em">Category</th>
+    <th style="width:15em">Categories</th>
     <th>Name</th>
-    <th>Aliases</th>
-    <th>DML Name</th>
+    <th class="webnnColumn">WebNN</th>
+    <th class="onnxColumn">ONNX</th>
+    <th class="dmlColumn">DML</th>
+    <th class="xnnPackColumn">XNNPACK</th>
+    <th class="stableHloColumn">StableHLO</th>
+    <th class="tosaColumn">TOSA</th>
+    <th class="numpyColumn">NumPy</th>
+    <th class="tensorFlowColumn">TensorFlow</th>
+    <th class="pytorchColumn">PyTorch</th>
+    <th class="coreMlColumn">CoreML</th>
+    <th class="bnnsColumn">BNNS</th>
+    <th class="mpsColumn">MPS</th>
+    <th class="mlxColumn">MLX</th>
+    <th class="ncnnColumn">NCNN</th>
+    <th class="futureColumn">(for future additions)</th>
     <th valign="top">Formula</th>
     <th>Precision</th>
   </tr>
   <tr>
     <td>Generic</td>
     <td>Identity</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY or DML_ACTIVATION_IDENTITY</td>
+    <td class="webnnColumn">identity</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></th>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY or
+DML_ACTIVATION_IDENTITY</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">stablehlo.optimization_barrier</td>
+    <td class="tosaColumn">tosa.identity</td>
+    <td class="numpyColumn">numpy.identity</td>
+    <td class="tensorFlowColumn">tf.identity</td>
+    <td class="pytorchColumn">torch.nn.Identity</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>Identity(X) = X</code></td>
     <td>Exact</td>
   </tr>
   <tr>
     <td>Input</td>
     <td>Constant</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Constant">Constant</a></td>
-    <td>NA just provide the tensor data</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Constant">Constant</a></td>
+    <td class="dmlColumn">NA just provide the tensor data</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>Constant() = Value</code></td>
     <td>Exact</td>
   </tr>
   <tr>
     <td>Input</td>
     <td>Constant Of Shape</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>ConstantOfShape(scalarTensorValue, inputOfDesiredShape) = Expand(scalarTensorValue, Shape(inputOfDesiredShape))</code></td>
-    <td>Exact</td>
-  </tr>
-  <tr class="elementwiseOperator">
-    <td>Input (Deleted)</td>
-    <td>Constant Fill</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.2.1/docs/Operators.md#ConstantFill">ConstantFill</a></td>
-    <td>Use DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides for broadcasting</td>
-    <td><code>function ConstantFill(dtype, extra_shape, input_as_shape, shape, value; inputOfDesiredShape)
-    assert(!exists(shape) || !input_as_shape)
-    output.dataType = dtype
-    output.shape = if exists(shape) then shape else Shape(inputOfDesiredShape) + extra_shape
-    for each element in output tensor
-        element = value
-    endfor
-endfunction</code></td>
-    <td>Exact</td>
-  </tr>
- <tr>
-    <td>Input (Deleted)</td>
-    <td>Constant Fill</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#GivenTensorFill">GivenTensorFill</a></td>
-    <td>NA experimental</td>
-    <td>unknown</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Add</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Add">Add</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ADD</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Add">Add</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ADD</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = x + y</code></td>
     <td>1 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Subtract</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sub">Sub</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_SUBTRACT</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sub">Sub</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SUBTRACT</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = x - y</code></td>
     <td>1 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Multiply</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mul">Mul</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mul">Mul</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = x * y</code></td>
     <td>1 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Divide</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Div">Div</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_DIVIDE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Div">Div</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_DIVIDE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = x / y</code></td>
     <td>1 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Reciprocal</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_RECIP</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_RECIP</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = 1 / x</code></td>
     <td>1 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Truncate</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
     <td>2 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Floor</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
     <td>2 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Power</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pow">Pow</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_POW</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pow">Pow</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_POW</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, exponent) = pow(x, exponent)</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Root</td>
-    <td>ONNX NA</td>
-    <td>DML_OPERATOR_ELEMENT_WISE_RECIP & POW</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX NA</td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_RECIP & POW</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Square root</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_SQRT</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SQRT</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Expnonent</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_EXP</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_EXP</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Logarithm</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOG</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOG</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Absolute</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Abs">Abs</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ABS</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Abs">Abs</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ABS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = abs(x)</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Negative</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Neg">Neg</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with scale = -1</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Neg">Neg</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with scale = -1</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = -x</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Ceiling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Ceil">Ceil</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_CEIL</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Ceil">Ceil</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_CEIL</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = ceil(x)</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Floor</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Floor">Floor</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_FLOOR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Floor">Floor</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_FLOOR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = floor(x)</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Clamp</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Clip">Clip</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_CLIP</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Clip">Clip</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_CLIP</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = clamp(x, min, max)</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Error Function</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Erf">Erf</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Erf">Erf</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
 or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code>
 <code>
@@ -292,8 +603,21 @@ double f(double x)
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Is Not a Number</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#IsNaN">IsNan</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IS_NAN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#IsNaN">IsNan</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IS_NAN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = isnan(x)
       where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
       Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>. The sign is ignored.
@@ -304,8 +628,21 @@ double f(double x)
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Is Infinity</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.5.0/docs/Operators.md#IsInf">IsInf</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.5.0/docs/Operators.md#IsInf">IsInf</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>output.shape = input.shape
 for every coordinate in input tensor
     hasExpectedSign = iif(input[coordinate] &gt; 0, detect_positive, detect_negative)
@@ -319,8 +656,21 @@ endfor
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Sign</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_SIGN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIGN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>function Sign(x)
     if x == 0 then 0
     elif x &gt; 0 then 1
@@ -331,8 +681,21 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Scale Signal</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#Scale">Scale</a></td>
-    <td>Same as Mul with broadcasting</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#Scale">Scale</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Mul(X, scale)
       or: f(x) = x * scale</td>
     <td>1 ULP</td>
@@ -340,8 +703,21 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Image Scaler</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ImageScaler">ImageScaler</a></td>
-    <td>DML_OPERATOR_VALUE_SCALE_2D</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ImageScaler">ImageScaler</a></td>
+    <td class="dmlColumn">DML_OPERATOR_VALUE_SCALE_2D</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Add(Mul(X, scale), Unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]
       or: f(x, scale, bias) = x * scale + bias</td>
     <td>Precision TBD</td>
@@ -349,136 +725,357 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
     <td>Greater Than</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Greater">Greater</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_GREATER_THAN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Greater">Greater</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_GREATER_THAN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y) = (x &gt; y)</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
     <td>Less Than</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Less">Less</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_LESS_THAN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Less">Less</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_LESS_THAN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y) = (x &lt; y)</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
     <td>Equals</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Equal">Equal</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_EQUALS</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Equal">Equal</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_EQUALS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y) = (x == y)</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
-    <td>Not</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Not">Not</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_NOT</td>
+    <td>Logical Not</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Not">Not</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_NOT</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">LogicalNotLayerParams</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = !x</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
     <td>And</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#And">And</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_AND</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#And">And</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_AND</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y) = x &amp;&amp; y</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
     <td>Or</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Or">Or</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_OR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Or">Or</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_OR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y) = x || y</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Logical</td>
     <td>Xor</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Xor">Xor</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_LOGICAL_XOR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Xor">Xor</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_XOR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y) = !!x xor !!y</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Sine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sin">Sin</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_SIN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sin">Sin</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = sin(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Cosine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cos">Cos</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_COS</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cos">Cos</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_COS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = cos(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Tangent</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tan">Tan</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_TAN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tan">Tan</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_TAN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = tan(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Arcsine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Asin">Asin</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ASIN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Asin">Asin</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ASIN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = asin(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Arccosine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Acos">Acos</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ACOS</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Acos">Acos</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ACOS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = acos(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Arctangent</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Atan">Atan</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ATAN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Atan">Atan</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ATAN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = atan(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Sine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_SINH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SINH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = sinh(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Cosine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Cosh">Cosh</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_COSH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Cosh">Cosh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_COSH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = cosh(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Tangent</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Tanh">Tanh</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_TANH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Tanh">Tanh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_TANH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = tanh(x)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Arccosine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ACOSH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ACOSH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = arccosh(x)
       or: logₑ(x + sqrt(x * x - 1))</td>
     <td>Precision TBD</td>
@@ -486,8 +1083,21 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Arccosine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Asinh">Asinh</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ASINH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Asinh">Asinh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ASINH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = arcsinh(x)
       or: logₑ(x + sqrt(x * x + 1))</td>
     <td>Precision TBD</td>
@@ -495,8 +1105,21 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Arccosine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Atanh">Atanh</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ATANH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Atanh">Atanh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ATANH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = arctanh(x)
       or: logₑ((1 + x) / (1 - x)) / 2</td>
     <td>Precision TBD</td>
@@ -504,8 +1127,22 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>CosineGrad</td>
-    <td>Composed</a></td>
-    <td>Composed</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">Composed</td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIN &
+DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(Dx, X) = Mul(Sin(X), Dx)
       f(dx, x) = sin(x) * dx</td>
     <td>Precision TBD</td>
@@ -513,32 +1150,84 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Sum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sum">Sum</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sum">Sum</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y, z…) = x + y + z…</td>
     <td>&lt; N-1 ULP</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Mean</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mean">Mean</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mean">Mean</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y, z…) = (x + y + z…) / n</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Maximum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y, z…) = max(x, y, z…)</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Threshold</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_THRESHOLD</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_THRESHOLD</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, minValue) = Max(X, minValue)
       or: f(x) = max(x, minValue)
       notes: Not equivalent to ThresholdedRelu.</td>
@@ -547,16 +1236,42 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Minimum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Min">Min</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Min">Min</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, y, z…) = min(x, y, z…)</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Quantization</td>
     <td>Quantize Linear</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#QuantizeLinear">QuantizeLinear</a><br/>com.microsoft QuantizeLinear</td>
-    <td>DML_OPERATOR_ELEMENT_WISE_QUANTIZE_LINEAR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#QuantizeLinear">QuantizeLinear</a><br/>com.microsoft QuantizeLinear</td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_QUANTIZE_LINEAR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(input:float32, scale:float32, zero_point:int32)
       return output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</td>
     <td>Precision TBD</td>
@@ -564,8 +1279,21 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Quantization</td>
     <td>Dequantize Linear</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DequantizeLinear">DequantizeLinear</a><br/>com.microsoft DequantizeLinear</td>
-    <td>DML_OPERATOR_ELEMENT_WISE_DEQUANTIZE_LINEAR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DequantizeLinear">DequantizeLinear</a><br/>com.microsoft DequantizeLinear</td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_DEQUANTIZE_LINEAR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(input:uint8, scale:float32, zero_point:float32)
       return output:float32 = (input - zero_point) * scale</td>
     <td>Precision TBD</td>
@@ -573,8 +1301,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Sigmoid</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sigmoid">Sigmoid</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SIGMOID</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sigmoid">Sigmoid</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SIGMOID</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Reciprocal(Add(1, Exp(Neg(X))))
       or: f(x) = 1 / (1 + expₑ(-x))
       or: f(x) = expₑ(x) / (1 + expₑ(x))</td>
@@ -583,9 +1324,22 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Hard Sigmoid</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#HardSigmoid">HardSigmoid</a></td>
-    <td>DML_OPERATOR_ACTIVATION_HARD_SIGMOID</td>
-    <td>F(X) = Clip(Add(Mul(alpha, X), beta), 0, 1))
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#HardSigmoid">HardSigmoid</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_HARD_SIGMOID</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>F(X) = Clip(Add(Mul(alpha, X), beta), 0, 1)
       or: f(x) = max(0, min(alpha * x + beta, 1))
       defaults: alpha = 0.2, beta = 0.5</td>
     <td>Precision TBD</td>
@@ -593,8 +1347,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Hyperbolic Tangent</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tanh">Tanh</a></td>
-    <td>DML_OPERATOR_ACTIVATION_TANH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tanh">Tanh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_TANH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Div(Sub(1, Exp(Mul(X, -2)), Add(1, Exp(X, -2)))
       or: f(x) = (1 - expₑ(-2 * x))/(1 + expₑ(-2 * x))
       or: f(x) = 2 /(1 + expₑ(-2 * x)) - 1
@@ -604,8 +1371,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Scaled Hyperbolic Tangent</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ScaledTanh">ScaledTanh</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SCALED_TANH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ScaledTanh">ScaledTanh</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SCALED_TANH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)
       or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
     <td>Precision TBD</td>
@@ -613,8 +1393,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Clamp Positive (Rectified Linear Unit)</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Relu">Relu</a></td>
-    <td>DML_OPERATOR_ACTIVATION_RELU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Relu">Relu</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_RELU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Max(X, 0)
       or: f(x) = max(x, 0)
       or: if x &gt;= 0 then x else 0</td>
@@ -623,8 +1416,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Leaky Rectified Linear Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LeakyRelu">LeakyRelu</a></td>
-    <td>DML_OPERATOR_ACTIVATION_LEAKY_RELU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LeakyRelu">LeakyRelu</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_LEAKY_RELU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Where(Less(X, 0), Mul(X, alpha), X)
       or: f(x, alpha) = if x &gt;= 0 then x else alpha * x</td>
     <td>&lt;= Mul precision</td>
@@ -632,8 +1438,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Parameterized Rectified Linear Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
-    <td>DML_OPERATOR_ACTIVATION_PARAMETERIZED_RELU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_PARAMETERIZED_RELU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Where(Less(X, 0), Mul(X, Slope), X)
       or: f(x, slope) = if x &gt;= 0 then x else slope * x
       PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
@@ -642,8 +1461,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Thresholded Rectified Linear Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ThresholdedRelu">ThresholdedRelu</a></td>
-    <td>DML_OPERATOR_ACTIVATION_THRESHOLDED_RELU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ThresholdedRelu">ThresholdedRelu</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_THRESHOLDED_RELU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, alpha = 1) = Where(Greater(X, alpha), X, 0)
       f(x) = if x &gt; alpha then x else 0</td>
     <td>Exact</td>
@@ -651,8 +1483,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Exponential Linear Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Elu">Elu</a></td>
-    <td>DML_OPERATOR_ACTIVATION_ELU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Elu">Elu</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_ELU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, alpha = 1) = Where(Less(X, 0), Mul(Sub(Exp(X), 1), alpha))
       or: F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
       or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (expₑ(x) - 1)</td>
@@ -661,8 +1506,21 @@ endfunction</code></td>
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Scaled Exponential Linear Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Selu">Selu</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SCALED_ELU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Selu">Selu</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SCALED_ELU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, alpha = 1.6732, gamma = 1.0507) = Mul(Elu(X, alpha), gamma)
       or: f(x, alpha = 1.6732, gamma = 1.0507):
       if x &gt; 0 then gamma * x
@@ -672,8 +1530,21 @@ endfunction</code></td>
   <tr class="activationOperator normalizationOperator">
     <td>Activation / Normalization</td>
     <td>Soft Maximum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softmax">Softmax</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SOFTMAX</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softmax">Softmax</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SOFTMAX</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 <code>function SoftMax2D(Input; Output; axis):
   MaxInput = ReduceMax(Input, axes=[1], keepdims=1)
@@ -696,8 +1567,21 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Log Soft Maximum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LogSoftmax">LogSoftmax</a></td>
-    <td>DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LogSoftmax">LogSoftmax</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(Input, axis) = Log(Softmax(Input, axis))
   or: f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))
   or: (x - max(X)) - logₑ(x - max(X))))</td>
@@ -706,8 +1590,21 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Hard Maximum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Hardmax">Hardmax</a></td>
-    <td>DML_OPERATOR_ACTIVATION_HARDMAX</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Hardmax">Hardmax</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_HARDMAX</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = if x_i == max(X) then 1 else 0
       *but only for first element along that axis</td>
     <td>Precision TBD</td>
@@ -715,8 +1612,21 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Soft Sign</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softsign">Softsign</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SOFTSIGN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softsign">Softsign</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SOFTSIGN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Div(X, Add(Abs(X), 1))
       or: f(x) = x / (1 + abs(x))</td>
     <td>Precision TBD</td>
@@ -724,8 +1634,21 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Softplus</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softplus">Softplus</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SOFTPLUS</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softplus">Softplus</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SOFTPLUS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Log(Add(Exp(x), 1))
       or: f(x) = logₑ(1 + expₑ(x))</td>
     <td>Precision TBD</td>
@@ -733,9 +1656,23 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Affine</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Affine">Affine</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY
-  with scale and bias or DML_OPERATOR_ACTIVATION_LINEAR</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Affine">Affine</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY
+    with scale and bias
+DML_OPERATOR_ACTIVATION_LINEAR</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Add(Mul(X, alpha), beta)
   or: f(x, alpha, beta) = alpha * x + beta</td>
     <td>Precision TBD</td>
@@ -743,8 +1680,21 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Symmetric signal shift</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
-    <td>DML_OPERATOR_ACTIVATION_SHRINK</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SHRINK</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x, lambda, bias):
       if x &lt; -lambda then y = x + bias
       elif x &gt; lambda then y = x - bias
@@ -754,8 +1704,21 @@ endfunction
   <tr class="activationOperator">
     <td>Activation (Deleted)</td>
     <td>Parametric Softplus</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ParametricSoftplus">ParametricSoftplus</a></td>
-    <td>DML_OPERATOR_ACTIVATION_PARAMETRIC_SOFTPLUS</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ParametricSoftplus">ParametricSoftplus</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ACTIVATION_PARAMETRIC_SOFTPLUS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Mul(alpha, Softplus(Mul(beta, X))).
       or: f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))
   </td>
@@ -764,24 +1727,63 @@ endfunction
  <tr>
     <td>Generation Random</td>
     <td>Random Normal</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormal">RandomNormal</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormal">RandomNormal</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
   </tr>
  <tr>
     <td>Generation Random</td>
     <td>Random Normal Like</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormalLike">RandomNormalLike</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormalLike">RandomNormalLike</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
   </tr>
  <tr>
     <td>Generation Random</td>
     <td>Random Uniform</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
       if integer: return (rand() % (range+1) + low 
@@ -791,8 +1793,21 @@ endfunction
  <tr>
     <td>Generation Random</td>
     <td>Random Uniform Normal</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniformLike">RandomUniformLike</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniformLike">RandomUniformLike</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
       if integer: return (rand() % (range+1) + low 
@@ -802,16 +1817,42 @@ endfunction
  <tr>
     <td>Generation Random</td>
     <td>Random Multinomial</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Multinomial">Multinomial</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Multinomial">Multinomial</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Unpredictable</td>
   </tr>
  <tr>
     <td>Generation Matrix Multiplication</td>
     <td>Diagonal Matrix</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#EyeLike">EyeLike</a></td>
-    <td>DML_OPERATOR_DIAGONAL_MATRIX</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#EyeLike">EyeLike</a></td>
+    <td class="dmlColumn">DML_OPERATOR_DIAGONAL_MATRIX</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
 output.shape = input.shape
 output.type = if exists(dtype) then dtype else input.type
@@ -825,8 +1866,21 @@ endfunction</code></td>
  <tr>
     <td>Matrix Multiplication</td>
     <td>Generic Matrix Multiplication</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gemm">Gemm</a></td>
-    <td>DML_OPERATOR_MATRIX_GEMM</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gemm">Gemm</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MATRIX_GEMM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(A, B, C; alpha, beta, transA, transB; Y):
       A2 = If(transA, Transpose(A), A)
       B2 = If(transB, Transpose(B), B)
@@ -836,8 +1890,21 @@ endfunction</code></td>
  <tr>
     <td>Matrix Multiplication</td>
     <td>Matrix Multiplication</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MatMul">MatMul</a></td>
-    <td>DML_OPERATOR_MATRIX_GEMM</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MatMul">MatMul</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MATRIX_GEMM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])
       It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
       notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices. A and B can have batch count dimensions, where each 2D matrix is multiplied separately. The batch count can be broadcast too.</td>
@@ -846,8 +1913,23 @@ endfunction</code></td>
  <tr>
     <td>Matrix Multiplication</td>
     <td>Convolve</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Conv">Conv</a></td>
-    <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_FORWARD</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Conv">Conv</a></td>
+    <td class="dmlColumn">DML_OPERATOR_CONVOLUTION 
+    with DML_CONVOLUTION_MODE_CROSS_CORRELATION
+    and DML_CONVOLUTION_DIRECTION_FORWARD</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Every output element is the convolution of the filter with the corresponding input elements.
   <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</code>
       notes: 'steps' affects the size of steps over the input.
@@ -885,8 +1967,23 @@ endfunction
  <tr>
     <td>Matrix Multiplication</td>
     <td>Convolve Tranposed</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConvTranspose">ConvTranspose</a></td>
-    <td>DML_OPERATOR_CONVOLUTION with DML_CONVOLUTION_MODE_CROSS_CORRELATION, DML_CONVOLUTION_DIRECTION_BACKWARD</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConvTranspose">ConvTranspose</a></td>
+    <td class="dmlColumn">DML_OPERATOR_CONVOLUTION
+    with DML_CONVOLUTION_MODE_CROSS_CORRELATION
+    and DML_CONVOLUTION_DIRECTION_BACKWARD</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>todo: Here be dragons.
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
     <td>Precision TBD</td>
@@ -894,16 +1991,43 @@ endfunction
  <tr>
     <td>Data Conversion</td>
     <td>Cast</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cast">Cast</a></td>
-    <td>DML_OPERATOR_CAST</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cast">Cast</a></td>
+    <td class="dmlColumn">DML_OPERATOR_CAST</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(x) = cast(x)</td>
     <td>&lt; 1 ULP</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Transpose</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Transpose">Transpose</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with new TENSOR_DESC that flips via permuted strides</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Transpose">Transpose</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with
+    TENSOR_DESC that flips via permuted strides</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
 function Transpose(input, perm):
@@ -920,9 +2044,24 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Broadcast</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Expand">Expand</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IDENTITY with TENSOR_DESC using zero strides along broadcast dimension</td>
-    <td>Broadcast any single size dimensions up to the output dimension counts. Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Expand">Expand</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with
+    TENSOR_DESC using zero strides along broadcast dimension</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Broadcast any single size dimensions up to the output dimension counts.
+Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
 function Broadcast(input, shape)
     output.shape = BroadcastShape(input.shape, shape)
@@ -938,9 +2077,23 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>BroadcastShape</td>
-    <td>No ONNX equivalent</a></td>
-    <td>NA</td>
-    <td>Compute the broadcasted output shape (1D tensor) from multiple input shapes, where any single size dimensions are stretched to the output dimension size.
+    <td class="webnnColumn">NA</td>
+    <td class="onnxColumn">NA</td>
+    <td class="dmlColumn">NA</td>
+    <td class="xnnPackColumn">NA</td>
+    <td class="stableHloColumn">NA</td>
+    <td class="tosaColumn">NA</td>
+    <td class="numpyColumn">NA</td>
+    <td class="tensorFlowColumn">NA</td>
+    <td class="pytorchColumn">NA</td>
+    <td class="coreMlColumn">NA</td>
+    <td class="bnnsColumn">NA</td>
+    <td class="mpsColumn">NA</td>
+    <td class="mlxColumn">NA</td>
+    <td class="ncnnColumn">NA</td>
+    <td class="futureColumn"></td>
+    <td>Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
+Any single size dimensions are stretched to the output dimension size.
 <code>
 function BroadcastShape(shapes...)
     N = 0
@@ -970,8 +2123,21 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Tile</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tile">Tile</a></td>
-    <td>DML_OPERATOR_TILE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tile">Tile</a></td>
+    <td class="dmlColumn">DML_OPERATOR_TILE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Repeat entire tensor along each axis by repeat counts.
 <code>
 function Tile(input, repeats)
@@ -989,16 +2155,42 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Split</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Split">Split</a></td>
-    <td>DML_OPERATOR_SPLIT</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Split">Split</a></td>
+    <td class="dmlColumn">DML_OPERATOR_SPLIT</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Split input into multiple output tensors.</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Slice</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a></td>
-    <td>DML_OPERATOR_SLICE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a></td>
+    <td class="dmlColumn">DML_OPERATOR_SLICE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Crop the tensor to the given ranges for each axis.
 <code>function Slice(input, starts, ends, axes, steps)
     N = input.rank
@@ -1025,16 +2217,42 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization (Deleted)</td>
     <td>Crop</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#experimental-crop">Crop</a> (ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a> subset)?</td>
-    <td>DML_OPERATOR_SLICE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#experimental-crop">Crop</a> (ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a> subset)?</td>
+    <td class="dmlColumn">DML_OPERATOR_SLICE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Crop the tensor to the given ranges for each axis. Crop is confusing and redundant. Just use Slice.</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Contenate</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Concat">Concat</a></td>
-    <td>DML_OPERATOR_JOIN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Concat">Concat</a></td>
+    <td class="dmlColumn">DML_OPERATOR_JOIN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 <code>function Concat(inputs, axis)
     sizesAlongAxis = []
@@ -1055,16 +2273,42 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Gather</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gather">Gather</a></td>
-    <td>DML_OPERATOR_GATHER</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gather">Gather</a></td>
+    <td class="dmlColumn">DML_OPERATOR_GATHER</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Gather Elements</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherElements">GatherElements</a><br/><a href="https://pytorch.org/docs/stable/torch.html#torch.gather">torch.gather</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherElements">GatherElements</a><br/><a href="https://pytorch.org/docs/stable/torch.html#torch.gather">torch.gather</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
 output = input
@@ -1097,8 +2341,21 @@ output = [[1,1], [4,3], [6,6]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Scatter Elements</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterElements">ScatterElements</a><br/><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor.scatter_">torch.tensor.scatter_</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterElements">ScatterElements</a><br/><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor.scatter_">torch.tensor.scatter_</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Opposite of gather. Write values from updates into data at the given indices. If two output element indices overlap, there is no documented winner, but last write wins in practice.
 <code>
 output = input
@@ -1127,16 +2384,42 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Pad</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pad">Pad</a></td>
-    <td>DML_OPERATOR_PADDING</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pad">Pad</a></td>
+    <td class="dmlColumn">DML_OPERATOR_PADDING</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Inflate the input with zeroes on the edges</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Space To Depth</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#SpaceToDepth">SpaceToDepth</a></td>
-    <td>DML_OPERATOR_SPACE_TO_DEPTH</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#SpaceToDepth">SpaceToDepth</a></td>
+    <td class="dmlColumn">DML_OPERATOR_SPACE_TO_DEPTH</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Rearrange blocks of elements.
 <code>
 channelCountDivBlockCount = channelCount / (blockSize * blockSize);
@@ -1153,8 +2436,21 @@ output[outputIndices] = input[inputIndices];</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Depth To Space</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DepthToSpace">DepthToSpace</a></td>
-    <td>DML_OPERATOR_DEPTH_TO_SPACE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DepthToSpace">DepthToSpace</a></td>
+    <td class="dmlColumn">DML_OPERATOR_DEPTH_TO_SPACE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Rearrange blocks of elements.
 <code>
 channelCountDivBlockCount = channelCount / (blockSize * blockSize);
@@ -1171,8 +2467,21 @@ output[outputIndices] = input[inputIndices];</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Shape</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Shape">Shape</a></td>
-    <td>NA, just read the TENSOR_DESC dimensions</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Shape">Shape</a></td>
+    <td class="dmlColumn">NA, just read the TENSOR_DESC dimensions</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Return the dimensions of the tensor as a 1D tensor.
       F(input): return input.shape
   </td>
@@ -1181,8 +2490,21 @@ output[outputIndices] = input[inputIndices];</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Element Count</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Size">Size</a></td>
-    <td>NA, just compute the number of TENSOR_DESC elements</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Size">Size</a></td>
+    <td class="dmlColumn">NA, just compute the number of TENSOR_DESC elements</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Return the element count. ReduceProd(Shape(X), keepdims=0).
       note: Size is unfortunately named, inconsistently with Resize10 which accepts separate dimensions. If you want the sizes of the tensor (N C H W) rather than just the total element count, called Shape instead.</td>
     <td>Exact</td>
@@ -1190,16 +2512,42 @@ output[outputIndices] = input[inputIndices];</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Reshape</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
-    <td>NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
+    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Reshape To 2D</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
-    <td>NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
+    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
 
 <code>
@@ -1224,8 +2572,21 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Reshape Removing 1's</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
-    <td>NA, just rearrange the TENSOR_DESC</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
+    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
 
 <code>
@@ -1252,8 +2613,21 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Reshape Inserting 1's</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
-    <td>NA, just rearrange the TENSOR_DESC</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
+    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
 
 <code>
@@ -1272,24 +2646,63 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization mapping</td>
     <td>One Hot Along Axis</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_ONE_HOT</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ONE_HOT</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
     <td>Top K Sorted Selection</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
-    <td>DML_OPERATOR_TOP_K</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
+    <td class="dmlColumn">DML_OPERATOR_TOP_K</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>TopK(X, K, axis) = Slice(SortDecreasing(X, axis), starts=0, ends=K, axes=axis)</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data reorganization selection</td>
     <td>Select elementwise</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
-    <td>DML_OPERATOR_ELEMENT_WISE_IF</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IF</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(b, x, y) = if b then x else y
       notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
   </td>
@@ -1298,16 +2711,42 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization selection</td>
     <td>Join selected slices</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Compress">Compress</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Compress">Compress</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data reorganization <a href="https://github.com/onnx/onnx/pull/1882">(Reverted)</a></td>
     <td>Reverse axes</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/pull/1804">Reverse</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/pull/1804">Reverse</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Reverse all the elements along the given axes.
 <code>
 output.shape = input.shape
@@ -1326,8 +2765,21 @@ endfor
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Global Average Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
-    <td>DML_OPERATOR_AVERAGE_POOLING</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Average all elements in each pool. y = (x1 + x2 + … + xn) / pool_size;
 So X[N C H W] reduces to Y[N C 1 1]
 
@@ -1341,48 +2793,128 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Average Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
-    <td>DML_OPERATOR_AVERAGE_POOLING</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = (x1 + x2 + … + xn) / pool_size</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Global Maximum Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
-    <td>DML_OPERATOR_MAX_POOLING with output being 1 element</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MAX_POOLING with output being 1 element</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = max(x1, x2, … x_pool_size)</td>
     <td>Exact</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Maximum Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxPool">MaxPool</a></td>
-    <td>DML_OPERATOR_MAX_POOLING</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxPool">MaxPool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MAX_POOLING</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = max(x1, x2, … x_pool_size)</td>
     <td>Exact</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Maximum Unpooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#MaxUnpool">MaxUnpool</a></td>
-    <td>---</td>
-    <td>Opposite of MaxPool. Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros, then write each value from the input tensor into the output tensor at the element offset from the corresponding indices array.</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#MaxUnpool">MaxUnpool</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Opposite of MaxPool.
+Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros.
+Then write each value from the input tensor into the output tensor at the element offset from the corresponding indices array.</td>
     <td>Exact</td>
 </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Lebesgue Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpPool">LpPool</a></td>
-    <td>DML_OPERATOR_LP_POOLING</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpPool">LpPool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_LP_POOLING</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Global Lebesgue Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalLpPool">GlobalLpPool</a></td>
-    <td>DML_OPERATOR_LP_POOLING with output being 1 element</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalLpPool">GlobalLpPool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_LP_POOLING with output being 1 element</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p);
       So X[N C H W] reduces to Y[N C 1 1]
       e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
@@ -1391,18 +2923,45 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Maximum Region of Interest Pooling</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxRoiPool">MaxRoiPool</a></td>
-    <td>DML_OPERATOR_ROI_POOLING (only POOLING_MAX is supported)</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxRoiPool">MaxRoiPool</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ROI_POOLING (only POOLING_MAX is supported)</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Apply MaxPool to given input within each numbered region (batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive), and write the maximal value back to the output.
-      questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute? That's broken and inconsistent with a lot of graphics API's and Python array slice start:end notation. What's the point of the pooled_shape when each region has a specific size anyway?
+questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute?
+'s broken and inconsistent with a lot of graphics API's and Python array slice start:end notation. What's the point of the pooled_shape when each region has a specific size anyway?
   </td>
     <td>Precision TBD</td>
   </tr>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Sum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSum">ReduceSum</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSum">ReduceSum</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
       y = (x1 + x2 + ... + xn)</td>
     <td>Precision TBD</td>
@@ -1410,24 +2969,63 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Mean</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMean">ReduceMean</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_AVERAGE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMean">ReduceMean</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_AVERAGE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = (x1 + x2 + ... + xn) / n</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Product</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceProd">ReduceProd</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MULTIPLY</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceProd">ReduceProd</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MULTIPLY</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>y = (x1 * x2 * ... * xn)</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Logarithm of Sum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSum">ReduceLogSum</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSum">ReduceLogSum</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Log(ReduceSum(X, axes, keepdims))
       or: y = logₑ(x1 + x2 + ... + xn)</td>
     <td>Precision TBD</td>
@@ -1435,8 +3033,21 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Logarithm of Sum of Exponents</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSumExp">ReduceLogSumExp</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM_EXP</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSumExp">ReduceLogSumExp</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_LOG_SUM_EXP</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Log(ReduceSum(Exp(X), axes, keepdims))
       or: y = logₑ(expₑ(x1) + expₑ(x2) + ... + expₑ(xn))
   </td>
@@ -1445,8 +3056,21 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Sum of Squares</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSumSquare">ReduceSumSquare</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM_SQUARE</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSumSquare">ReduceSumSquare</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM_SQUARE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = ReduceSum(Pow(X, 2), axes, keepdims)
       or: y = x1^2 + x2^2 + ... + xn^2</td>
     <td>Precision TBD</td>
@@ -1454,8 +3078,21 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Sum of Absolute Values</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL1">ReduceL1</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L1</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL1">ReduceL1</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L1</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = ReduceSum(Abs(X), axes, keepdims)
       or: y = abs(x1) + abs(x2) + ... + abs(xn)</td>
     <td>Precision TBD</td>
@@ -1463,8 +3100,21 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To L2 Distance</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL2">ReduceL2</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L2</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL2">ReduceL2</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_L2</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>F(X) = Sqrt(ReduceSum(Pow(X, 2), axes, keepdims))
   or: y = sqrt(x1^2 + x2^2 + ... + xn^2)</td>
     <td>Precision TBD</td>
@@ -1472,40 +3122,105 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Maximum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMax">ReduceMax</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MAX</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMax">ReduceMax</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MAX</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>x = max(max(max(x1, x2), x3), ..., xn)</td>
     <td>Exact</td>
   </tr>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Minimum</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMin">ReduceMin</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MIN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMin">ReduceMin</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MIN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>x = min(min(min(x1, x2), x3), ..., xn)</td>
     <td>Exact</td>
   </tr>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Maximum Argument</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMax">ArgMax</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMAX</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMax">ArgMax</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMAX</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>int32 {i j k ..} = maxindex(X Y Z …)</td>
     <td>Exact</td>
   </tr>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce To Minimum Argument</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMin">ArgMin</a></td>
-    <td>DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMIN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMin">ArgMin</a></td>
+    <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMIN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>int32 {i j k ..} = minindex(X Y Z …)</td>
     <td>Exact</td>
   </tr>
  <tr>
     <td>Imaging Operators</td>
     <td>Resample Up</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Upsample">Upsample</a></td>
-    <td>DML_OPERATOR_UPSAMPLE_2D</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Upsample">Upsample</a></td>
+    <td class="dmlColumn">DML_OPERATOR_UPSAMPLE_2D</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Y.Shape = Floor(Shape(X) * Scales)
       Y[output_i] = X[output_i / Scales]</td>
     <td>Precision TBD</td>
@@ -1513,8 +3228,21 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>If</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#If">If</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#If">If</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>f(cond, then_graph, else_graph, outputs...):
       subgraph = cond ? then_graph : else_graph
       outputs = subgraph(implictly_named_inputs_from_outer_graph)
@@ -1524,24 +3252,68 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>Loop</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Loop">Loop</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Loop">Loop</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>TODO:CODE</td>
     <td>Exact</td>
   </tr>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>Scan</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Scan">Scan</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Scan">Scan</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>TODO:CODE</td>
     <td>Exact</td>
   </tr>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Spatial Normalization (independent batch&channel)</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
-    <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes except the first two (N,C).<br/>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with acrossChannels=false, normalizeVariance=true, scale and bias provided</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
+    axes = [2,3,4,...] excluding (N,C).
+DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
+    acrossChannels=false
+    normalizeVariance=true
+    scale and bias provided</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>InstanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
 Mean and variance are computed across spatial dimensions DHW, independently per batch per channel NC:
@@ -1562,8 +3334,26 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Layer Normalization (independent leading batches)</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/main/docs/Operators.md#LayerNormalization">LayerNormalization</a></td>
-    <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes including and after the axis parameter.<br/>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with acrossChannels=false, normalizeVariance=true, scale and bias provided</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/main/docs/Operators.md#LayerNormalization">LayerNormalization</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
+    axes = [firstAxis, firstAxis+1, ...].
+DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
+    acrossChannels=false
+    normalizeVariance=true
+    scale and bias provided</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
 Mean and variance are computed across all dimensions from and after axis, independently per leading batches:
@@ -1584,8 +3374,22 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Spatial&Channel Normalization</td>
-    <td>NA (<a href="https://arxiv.org/abs/1803.08494">alternate layer normalization</a>)</td>
-    <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with all axes except the first batch (N).</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">NA (<a href="https://arxiv.org/abs/1803.08494">alternate layer normalization</a>)</td>
+    <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
+    axes = [1,2,3,...].</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + Bias
 
 Mean and variance are computed across spatial&channel dimensions CDHW, independently per batch N:
@@ -1606,8 +3410,21 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Batch&Spatial Normalization (independent channel)</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BatchNormalization">BatchNormalization</a></td>
-    <td>DML_OPERATOR_BATCH_NORMALIZATION</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BatchNormalization">BatchNormalization</a></td>
+    <td class="dmlColumn">DML_OPERATOR_BATCH_NORMALIZATION</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
 
 Statistics are precomputed across batch and spatial dimensions NDHW (and not just the batch dimension, as the name would misleadingly lead you believe) independently for each channel C, then reshaped to be input size compatible.
@@ -1629,8 +3446,21 @@ variance = np.mean(x, axis=axes, keepdims=True)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Mean Variance Normalization</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
-    <td>DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
+    <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>For each output element, subtract the mean, and divide by standard deviation.
 
 MeanVarianceNormalization(X) = (X - mean) / standardDeviation
@@ -1664,8 +3494,21 @@ output = (inputData - dataMean) / (std + 1e-9)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Local Response Normalization</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
-    <td>DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
+    <td class="dmlColumn">DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
 
 LRN(x, localSize, scaleAlpha, powerBeta, bias) = x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta
@@ -1684,8 +3527,21 @@ Output = Input / Pow(Biased, Beta)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Lebesgue Length Normalization</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpNormalization">LpNormalization</a></td>
-    <td>DML_OPERATOR_LP_NORMALIZATION</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpNormalization">LpNormalization</a></td>
+    <td class="dmlColumn">DML_OPERATOR_LP_NORMALIZATION</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
 <code>aggregate F(X, p)
     // TODO: verify this. mean? variance not / n?
@@ -1701,32 +3557,84 @@ endaggregate</code></td>
  <tr>
     <td>Sparse tensor collation</td>
     <td>Nonzero Indices List</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved (so not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
     <td>Exact</td>
   </tr>
  <tr>
     <td>NGram</td>
     <td>Term Frequency Inverse Document Frequency Vectorizer</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
-    <td>---</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
+    <td class="dmlColumn">---</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Read input front to back, incrementing output histogram for each occurrence found of desired patterns. It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
     <td>Exact</td>
   </tr>
  <tr>
     <td>Aggregate</td>
     <td>Recurrent Neural Network</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RNN">RNN</a></td>
-    <td>DML_OPERATOR_RNN</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RNN">RNN</a></td>
+    <td class="dmlColumn">DML_OPERATOR_RNN</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
     <td>Precision TBD</td>
   </tr>
  <tr>
     <td>Aggregate</td>
     <td>Gated Recurrent Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GRU">GRU</a></td>
-    <td>DML_OPERATOR_GRU</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GRU">GRU</a></td>
+    <td class="dmlColumn">DML_OPERATOR_GRU</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
 Z = Activation1(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + b1, -clip, +clip))
@@ -1741,19 +3649,94 @@ b2 = B[1, :] + B[4*hidden_size, :];
 b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+  <tr class="elementwiseOperator">
+    <td>Input (Deleted)</td>
+    <td>Constant Fill</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.2.1/docs/Operators.md#ConstantFill">ConstantFill (see ConstantOfShape)</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides for broadcasting</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td><code>function ConstantFill(dtype, extra_shape, input_as_shape, shape, value; inputOfDesiredShape)
+    assert(!exists(shape) || !input_as_shape)
+    output.dataType = dtype
+    output.shape = if exists(shape) then shape else Shape(inputOfDesiredShape) + extra_shape
+    for each element in output tensor
+        element = value
+    endfor
+endfunction</code></td>
+    <td>Exact</td>
+  </tr>
+  <tr>
+    <td>Input (Deleted)</td>
+    <td>Constant Fill</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#GivenTensorFill">GivenTensorFill</a></td>
+    <td class="dmlColumn">NA experimental</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>unknown</td>
+    <td>Exact</td>
+  </tr>
+  <tr>
     <td>Aggregate (Deleted)</td>
     <td>Gated Recurrent Unit Unit</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#GRUUnit">GRUUnit</a></td>
-    <td>NA, experimental</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#GRUUnit">GRUUnit</a></td>
+    <td class="dmlColumn">NA</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>???</td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+  <tr>
     <td>Aggregate</td>
     <td>Long Short Term Memory</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
-    <td>DML_OPERATOR_LSTM</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
+    <td class="dmlColumn">DML_OPERATOR_LSTM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
 I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
@@ -1770,11 +3753,24 @@ b3 = B[2, :] + B[6*hidden_size, :];
 b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+  <tr>
     <td>Training</td>
     <td>Dropout</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
-    <td>Identity actually (useful during training, not trained execution)</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
+    <td class="dmlColumn">NA (can use identity, since not used during inference)</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 <code>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
 or f(x) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</code>
@@ -1782,11 +3778,24 @@ For forward execution, ratio is 0, and so it's equivalent to: <code>F(X) = Ident
 notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
     <td>Unpredictable</td>
   </tr>
- <tr>
+  <tr>
     <td>Deleted / Code Execution</td>
     <td>A TENsor Kernel</td>
-    <td>ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#ATen">ATen</a></td>
-    <td>Experimental to execute arbitrary Python code.</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#ATen">ATen</a> <i>experimental and deprecated</i></td>
+    <td class="dmlColumn">NA</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="futureColumn"></td>
     <td>???</td>
     <td>Unpredictable</td>
   </tr>
@@ -2115,8 +4124,9 @@ Note HLSL says "The % operator is defined only in cases where either both sides 
 
 Also add:
 
-NCNN - https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md?plain=1#L1
+NCNN - https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md
 StableHLO - https://github.com/openxla/stablehlo/blob/main/docs/spec.md
 TOSA - https://mlir.llvm.org/docs/Dialects/TOSA/#tosaselect-mlirtosaselectop
+CoreML - https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html
 
 -->
