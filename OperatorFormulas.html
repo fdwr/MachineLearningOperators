@@ -432,7 +432,7 @@ DML_ACTIVATION_IDENTITY</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
-    <td>Expnonent</td>
+    <td>Exponent</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_EXP</td>
@@ -581,12 +581,12 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="ncnnColumn">?</td>
     <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
-    <td><code>f(x) = clamp(x, min, max)</code></td>
+    <td><code>f(x, min, max) = clamp(x, min, max)</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
-    <td>Error Function</td>
+    <td>Gauss Error Function</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Erf">Erf</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ERF</td>
@@ -603,8 +603,8 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="ncnnColumn">?</td>
     <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
-    <td><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
-or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code>
+    <td><details><summary><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
+or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code></summary>
 <code>
 double f(double x)
 {
@@ -2413,6 +2413,144 @@ endfunction</code></td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data Reorganization</td>
+    <td>Reshape</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
+    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data Reorganization</td>
+    <td>Reshape To 2D</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
+    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
+
+<code>
+aggregate Flatten(input, axis)
+    InputShape = Shape(input)
+    ShapeFrontHalf = Slice(InputShape; ends=axis)
+    ShapeBackHalf = Slice(InputShape; starts=axis)
+    NewShape = Concat(axis=0, ReduceProd(ShapeFrontHalf), ReduceProd(ShapeBackHalf))
+    Output = Reshape(input, NewShape)
+endaggregate
+</code>
+
+<code>
+function Flatten(input, axis)
+    output = input
+    inputShape = input.shape
+    output.shape = join(reduceprod(inputShape[0..axis]), reduceprod(inputShape[axis..oldShape.size]))
+    return output
+endfunction</code></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data Reorganization</td>
+    <td>Reshape Removing Ones</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
+    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
+
+<code>
+function ReshapeDeletingOnes(input, axes)
+    outputShape = input.shape
+    if axes.empty
+        axes = arange(0, outputShape.size)
+    else // !axes.empty
+        for i in axes do assert(outputShape[i] == 1)
+        axes = removeDupes(sort(axes))
+    endif
+    axes = reverse(axes)
+    for i in axes // work from back to front
+        if outputShape[i] == 1
+            outputShape.deleteAt(i)
+        endif
+    endfor
+    output = input
+    output.shape = outputShape
+    return output
+endfunction</code></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data Reorganization</td>
+    <td>Reshape Inserting Ones</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
+    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
+
+<code>
+function ReshapeInsertingOnes(input, axes)
+    output = input
+    outputShape = input.shape
+    axes = removeDupes(sort(axes))
+    for i in axes
+        outputShape.insertAt(i, 1)
+    endfor
+    output.shape = outputShape
+    return output
+endfunction</code></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data Reorganization</td>
     <td>Tile</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tile">Tile</a></td>
@@ -2856,144 +2994,6 @@ output[outputIndices] = input[inputIndices];</code></td>
     <td>Return the element count. ReduceProd(Shape(X), keepdims=0).
 note: <code>Size</code> is unfortunately named, inconsistently so with <code>Resize-10</code> which accepts separate dimensions. 🙃
 If you want the sizes of the tensor (N C H W) rather than just the total element count, called <code>Shape</code> instead.</td>
-    <td>Exact</td>
-  </tr>
-  <tr class="reorganizationOperator">
-    <td>Data Reorganization</td>
-    <td>Reshape</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
-    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
-    <td>Exact</td>
-  </tr>
-  <tr class="reorganizationOperator">
-    <td>Data Reorganization</td>
-    <td>Reshape To 2D</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Flatten">Flatten</a></td>
-    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
-
-<code>
-aggregate Flatten(input, axis)
-    InputShape = Shape(input)
-    ShapeFrontHalf = Slice(InputShape; ends=axis)
-    ShapeBackHalf = Slice(InputShape; starts=axis)
-    NewShape = Concat(axis=0, ReduceProd(ShapeFrontHalf), ReduceProd(ShapeBackHalf))
-    Output = Reshape(input, NewShape)
-endaggregate
-</code>
-
-<code>
-function Flatten(input, axis)
-    output = input
-    inputShape = input.shape
-    output.shape = join(reduceprod(inputShape[0..axis]), reduceprod(inputShape[axis..oldShape.size]))
-    return output
-endfunction</code></td>
-    <td>Exact</td>
-  </tr>
-  <tr class="reorganizationOperator">
-    <td>Data Reorganization</td>
-    <td>Reshape Removing Ones</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
-    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
-
-<code>
-function ReshapeDeletingOnes(input, axes)
-    outputShape = input.shape
-    if axes.empty
-        axes = arange(0, outputShape.size)
-    else // !axes.empty
-        for i in axes do assert(outputShape[i] == 1)
-        axes = removeDupes(sort(axes))
-    endif
-    axes = reverse(axes)
-    for i in axes // work from back to front
-        if outputShape[i] == 1
-            outputShape.deleteAt(i)
-        endif
-    endfor
-    output = input
-    output.shape = outputShape
-    return output
-endfunction</code></td>
-    <td>Exact</td>
-  </tr>
-  <tr class="reorganizationOperator">
-    <td>Data Reorganization</td>
-    <td>Reshape Inserting Ones</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
-    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
-
-<code>
-function ReshapeInsertingOnes(input, axes)
-    output = input
-    outputShape = input.shape
-    axes = removeDupes(sort(axes))
-    for i in axes
-        outputShape.insertAt(i, 1)
-    endfor
-    output.shape = outputShape
-    return output
-endfunction</code></td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
@@ -5690,7 +5690,7 @@ int32
 int64
 uInt64
 
-Apple BNNS (Basic Neural Network Subroutines) - bnns_constants.h
+Apple BNNS (Basic Neural Network Subroutines) - bnns_constants.h - https://github.com/alexey-lysiuk/macos-sdk/blob/6c1513f5b0667b76e24aaadcad130e90c545f046/MacOSX14.0.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/BNNS/bnns_constants.h#L33-L91
 BNNSDataTypeFloat16 - 16-bit half precision floating point
 BNNSDataTypeBFloat16 - 16-bit brain floating Point
 BNNSDataTypeFloat32 - 32-bit single precision floating point
