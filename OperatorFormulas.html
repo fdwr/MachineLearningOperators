@@ -17,8 +17,13 @@ td
   white-space: pre; /*not pre-wrap;*/
   vertical-align: top;
 }
- 
- /* Hide expandable content by default */
+th {
+  background: #E8E8FF;
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+/* Hide expandable content by default */
 .elementwiseOperator { visibility: collapse; }
 .activationOperator { visibility: collapse; }
 .reorganizationOperator { visibility: collapse; }
@@ -69,7 +74,6 @@ td
 #toggleMlxColumn:checked ~ * .mlxColumn { display: table-cell; }
 #toggleNcnnColumn:checked ~ * .ncnnColumn { display: table-cell; }
 #toggleCntkColumn:checked ~ * .cntkColumn { display: table-cell; }
-
 </style>
 </head>
 <body>
@@ -94,13 +98,13 @@ td
 <li>The pseudocode below uses a few undefined functions, but their trivial behavior should be obvious to implement. e.g. min, max, ones, zeroes, iif, assert</li>
 </p>
 
-<input type="checkbox" id="toggleElementwiseOperators" checked="on"/><label for="toggleElementwiseOperators">Elementwise operators</label><br/>
-<input type="checkbox" id="toggleActivationOperators" checked="on"/><label for="toggleActivationOperators">Activation operators</label><br/>
-<input type="checkbox" id="toggleReorganizationOperators" checked="on"/><label for="toggleReorganizationOperators">Reorganization operators</label><br/>
-<input type="checkbox" id="togglePoolingOperators" checked="on"/><label for="togglePoolingOperators">Pooling operators</label><br/>
-<input type="checkbox" id="toggleReductionOperators" checked="on"/><label for="toggleReductionOperators">Reduction operators</label><br/>
-<input type="checkbox" id="toggleNormalizationOperators" checked="on"/><label for="toggleNormalizationOperators">Normalization operators</label><br/>
-<input type="checkbox" id="toggleControlFlowOperators" checked="on"/><label for="toggleControlFlowOperators">Control flow operators</label><br/>
+<input type="checkbox" id="toggleElementwiseOperators" checked="on"/><label for="toggleElementwiseOperators">Elementwise operators (pointwise operation, input.shape == output.shape)</label><br/>
+<input type="checkbox" id="toggleActivationOperators" checked="on"/><label for="toggleActivationOperators">Activation operators (signal <a href="https://en.wikipedia.org/wiki/Activation_function">remapping function</a>)</label><br/>
+<input type="checkbox" id="toggleReorganizationOperators" checked="on"/><label for="toggleReorganizationOperators">Reorganization operators (data movement, no value calculations)</label><br/>
+<input type="checkbox" id="toggleReductionOperators" checked="on"/><label for="toggleReductionOperators">Reduction operators (reduce multiple inputs to output via a formula)</label><br/>
+<input type="checkbox" id="togglePoolingOperators" checked="on"/><label for="togglePoolingOperators">Pooling operators (overlapping reduction)</label><br/>
+<input type="checkbox" id="toggleNormalizationOperators" checked="on"/><label for="toggleNormalizationOperators">Normalization operators (normalize values based on neighbors)</label><br/>
+<input type="checkbox" id="toggleControlFlowOperators" checked="on"/><label for="toggleControlFlowOperators">Control flow operators (graph level branches and loops)</label><br/>
 <br/>
 <input type="checkbox" id="toggleWebnnColumn" checked="on"/><label for="toggleWebnnColumn">WebNN (W3C <b>Web</b> <b>N</b>eural <b>N</b>etwork) <a href="https://www.w3.org/TR/webnn/">(info)</a></label><br/>
 <input type="checkbox" id="toggleOnnxColumn" checked="on"/><label for="toggleOnnxColumn">ONNX (<b>O</b>pen <b>N</b>eural <b>N</b>etwork E<b>x</b>change) <a href="https://onnx.ai/">(info)</a> <a href="https://onnx.ai/onnx/operators/index.html">(ops)</a></label><br/>
@@ -124,21 +128,21 @@ td
   <tr>
     <th style="width:15em">Categories</th>
     <th>Name</th>
-    <th class="webnnColumn">WebNN</th>
-    <th class="onnxColumn">ONNX</th>
-    <th class="dmlColumn">DML</th>
+    <th class="webnnColumn"><a href="https://www.w3.org/TR/webnn/">WebNN</a></th>
+    <th class="onnxColumn"><a href="https://onnx.ai/onnx/operators/index.html">ONNX</a></th>
+    <th class="dmlColumn"><a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_operator_type">DML</a></th>
     <th class="xnnPackColumn">XNNPACK</th>
-    <th class="stableHloColumn">StableHLO</th>
-    <th class="tosaColumn">TOSA</th>
-    <th class="numpyColumn">NumPy</th>
+    <th class="stableHloColumn"><a href="https://github.com/openxla/stablehlo/blob/main/docs/spec.md">StableHLO</a></th>
+    <th class="tosaColumn"><a href="https://mlir.llvm.org/docs/Dialects/TOSA/">TOSA</a></th>
+    <th class="numpyColumn"><a href="https://numpy.org/doc/stable/reference/routines.html">NumPy</a></th>
     <th class="tensorFlowColumn">TensorFlow</th>
-    <th class="pytorchColumn">PyTorch</th>
-    <th class="coreMlColumn">CoreML</th>
+    <th class="pytorchColumn"><a href="https://pytorch.org/docs/stable/torch.html">PyTorch</a></th>
+    <th class="coreMlColumn"><a href="https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html">CoreML</a></th>
     <th class="bnnsColumn">BNNS</th>
     <th class="mpsColumn">MPS</th>
-    <th class="mlxColumn">MLX</th>
-    <th class="ncnnColumn">NCNN</th>
-    <th class="cntkColumn">CNTK</th>
+    <th class="mlxColumn"><a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">MLX</a></th>
+    <th class="ncnnColumn"><a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">NCNN</a></th>
+    <th class="cntkColumn"><a href="https://microsoft.github.io/CNTK-R/reference/index.html">CNTK</a></th>
     <th class="futureColumn">(for future additions)</th>
     <th valign="top">Formula</th>
     <th>Precision</th>
