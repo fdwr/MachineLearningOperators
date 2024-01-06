@@ -83,9 +83,9 @@ th {
 <a href="https://github.com/fdwr/MachineLearningOperators/">GitHub repo</a><br/>
 <br/>
 
-<h1>Operator Equations</h1>
-<li><a href="#Operators">Operator Formulas</a></li>
+<h1>Operator Formulas</h1>
 <li><a href="#DataTypes">Data Types</a></li>
+<li><a href="#Operators">Operator Formulas</a></li>
 
 <p>Notation:
 <li>Lowercase values are scalar. Uppercase are full tensors. So, x is scalar while X is a tensor, and abs(x) means it returns a scalar while Abs(X) returns a tensor.</li>
@@ -119,6 +119,457 @@ th {
 <input type="checkbox" id="toggleMlxColumn" checked="on"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
 <input type="checkbox" id="toggleNcnnColumn" checked="on"/><label for="toggleNcnnColumn">NCNN (<b>T</b>en<b>c</b>ent <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/">(info)</a> <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(ops)</a></label><br/>
 <input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
+
+<br/><br/>
+<h2 id="DataTypes">Data Types</h2>
+
+<table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
+  <tr>
+    <th style="width:12em">Categories</th>
+    <th>Name</th>
+    <th class="webnnColumn">WebNN</th>
+    <th class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/8a782415a69faf626abc032ff6b2a16187e13c4f/onnx/onnx.proto#L485">ONNX</a></th>
+    <th class="dmlColumn">DML</th>
+    <th class="xnnPackColumn">XNNPACK</th>
+    <th class="stableHloColumn">StableHLO</th>
+    <th class="tosaColumn">TOSA</th>
+    <th class="numpyColumn">NumPy</th>
+    <th class="tensorFlowColumn">TensorFlow</th>
+    <th class="pytorchColumn">PyTorch</th>
+    <th class="coreMlColumn">CoreML</th>
+    <th class="bnnsColumn">BNNS</th>
+    <th class="mpsColumn">MPS</th>
+    <th class="mlxColumn">MLX</th>
+    <th class="ncnnColumn">NCNN</th>
+    <th class="cntkColumn">CNTK</th>
+    <th class="futureColumn">(for future additions)</th>
+    <th valign="top">Details</th>
+  </tr>
+  <tr>
+    <td>Integer</td>
+    <td>uint1</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer</td>
+    <td>uint4</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer</td>
+    <td>uint8</td>
+    <td class="webnnColumn">uint8</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer</td>
+    <td>uint16</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer</td>
+    <td>uint32</td>
+    <td class="webnnColumn">uint32</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer</td>
+    <td>uint48</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>uint64</td>
+    <td class="webnnColumn">uint64</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>int4</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>int8</td>
+    <td class="webnnColumn">int8</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>int16</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>int32</td>
+    <td class="webnnColumn">int32</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>int48</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Integer Signed</td>
+    <td>int64</td>
+    <td class="webnnColumn">int64</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Float Signed</td>
+    <td>float8</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Float Signed</td>
+    <td>float8 #2</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Float Signed</td>
+    <td>float16 IEEE</td>
+    <td class="webnnColumn">float16</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Float Signed</td>
+    <td>float16 brain</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Float Signed</td>
+    <td>float32</td>
+    <td class="webnnColumn">float32</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <tr>
+    <td>Float Signed</td>
+    <td>float64</td>
+    <td class="webnnColumn">float64</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  <!--
+  <tr>
+    <td>categories</td>
+    <td>name</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td class="details"></td>
+  </tr>
+  -->
+</table>
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <h2 id="Operators">Operators</h2>
 
@@ -4202,460 +4653,10 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   </tr>
 </table>
 
-<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-<br/><br/>
-<h2 id="DataTypes">Data Types</h2>
-
-<table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
-  <tr>
-    <th style="width:12em">Categories</th>
-    <th>Name</th>
-    <th class="webnnColumn">WebNN</th>
-    <th class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/8a782415a69faf626abc032ff6b2a16187e13c4f/onnx/onnx.proto#L485">ONNX</a></th>
-    <th class="dmlColumn">DML</th>
-    <th class="xnnPackColumn">XNNPACK</th>
-    <th class="stableHloColumn">StableHLO</th>
-    <th class="tosaColumn">TOSA</th>
-    <th class="numpyColumn">NumPy</th>
-    <th class="tensorFlowColumn">TensorFlow</th>
-    <th class="pytorchColumn">PyTorch</th>
-    <th class="coreMlColumn">CoreML</th>
-    <th class="bnnsColumn">BNNS</th>
-    <th class="mpsColumn">MPS</th>
-    <th class="mlxColumn">MLX</th>
-    <th class="ncnnColumn">NCNN</th>
-    <th class="cntkColumn">CNTK</th>
-    <th class="futureColumn">(for future additions)</th>
-    <th valign="top">Details</th>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint1</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint4</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint8</td>
-    <td class="webnnColumn">uint8</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint16</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint32</td>
-    <td class="webnnColumn">uint32</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint48</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>uint64</td>
-    <td class="webnnColumn">uint64</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int4</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int8</td>
-    <td class="webnnColumn">int8</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int16</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int32</td>
-    <td class="webnnColumn">int32</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int48</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int64</td>
-    <td class="webnnColumn">int64</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float8</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float8 #2</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float16 IEEE</td>
-    <td class="webnnColumn">float16</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float16 brain</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float32</td>
-    <td class="webnnColumn">float32</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float64</td>
-    <td class="webnnColumn">float64</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <!--
-  <tr>
-    <td>categories</td>
-    <td>name</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  -->
-</table>
-
-
 </body>
 </html>
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <!--
 
