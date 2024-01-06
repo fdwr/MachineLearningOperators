@@ -79,15 +79,18 @@ th {
 <body>
 
 <h1>Links</h1>
-<a href="https://fdwr.github.io/MachineLearningOperators/OperatorFormulas.html">Original document location</a><br/>
-<a href="https://github.com/fdwr/MachineLearningOperators/">GitHub repo</a><br/>
+<ul>
+<li>This document</li>
+<ul>
+  <li><a href="https://fdwr.github.io/MachineLearningOperators/OperatorFormulas.html">Original document location</a><br/></li>
+  <li><a href="https://github.com/fdwr/MachineLearningOperators/">GitHub repo</a><br/></li>
+</ul>
+<li><a href="#DataTypes">Data Types table</a></li>
+<li><a href="#Operators">Operator Formulas table</a></li>
+</ul>
 <br/>
 
-<h1>Operator Formulas</h1>
-<li><a href="#DataTypes">Data Types</a></li>
-<li><a href="#Operators">Operator Formulas</a></li>
-
-<p>Notation:
+<h1>Notation</h1>
 <li>Lowercase values are scalar. Uppercase are full tensors. So, x is scalar while X is a tensor, and abs(x) means it returns a scalar while Abs(X) returns a tensor.</li>
 <li>Any multiplication signs '*' mean elementwise multiplication (per NumPy, PyTorch, TensorFlow).</li>
 <li>Any matrix style compound dot product will explicitly use MatMul() rather than '*' to avoid unacceptable notation ambiguity.</li>
@@ -121,7 +124,7 @@ th {
 <input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
 
 <br/><br/>
-<h2 id="DataTypes">Data Types</h2>
+<h1 id="DataTypes">Data Types</h1>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
   <tr>
@@ -571,7 +574,7 @@ th {
 
 <!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-<h2 id="Operators">Operators</h2>
+<h1 id="Operators">Operators</h1>
 
 <table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
   <tr>
