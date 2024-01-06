@@ -79,8 +79,8 @@ th {
 <body>
 
 <h1>Links</h1>
-<a href="https://fdwr.github.io/LostOnnxDocs/OperatorFormulas.html">Original document location</a><br/>
-<a href="https://github.com/fdwr/LostOnnxDocs/">GitHub repo</a><br/>
+<a href="https://fdwr.github.io/MachineLearningOperators/OperatorFormulas.html">Original document location</a><br/>
+<a href="https://github.com/fdwr/MachineLearningOperators/">GitHub repo</a><br/>
 <br/>
 
 <h1>Operator Equations</h1>
@@ -834,7 +834,7 @@ endfunction</code></td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
     <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">LogicalNotLayerParams</td>
+    <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
@@ -4212,7 +4212,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <th style="width:12em">Categories</th>
     <th>Name</th>
     <th class="webnnColumn">WebNN</th>
-    <th class="onnxColumn">ONNX</th>
+    <th class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/8a782415a69faf626abc032ff6b2a16187e13c4f/onnx/onnx.proto#L485">ONNX</a></th>
     <th class="dmlColumn">DML</th>
     <th class="xnnPackColumn">XNNPACK</th>
     <th class="stableHloColumn">StableHLO</th>
@@ -5690,6 +5690,49 @@ complexFloat32
 int32
 int64
 uInt64
+
+https://github.com/onnx/onnx/blob/main/onnx/onnx.proto#L485
+
+message TensorProto {
+  enum DataType {
+    UNDEFINED = 0;
+    // Basic types.
+    FLOAT = 1;   // float
+    UINT8 = 2;   // uint8_t
+    INT8 = 3;    // int8_t
+    UINT16 = 4;  // uint16_t
+    INT16 = 5;   // int16_t
+    INT32 = 6;   // int32_t
+    INT64 = 7;   // int64_t
+    STRING = 8;  // string
+    BOOL = 9;    // bool
+
+    // IEEE754 half-precision floating-point format (16 bits wide).
+    // This format has 1 sign bit, 5 exponent bits, and 10 mantissa bits.
+    FLOAT16 = 10;
+
+    DOUBLE = 11;
+    UINT32 = 12;
+    UINT64 = 13;
+    COMPLEX64 = 14;     // complex with float32 real and imaginary components
+    COMPLEX128 = 15;    // complex with float64 real and imaginary components
+
+    // Non-IEEE floating-point format based on IEEE754 single-precision
+    // floating-point number truncated to 16 bits.
+    // This format has 1 sign bit, 8 exponent bits, and 7 mantissa bits.
+    BFLOAT16 = 16;
+
+    // Non-IEEE floating-point format based on papers
+    // FP8 Formats for Deep Learning, https://arxiv.org/abs/2209.05433,
+    // 8-bit Numerical Formats For Deep Neural Networks, https://arxiv.org/pdf/2206.02915.pdf.
+    // Operators supported FP8 are Cast, CastLike, QuantizeLinear, DequantizeLinear.
+    // The computation usually happens inside a block quantize / dequantize
+    // fused by the runtime.
+    FLOAT8E4M3FN = 17;    // float 8, mostly used for coefficients, supports nan, not inf
+    FLOAT8E4M3FNUZ = 18;  // float 8, mostly used for coefficients, supports nan, not inf, no negative zero
+    FLOAT8E5M2 = 19;      // follows IEEE 754, supports nan, inf, mostly used for gradients
+    FLOAT8E5M2FNUZ = 20;  // follows IEEE 754, supports nan, inf, mostly used for gradients, no negative zero
+  }
 
 Apple BNNS (Basic Neural Network Subroutines) - bnns_constants.h - https://github.com/alexey-lysiuk/macos-sdk/blob/6c1513f5b0667b76e24aaadcad130e90c545f046/MacOSX14.0.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/BNNS/bnns_constants.h#L33-L91
 BNNSDataTypeFloat16 - 16-bit half precision floating point
