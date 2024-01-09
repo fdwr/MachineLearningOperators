@@ -126,450 +126,590 @@ th {
 <br/><br/>
 <h1 id="DataTypes">Data Types</h1>
 
-<table border=1 cellspacing=0 cellpadding=1 style='border-collapse:collapse; border:none'>
-  <tr>
-    <th style="width:12em">Categories</th>
-    <th>Name</th>
-    <th class="webnnColumn">WebNN</th>
-    <th class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/8a782415a69faf626abc032ff6b2a16187e13c4f/onnx/onnx.proto#L485">ONNX</a></th>
-    <th class="dmlColumn">DML</th>
-    <th class="xnnPackColumn">XNNPACK</th>
-    <th class="stableHloColumn">StableHLO</th>
-    <th class="tosaColumn">TOSA</th>
-    <th class="numpyColumn">NumPy</th>
-    <th class="tensorFlowColumn">TensorFlow</th>
-    <th class="pytorchColumn">PyTorch</th>
-    <th class="coreMlColumn">CoreML</th>
-    <th class="bnnsColumn">BNNS</th>
-    <th class="mpsColumn">MPS</th>
-    <th class="mlxColumn">MLX</th>
-    <th class="ncnnColumn">NCNN</th>
-    <th class="cntkColumn">CNTK</th>
-    <th class="futureColumn">(for future additions)</th>
-    <th valign="top">Details</th>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint1</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint4</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint8</td>
-    <td class="webnnColumn">uint8</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT8</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint16</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT16</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint32</td>
-    <td class="webnnColumn">uint32</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT32</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer</td>
-    <td>uint48</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>uint64</td>
-    <td class="webnnColumn">uint64</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT64</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int4</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int8</td>
-    <td class="webnnColumn">int8</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT8</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int16</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT16</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int32</td>
-    <td class="webnnColumn">int32</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT32</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int48</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Integer Signed</td>
-    <td>int64</td>
-    <td class="webnnColumn">int64</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT64</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float8</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float8 #2</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float16 IEEE</td>
-    <td class="webnnColumn">float16</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT16</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float16 brain</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float32</td>
-    <td class="webnnColumn">float32</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT32</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <tr>
-    <td>Float Signed</td>
-    <td>float64</td>
-    <td class="webnnColumn">float64</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT64</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  <!--
-  <tr>
-    <td>categories</td>
-    <td>name</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">?</td>
-    <td class="dmlColumn">?</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td class="details"></td>
-  </tr>
-  -->
+
+
+
+
+<table border="1" cellpadding="1" cellspacing="0" style="border-collapse:collapse; border:none">
+  <tbody>
+    <tr>
+      <th style="width:12em">Categories</th>
+      <th>Name</th>
+      <th class="webnnColumn"><a href="https://www.w3.org/TR/webnn/#enumdef-mloperanddatatype">WebNN</a></th>
+      <th class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/8a782415a69faf626abc032ff6b2a16187e13c4f/onnx/onnx.proto#L485">ONNX</a></th>
+      <th class="dmlColumn"><a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_tensor_data_type">DML</a></th>
+      <th class="xnnPackColumn"><a href="https://github.com/google/XNNPACK/blob/03d2a24b53f18103a2bb0f62e2c7123c5cea8890/include/xnnpack.h#L211-L232">XNNPACK</a></th>
+      <th class="stableHloColumn"><a href="https://github.com/openxla/stablehlo/blob/main/docs/spec.md#types">StableHLO</a></th>
+      <th class="tosaColumn"><a href="https://www.mlplatform.org/tosa/tosa_spec.html">TOSA</a></th>
+      <th class="numpyColumn"><a href="https://numpy.org/devdocs/user/basics.types.html">NumPy</a></th>
+      <th class="tensorFlowColumn"><a href="https://www.tensorflow.org/api_docs/python/tf/dtypes">TensorFlow</a></th>
+      <th class="pytorchColumn"><a href="https://pytorch.org/docs/stable/tensor_attributes.html">PyTorch</a></th>
+      <th class="coreMlColumn"><a href="https://chromium-review.googlesource.com/c/chromium/src/+/5075312/12/services/webnn/coreml/ModelFormat/FeatureTypes.proto">CoreML</a></th>
+      <th class="bnnsColumn"><a href="https://github.com/alexey-lysiuk/macos-sdk/blob/6c1513f5b0667b76e24aaadcad130e90c545f046/MacOSX14.0.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/BNNS/bnns_constants.h#L33-L91">BNNS</a></th>
+      <th class="mpsColumn"><a href="https://developer.apple.com/documentation/metalperformanceshadersgraph/mpsgraphtensor/3564663-datatype">MPS</a></th>
+      <th class="mlxColumn"><a href="https://ml-explore.github.io/mlx/build/html/python/data_types.html">MLX</a></th>
+      <th class="ncnnColumn"><a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md#cast">NCNN</a></th>
+      <th class="cntkColumn">CNTK</th>
+      <th class="futureColumn">(for future additions)</th>
+      <th valign="top">Details</th>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
+      <td>uint1</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">X</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">i1 (bool)</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">?</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
+      <td>uint4</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">X</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">ui4</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">?</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
+      <td>uint8</td>
+      <td class="webnnColumn">uint8</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.UINT8</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT8</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">ui8</td>
+      <td class="tosaColumn">tosa.uint8_t</td>
+      <td class="numpyColumn">numpy.uint8 / ubyte</td>
+      <td class="tensorFlowColumn">tensorflow.uint8</td>
+      <td class="pytorchColumn">torch.uint8</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeUInt8</td>
+      <td class="mpsColumn">MPSDataType.uInt8</td>
+      <td class="mlxColumn">mx.uint8</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
+      <td>uint16</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.UINT16</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT16</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">ui16</td>
+      <td class="tosaColumn">tosa.uint16_t</td>
+      <td class="numpyColumn">numpy.uint16 / ushort</td>
+      <td class="tensorFlowColumn">tensorflow.uint16</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeUInt16</td>
+      <td class="mpsColumn">MPSDataType.uInt16</td>
+      <td class="mlxColumn">mx.uint16</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
+      <td>uint32</td>
+      <td class="webnnColumn">uint32</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.UINT32</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT32</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">ui32</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">numpy.uint32 / uintc</td>
+      <td class="tensorFlowColumn">tensorflow.uint32</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeUInt32</td>
+      <td class="mpsColumn">MPSDataType.uInt32</td>
+      <td class="mlxColumn">mx.uint32</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
+      <td>uint48</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">X</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">X</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>uint64</td>
+      <td class="webnnColumn">uint64</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.UINT64</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT64</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">ui64</td>
+      <td class="tosaColumn">?</td>
+      <td class="numpyColumn">numpy.uint64 / uint</td>
+      <td class="tensorFlowColumn">tensorflow.uint64</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeUInt64</td>
+      <td class="mpsColumn">MPSDataType.uInt64</td>
+      <td class="mlxColumn">mx.uint64</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int4</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">X</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">si4</td>
+      <td class="tosaColumn">tosa.int4_t</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">X</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">X</td>
+      <td class="cntkColumn">X</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int8</td>
+      <td class="webnnColumn">int8</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.INT8</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT8</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">si8</td>
+      <td class="tosaColumn">tosa.int8_t</td>
+      <td class="numpyColumn">numpy.int8 / byte</td>
+      <td class="tensorFlowColumn">tensorflow.int8</td>
+      <td class="pytorchColumn">torch.int8</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeInt8</td>
+      <td class="mpsColumn">MPSDataType.int8</td>
+      <td class="mlxColumn">mx.int8</td>
+      <td class="ncnnColumn">int8</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int16</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.INT16</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT16</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">si16</td>
+      <td class="tosaColumn">tosa.int16_t</td>
+      <td class="numpyColumn">numpy.int16 / short</td>
+      <td class="tensorFlowColumn">tensorflow.int16</td>
+      <td class="pytorchColumn">torch.int16 / short</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeInt16</td>
+      <td class="mpsColumn">MPSDataType.int16</td>
+      <td class="mlxColumn">mx.int16</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int32</td>
+      <td class="webnnColumn">int32</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.INT32</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT32</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">si32</td>
+      <td class="tosaColumn">tosa.int32_t</td>
+      <td class="numpyColumn">numpy.int32 / intc</td>
+      <td class="tensorFlowColumn">tensorflow.int32</td>
+      <td class="pytorchColumn">torch.int32 / int</td>
+      <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.INT32</td>
+      <td class="bnnsColumn">BNNSDataTypeInt32</td>
+      <td class="mpsColumn">MPSDataType.int32</td>
+      <td class="mlxColumn">mx.int32</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int48</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">?</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">X</td>
+      <td class="tosaColumn">tosa.int48_t</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">?</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int64</td>
+      <td class="webnnColumn">int64</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.INT64</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT64</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">si64</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">numpy.int64 / int_</td>
+      <td class="tensorFlowColumn">tensorflow.int64</td>
+      <td class="pytorchColumn">torch.int64 / long</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">BNNSDataTypeInt64</td>
+      <td class="mpsColumn">MPSDataType.int64</td>
+      <td class="mlxColumn">mx.int64</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float8 frac=3 exp=4 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a><br />
+      has nan, no inf<br />
+      Mostly used for coefficients.</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E4M3FN</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">f8E4M3FN</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float8 frac=3 exp=4 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a><br />
+      has nan, no inf, no negative zero<br />
+      Mostly used for coefficients.</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E4M3FNUZ</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">f8E4M3FNUZ</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float8 frac=2 exp=5 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a><br />
+      has nan, has inf<br />
+      Mostly used for gradients.</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E5M2</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">f8E5M2</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float8 frac=2 exp=5 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a><br />
+      has nan, has inf, no negative zero<br />
+      Mostly used for gradients.</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E5M2FNUZ</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">f8E5M2FNUZ</td>
+      <td class="tosaColumn">X</td>
+      <td class="numpyColumn">X</td>
+      <td class="tensorFlowColumn">X</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">X</td>
+      <td class="bnnsColumn">X</td>
+      <td class="mpsColumn">X</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float16 IEEE frac=10 exp=5 sign=1</td>
+      <td class="webnnColumn">float16</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT16</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT16</td>
+      <td class="xnnPackColumn">xnn_datatype_fp16</td>
+      <td class="stableHloColumn">f16</td>
+      <td class="tosaColumn">tosa.fp16_t</td>
+      <td class="numpyColumn">numpy.float16 / half</td>
+      <td class="tensorFlowColumn">tensorflow.float16 / half</td>
+      <td class="pytorchColumn">torch.float16 / half</td>
+      <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.FLOAT16</td>
+      <td class="bnnsColumn">BNNSDataTypeFloat16</td>
+      <td class="mpsColumn">MPSDataType.float16</td>
+      <td class="mlxColumn">mx.float16</td>
+      <td class="ncnnColumn">float16</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float16 Brain frac=7 exp=8 sign=1</td>
+      <td class="webnnColumn">X</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.BFLOAT16</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">bf16</td>
+      <td class="tosaColumn">tosa.bf16_t</td>
+      <td class="numpyColumn">?</td>
+      <td class="tensorFlowColumn">tensorflow.bfloat16</td>
+      <td class="pytorchColumn">torch.bfloat16</td>
+      <td class="coreMlColumn">?</td>
+      <td class="bnnsColumn">BNNSDataTypeBFloat16</td>
+      <td class="mpsColumn">MPSDataType.bFloat16</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">bfloat16</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float32 IEEE frac=23 exp=8 sign=1</td>
+      <td class="webnnColumn">float32</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT32</td>
+      <td class="xnnPackColumn">xnn_datatype_fp32</td>
+      <td class="stableHloColumn">f32</td>
+      <td class="tosaColumn">tosa.fp32_t</td>
+      <td class="numpyColumn">numpy.float32 / single</td>
+      <td class="tensorFlowColumn">tensorflow.float32 / float</td>
+      <td class="pytorchColumn">torch.float32 / float</td>
+      <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.FLOAT32</td>
+      <td class="bnnsColumn">BNNSDataTypeFloat32</td>
+      <td class="mpsColumn">MPSDataType.float32</td>
+      <td class="mlxColumn">mx.float32</td>
+      <td class="ncnnColumn">float32</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float64 IEEE frac=52 exp=11 sign=1</td>
+      <td class="webnnColumn">float64</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.DOUBLE</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT64</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">f64</td>
+      <td class="tosaColumn">tosa.fp64_t</td>
+      <td class="numpyColumn">numpy.float64 / double / float_</td>
+      <td class="tensorFlowColumn">tensorflow.float64 / double</td>
+      <td class="pytorchColumn">torch.float64 / double</td>
+      <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.DOUBLE</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">?</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float32 x 2</td>
+      <td class="webnnColumn">NA</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.COMPLEX64</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">?</td>
+      <td class="numpyColumn">numpy.complex64 / singlecomplex</td>
+      <td class="tensorFlowColumn">tensorflow.complex64</td>
+      <td class="pytorchColumn">torch.complex64 / cfloat</td>
+      <td class="coreMlColumn">?</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">MPSDataType.complexFloat32</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Float Signed</td>
+      <td>float64 x 2</td>
+      <td class="webnnColumn">NA</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.COMPLEX128</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">?</td>
+      <td class="numpyColumn">numpy.complex128 / doublecomplex</td>
+      <td class="tensorFlowColumn">tensorflow.complex128</td>
+      <td class="pytorchColumn">torch.complex128 / cdouble</td>
+      <td class="coreMlColumn">?</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">?</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>Boolean</td>
+      <td>bool8</td>
+      <td class="webnnColumn">uint8</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.BOOL</td>
+      <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT8</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">tosa.bool_t</td>
+      <td class="numpyColumn">numpy.bool</td>
+      <td class="tensorFlowColumn">tensorflow.bool</td>
+      <td class="pytorchColumn">torch.bool</td>
+      <td class="coreMlColumn">?</td>
+      <td class="bnnsColumn">BNNSDataTypeBoolean (bit size?)</td>
+      <td class="mpsColumn">MPSDataType.bool (bit size?)</td>
+      <td class="mlxColumn">bool_</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <td>String</td>
+      <td>string8</td>
+      <td class="webnnColumn">NA</td>
+      <td class="onnxColumn">ONNX.TensorProto.DataType.STRING</td>
+      <td class="dmlColumn">X</td>
+      <td class="xnnPackColumn">X</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">?</td>
+      <td class="numpyColumn">?</td>
+      <td class="tensorFlowColumn">tensorflow.string</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">?</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">?</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    <!--
+    <tr>
+      <td>categories</td>
+      <td>name</td>
+      <td class="webnnColumn">?</td>
+      <td class="onnxColumn">?</td>
+      <td class="dmlColumn">?</td>
+      <td class="xnnPackColumn">?</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">?</td>
+      <td class="numpyColumn">?</td>
+      <td class="tensorFlowColumn">?</td>
+      <td class="pytorchColumn">?</td>
+      <td class="coreMlColumn">?</td>
+      <td class="bnnsColumn">?</td>
+      <td class="mpsColumn">?</td>
+      <td class="mlxColumn">?</td>
+      <td class="ncnnColumn">?</td>
+      <td class="cntkColumn">?</td>
+      <td class="futureColumn"></td>
+      <td class="details"></td>
+    </tr>
+    -->
+  </tbody>
 </table>
 
 <!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -5675,217 +5815,173 @@ WorkerDescriptor	New Distributed Worker Descriptor
 TODO:Add these
 
 Apple MPS (Metal Performance Shaders) - https://developer.apple.com/documentation/metalperformanceshadersgraph/mpsgraphtensor/3564663-datatype
-float16
-int8
-int16
-bool
-normalizedBit
-signedBit
-alternateEncodingBit
-uInt8
-uInt16
-uInt32
-unorm1
-unorm8
-bFloat16
-complexBit
-complexFloat16
-complexFloat32
-int32
-int64
-uInt64
-
-https://github.com/onnx/onnx/blob/main/onnx/onnx.proto#L485
-
-message TensorProto {
-  enum DataType {
-    UNDEFINED = 0;
-    // Basic types.
-    FLOAT = 1;   // float
-    UINT8 = 2;   // uint8_t
-    INT8 = 3;    // int8_t
-    UINT16 = 4;  // uint16_t
-    INT16 = 5;   // int16_t
-    INT32 = 6;   // int32_t
-    INT64 = 7;   // int64_t
-    STRING = 8;  // string
-    BOOL = 9;    // bool
-
-    // IEEE754 half-precision floating-point format (16 bits wide).
-    // This format has 1 sign bit, 5 exponent bits, and 10 mantissa bits.
-    FLOAT16 = 10;
-
-    DOUBLE = 11;
-    UINT32 = 12;
-    UINT64 = 13;
-    COMPLEX64 = 14;     // complex with float32 real and imaginary components
-    COMPLEX128 = 15;    // complex with float64 real and imaginary components
-
-    // Non-IEEE floating-point format based on IEEE754 single-precision
-    // floating-point number truncated to 16 bits.
-    // This format has 1 sign bit, 8 exponent bits, and 7 mantissa bits.
-    BFLOAT16 = 16;
-
-    // Non-IEEE floating-point format based on papers
-    // FP8 Formats for Deep Learning, https://arxiv.org/abs/2209.05433,
-    // 8-bit Numerical Formats For Deep Neural Networks, https://arxiv.org/pdf/2206.02915.pdf.
-    // Operators supported FP8 are Cast, CastLike, QuantizeLinear, DequantizeLinear.
-    // The computation usually happens inside a block quantize / dequantize
-    // fused by the runtime.
-    FLOAT8E4M3FN = 17;    // float 8, mostly used for coefficients, supports nan, not inf
-    FLOAT8E4M3FNUZ = 18;  // float 8, mostly used for coefficients, supports nan, not inf, no negative zero
-    FLOAT8E5M2 = 19;      // follows IEEE 754, supports nan, inf, mostly used for gradients
-    FLOAT8E5M2FNUZ = 20;  // follows IEEE 754, supports nan, inf, mostly used for gradients, no negative zero
-  }
+MPSDataType.unorm1
+MPSDataType.unorm8
+MPSDataType.complexFloat16
+-MPSDataType.float16
+-MPSDataType.bFloat16
+-MPSDataType.int8
+-MPSDataType.int16
+-MPSDataType.int32
+-MPSDataType.int64
+-MPSDataType.bool
+-MPSDataType.uInt8
+-MPSDataType.uInt16
+-MPSDataType.uInt32
+-MPSDataType.uInt64
+-MPSDataType.unorm1
+-MPSDataType.unorm8
+-MPSDataType.complexBit
+-MPSDataType.complexFloat16
+-MPSDataType.complexFloat32
 
 Apple BNNS (Basic Neural Network Subroutines) - bnns_constants.h - https://github.com/alexey-lysiuk/macos-sdk/blob/6c1513f5b0667b76e24aaadcad130e90c545f046/MacOSX14.0.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/BNNS/bnns_constants.h#L33-L91
-BNNSDataTypeFloat16 - 16-bit half precision floating point
-BNNSDataTypeBFloat16 - 16-bit brain floating Point
-BNNSDataTypeFloat32 - 32-bit single precision floating point
--BNNSDataTypeIntBit - Common bit to signed integer types, this constant is not a valid type
-BNNSDataTypeInt8 - 8-bit signed integer
-BNNSDataTypeInt16 - 16-bit signed integer
-BNNSDataTypeInt32 - 32-bit signed integer
-BNNSDataTypeInt64 - 64-bit signed integer
--BNNSDataTypeUIntBit - Common bit to unsigned integer types, this constant is not a valid type
-BNNSDataTypeUInt8 - 8-bit unsigned integer
-BNNSDataTypeUInt16 - 16-bit unsigned integer
-BNNSDataTypeUInt32 - 32-bit unsigned integer
-BNNSDataTypeUInt64 - 64-bit unsigned integer
 BNNSDataTypeIndexed2 - 2-bit unsigned indices into a floating point conversion table (4 values)
 BNNSDataTypeIndexed4 - 4-bit unsigned indices into a floating point conversion table (16 values)
 BNNSDataTypeIndexed8 - 8-bit unsigned indices into a floating point conversion table (256 values)
-BNNSDataTypeBoolean
+-BNNSDataTypeBoolean
+-BNNSDataTypeFloat16 - 16-bit half precision floating point
+-BNNSDataTypeBFloat16 - 16-bit brain floating Point
+-BNNSDataTypeFloat32 - 32-bit single precision floating point
+-BNNSDataTypeInt8 - 8-bit signed integer
+-BNNSDataTypeInt16 - 16-bit signed integer
+-BNNSDataTypeInt32 - 32-bit signed integer
+-BNNSDataTypeInt64 - 64-bit signed integer
+-BNNSDataTypeUInt8 - 8-bit unsigned integer
+-BNNSDataTypeUInt16 - 16-bit unsigned integer
+-BNNSDataTypeUInt32 - 32-bit unsigned integer
+-BNNSDataTypeUInt64 - 64-bit unsigned integer
+-BNNSDataTypeIntBit - Common bit to signed integer types, this constant is not a valid type
+-BNNSDataTypeUIntBit - Common bit to unsigned integer types, this constant is not a valid type
 
-Apple CoreML - https://chromium-review.googlesource.com/c/chromium/src/+/5075312/12/services/webnn/coreml/ModelFormat/FeatureTypes.proto
-FLOAT32
-DOUBLE
-INT32
-FLOAT16
+-Apple CoreML - https://chromium-review.googlesource.com/c/chromium/src/+/5075312/12/services/webnn/coreml/ModelFormat/FeatureTypes.proto
+-ArrayFeatureType.ArrayDataType.FLOAT32
+-ArrayFeatureType.ArrayDataType.DOUBLE
+-ArrayFeatureType.ArrayDataType.INT32
+-ArrayFeatureType.ArrayDataType.FLOAT16
 
 NumPy - https://numpy.org/devdocs/user/basics.types.html (https://numpy.org/doc/stable/user/basics.types.html)
-int8
-uint8
-int16
-uint16
-uint32
-int32
-intp
-uintp
-float16
-float32
-float64
-float96 actually float80 with padding on x86
-float128 actually float80 with padding on x86, true on SPARC
-complex64 2x32
-complex128 2x64
-complex192 2x96 (or really 80 with padding)
-complex256 2x128 (or really 80 with padding)
-numpy.bool - bool, Boolean (True or False) stored as a byte
-numpy.bool_ - bool, Boolean (True or False) stored as a byte
-numpy.byte - signed char
-numpy.ubyte - unsigned char
-numpy.short - short
-numpy.ushort - unsigned short
-numpy.intc - int
-numpy.uintc - unsigned int
-numpy.int_ - long
-numpy.uint - unsigned long
 numpy.longlong - long long
 numpy.ulonglong - unsigned long long
-numpy.half / numpy.float16 - Half precision float: sign bit, 5 bits exponent, 10 bits mantissa
-numpy.single - float, Platform-defined single precision float: typically sign bit, 8 bits exponent, 23 bits mantissa
-numpy.double - double, Platform-defined double precision float: typically sign bit, 11 bits exponent, 52 bits mantissa.
+numpy.float96 actually float80 with padding on x86
+numpy.float128 actually float80 with padding on x86, true on SPARC
+numpy.complex192 2x96 (or really 80 with padding)
+numpy.complex256 2x128 (or really 80 with padding)
 numpy.longdouble - long double, Platform-defined extended-precision float
-numpy.csingle - float complex, Complex number, represented by two single-precision floats (real and imaginary components)
-numpy.cdouble - double complex, Complex number, represented by two double-precision floats (real and imaginary components).
 numpy.clongdouble - long double complex, Complex number, represented by two extended-precision floats (real and imaginary components).
+-numpy.int8
+-numpy.uint8
+-numpy.int16
+-numpy.uint16
+-numpy.uint32
+-numpy.int32
+-numpy.intp
+-numpy.uintp
+-numpy.float16
+-numpy.float32
+-numpy.float64
+-numpy.complex64 2x32
+-numpy.complex128 2x64
+-numpy.bool - bool, Boolean (True or False) stored as a byte
+-numpy.bool_ - bool, Boolean (True or False) stored as a byte
+-numpy.byte - signed char
+-numpy.ubyte - unsigned char
+-numpy.short - short
+-numpy.ushort - unsigned short
+-numpy.intc - int
+-numpy.uintc - unsigned int
+-numpy.int_ - long
+-numpy.uint - unsigned long
+-numpy.half / numpy.float16 - Half precision float: sign bit, 5 bits exponent, 10 bits mantissa
+-numpy.single - float, Platform-defined single precision float: typically sign bit, 8 bits exponent, 23 bits mantissa
+-numpy.double - double, Platform-defined double precision float: typically sign bit, 11 bits exponent, 52 bits mantissa.
+-numpy.csingle - float complex, Complex number, represented by two single-precision floats (real and imaginary components)
+-numpy.cdouble - double complex, Complex number, represented by two double-precision floats (real and imaginary components).
 
-PyTorch - https://pytorch.org/docs/stable/tensor_attributes.html
-torch.float16 or torch.half - 16-bit floating point 1
-torch.bfloat16 - 16-bit floating point 2
-torch.float32 or torch.float - 32-bit floating point
-torch.float64 or torch.double - 64-bit floating point
-torch.complex64 or torch.cfloat - 64-bit complex
-torch.complex128 or torch.cdouble - 128-bit complex
-torch.uint8 - 8-bit integer (unsigned)
-torch.int8 - 8-bit integer (signed)
-torch.int16 or torch.short - 16-bit integer (signed)
-torch.int32 or torch.int - 32-bit integer (signed)
-torch.int64 or torch.long - 64-bit integer (signed)
-torch.bool - Boolean
+-PyTorch - https://pytorch.org/docs/stable/tensor_attributes.html
+-torch.float16 or torch.half - 16-bit floating point 1
+-torch.bfloat16 - 16-bit floating point 2
+-torch.float32 or torch.float - 32-bit floating point
+-torch.float64 or torch.double - 64-bit floating point
+-torch.complex64 or torch.cfloat - 64-bit complex
+-torch.complex128 or torch.cdouble - 128-bit complex
+-torch.uint8 - 8-bit integer (unsigned)
+-torch.int8 - 8-bit integer (signed)
+-torch.int16 or torch.short - 16-bit integer (signed)
+-torch.int32 or torch.int - 32-bit integer (signed)
+-torch.int64 or torch.long - 64-bit integer (signed)
+-torch.bool - Boolean
 
 TensorFlow - https://www.tensorflow.org/api_docs/python/tf/dtypes
-bool - Boolean
-complex64 - 64-bit complex
-complex128 - 128-bit complex
-double - 64-bit (double precision) floating-point
-bfloat16 - brain floating point
-float16 - 16-bit (half precision) floating-point
-float32 - 32-bit (single precision) floating-point
-float64 - 64-bit (double precision) floating-point
-half - 16-bit (half precision) floating-point
-int16 - Signed 16-bit integer
-int32 - Signed 32-bit integer
-int64 - Signed 64-bit integer
-int8 - Signed 8-bit integer
-qint8 - Signed quantized 8-bit integer
-qint16 - Signed quantized 16-bit integer
-qint32 - signed quantized 32-bit integer
-quint8 - Unsigned quantized 8-bit integer
-quint16 - Unsigned quantized 16-bit integer
-resource - Handle to a mutable, dynamically allocated resource
-string - Variable-length string, represented as byte array
-uint8 - Unsigned 8-bit (byte) integer
-uint16 - Unsigned 16-bit (word) integer
-uint32 - Unsigned 32-bit (dword) integer
-uint64 - Unsigned 64-bit (qword) integer
-variant - Data of arbitrary type (known at runtime)
+tensorflow.qint8 - Signed quantized 8-bit integer
+tensorflow.qint16 - Signed quantized 16-bit integer
+tensorflow.qint32 - signed quantized 32-bit integer
+tensorflow.quint8 - Unsigned quantized 8-bit integer
+tensorflow.quint16 - Unsigned quantized 16-bit integer
+-tensorflow.bool - Boolean
+-tensorflow.complex64 - 64-bit complex
+-tensorflow.complex128 - 128-bit complex
+-tensorflow.double - 64-bit (double precision) floating-point
+-tensorflow.bfloat16 - brain floating point
+-tensorflow.float16 - 16-bit (half precision) floating-point
+-tensorflow.float32 - 32-bit (single precision) floating-point
+-tensorflow.float64 - 64-bit (double precision) floating-point
+-tensorflow.half - 16-bit (half precision) floating-point
+-tensorflow.int16 - Signed 16-bit integer
+-tensorflow.int32 - Signed 32-bit integer
+-tensorflow.int64 - Signed 64-bit integer
+-tensorflow.int8 - Signed 8-bit integer
+-tensorflow.resource - Handle to a mutable, dynamically allocated resource
+-tensorflow.string - Variable-length string, represented as byte array
+-tensorflow.uint8 - Unsigned 8-bit (byte) integer
+-tensorflow.uint16 - Unsigned 16-bit (word) integer
+-tensorflow.uint32 - Unsigned 32-bit (dword) integer
+-tensorflow.uint64 - Unsigned 64-bit (qword) integer
+-tensorflow.variant - Data of arbitrary type (known at runtime)
 
-StableHLO (high level optimizer) - https://github.com/openxla/stablehlo/blob/main/docs/spec.md#types
-Boolean
-ui4
-ui8
-ui16
-ui32
-ui64
-i4
-i8
-i16
-i32
-i64
-f8E4M3FN
-f8E5M2
-f8E4M3FNUZ
-f8E5M2FNUZ
+-StableHLO (high level optimizer) - https://github.com/openxla/stablehlo/blob/main/docs/spec.md#types
+-Boolean
+-i1
+-ui4
+-ui8
+-ui16
+-ui32
+-ui64
+-si4
+-si8
+-si16
+-si32
+-si64
+-f8E4M3FN
+-f8E5M2
+-f8E4M3FNUZ
+-f8E5M2FNUZ
 f8E4M3B11FNUZ
-bf16
-f16
-f32
-f64
+-bf16
+-f16
+-f32
+-f64
 
-TOSA - https://www.mlplatform.org/tosa/tosa_spec.html
-tosa.bool_t, - to -, Boolean value. Size implementation defined. The TOSA reference model implements this as int8_t with 0 for false and 1 for true. All non-zero values are accepted on input as true.
-tosa.i4_t, - to -, Signless 4-bit integer type. Will be interpreted as int4_t by all operators
-tosa.int4_t, -7 to +7, Signed 4-bit two’s-complement value. Excludes -8 to maintain a symmetric about zero range for weights.
-tosa.i8_t, - to -, Signless 8-bit integer value. Will be interpreted as int8_t unless otherwise specified by an operator.
-tosa.int8_t, -128 to +127, Signed 8-bit two’s-complement value.
-tosa.uint8_t, 0 to 255, Unsigned 8-bit integer value.
-tosa.i16_t, - to -, Signless 16-bit integer type. Will be interpreted as int16_t unless otherwise specified by an operator.
-tosa.int16_t, -32768 to +32767, Signed 16-bit two’s-complement value.
-tosa.uint16_t, 0 to 65535, Unsigned 16-bit value.
-tosa.i32_t, - to -, Signless 32-bit integer value. Will be interpreted as int32_t by all operators.
-tosa.int32_t, -(1<<31) to (1<<31)-1, Signed 32-bit two’s-complement value.
-tosa.i48_t, - to -, Signless 32-bit integer value. Will be interpreted as int48_t by all operators.
-tosa.int48_t, -(1<<47) to (1<<47)-1, Signed 48-bit two’s-complement value.
-tosa.fp16_t, -infinity to +infinity, 16-bit half-precision floating-point defined by Other publications[1]. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
-tosa.bf16_t, -infinity to +infinity, 16-bit brain floating-point defined as bits [31:16] of the fp32_t format. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
-tosa.fp32_t, -infinity to +infinity, 32-bit single-precision floating-point defined by Other publications[1]. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
-tosa.fp64_t, -infinity to + infinity, 64-bit double-precision floating-point defined by Other publications[1]. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
+-TOSA - https://www.mlplatform.org/tosa/tosa_spec.html
+-tosa.bool_t, - to -, Boolean value. Size implementation defined. The TOSA reference model implements this as int8_t with 0 for false and 1 for true. All non-zero values are accepted on input as true.
+-tosa.i4_t, - to -, Signless 4-bit integer type. Will be interpreted as int4_t by all operators
+-tosa.int4_t, -7 to +7, Signed 4-bit two’s-complement value. Excludes -8 to maintain a symmetric about zero range for weights.
+-tosa.i8_t, - to -, Signless 8-bit integer value. Will be interpreted as int8_t unless otherwise specified by an operator.
+-tosa.int8_t, -128 to +127, Signed 8-bit two’s-complement value.
+-tosa.uint8_t, 0 to 255, Unsigned 8-bit integer value.
+-tosa.i16_t, - to -, Signless 16-bit integer type. Will be interpreted as int16_t unless otherwise specified by an operator.
+-tosa.int16_t, -32768 to +32767, Signed 16-bit two’s-complement value.
+-tosa.uint16_t, 0 to 65535, Unsigned 16-bit value.
+-tosa.i32_t, - to -, Signless 32-bit integer value. Will be interpreted as int32_t by all operators.
+-tosa.int32_t, -(1<<31) to (1<<31)-1, Signed 32-bit two’s-complement value.
+-tosa.i48_t, - to -, Signless 32-bit integer value. Will be interpreted as int48_t by all operators.
+-tosa.int48_t, -(1<<47) to (1<<47)-1, Signed 48-bit two’s-complement value.
+-tosa.fp16_t, -infinity to +infinity, 16-bit half-precision floating-point defined by Other publications[1]. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
+-tosa.bf16_t, -infinity to +infinity, 16-bit brain floating-point defined as bits [31:16] of the fp32_t format. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
+-tosa.fp32_t, -infinity to +infinity, 32-bit single-precision floating-point defined by Other publications[1]. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
+-tosa.fp64_t, -infinity to + infinity, 64-bit double-precision floating-point defined by Other publications[1]. Normal values must be supported. Denormal values must either be supported or flushed to zero. Positive and negative infinity must be supported. At least one NaN encoding must be supported. Signed zero must be supported.
 
 XNNPack - https://github.com/google/XNNPACK/blob/03d2a24b53f18103a2bb0f62e2c7123c5cea8890/include/xnnpack.h#L211-L232
-xnn_datatype_fp32 - IEEE754 single-precision floating-point.
-xnn_datatype_fp16 - IEEE754 half-precision floating-point.
 xnn_datatype_qint8 - Quantized 8-bit signed integer with shared per-Value quantization parameters.
 xnn_datatype_quint8 - Quantized 8-bit unsigned integer with shared per-Value quantization parameters.
 xnn_datatype_qint32 - Quantized 32-bit signed integer with shared per-Value quantization parameters.
@@ -5893,4 +5989,6 @@ xnn_datatype_qcint8 - Quantized 8-bit signed integer with shared per-channel qua
 xnn_datatype_qcint32 - Quantized 32-bit signed integer with shared per-channel quantization parameters.
 xnn_datatype_qcint4 - Quantized 4-bit signed integer with shared per-channel quantization parameters.
 xnn_datatype_qdint8 - Dynamically quantized 8-bit signed integer with per-batch quantization parameters.
+-xnn_datatype_fp32 - IEEE754 single-precision floating-point.
+-xnn_datatype_fp16 - IEEE754 half-precision floating-point.
 -->
