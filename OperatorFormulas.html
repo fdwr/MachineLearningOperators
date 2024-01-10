@@ -4640,6 +4640,28 @@ b3 = B[2, :] + B[6*hidden_size, :];
 b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
+  <tr>
+    <td>Aggregate</td>
+    <td>Multihead Attention</td>
+    <td class="webnnColumn">X</td>
+    <td class="onnxColumn">X</td>
+    <td class="dmlColumn">DML_OPERATOR_MULTIHEAD_ATTENTION</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">X</td>
+    <td class="pytorchColumn">torch.nn.MultiheadAttention</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">mlx.nn.MultiHeadAttention</td>
+    <td class="ncnnColumn">MultiHeadAttention</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>TODO:</td>
+    <td>Precision TBD</td>
+  </tr>
   <tr class="elementwiseOperator">
     <td>Input (Deleted)</td>
     <td>Constant Fill</td>
