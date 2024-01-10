@@ -2774,7 +2774,9 @@ endfunction</code></td>
     <td class="futureColumn"></td>
     <td>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])
       It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
-      notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices. A and B can have batch count dimensions, where each 2D matrix is multiplied separately. The batch count can be broadcast too.</td>
+      notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices.
+      A and B can have batch count dimensions, where each 2D matrix is multiplied separately.
+      The batch count can be broadcast too.</td>
     <td>Precision TBD</td>
   </tr>
  <tr>
@@ -3864,10 +3866,11 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="ncnnColumn">?</td>
     <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
-    <td>Apply MaxPool to given input within each numbered region (batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive), and write the maximal value back to the output.
-questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute?
-'s broken and inconsistent with a lot of graphics API's and Python array slice start:end notation. What's the point of the pooled_shape when each region has a specific size anyway?
-  </td>
+    <td>Apply MaxPool to given input within each numbered region:
+    [batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive].
+    Then write the maximal value back to the output.
+    questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute?
+    What's the point of the pooled_shape when each region has a specific size anyway?</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="reductionOperator">
@@ -4524,7 +4527,8 @@ endaggregate</code></td>
     <td class="ncnnColumn">?</td>
     <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
-    <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved (so not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
+    <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
+    So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
     <td>Exact</td>
   </tr>
  <tr>
