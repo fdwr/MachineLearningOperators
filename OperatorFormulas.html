@@ -4572,7 +4572,7 @@ It's basically a word count algorithm with the output histogram size equalling t
     <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+  <tr>
     <td>Aggregate</td>
     <td>Gated Recurrent Unit</td>
     <td class="webnnColumn">?</td>
@@ -4603,6 +4603,41 @@ W = [W1, W2, W3];
 b1 = B[0, :] + B[3*hidden_size, :];
 b2 = B[1, :] + B[4*hidden_size, :];
 b3 = B[2, :] + B[5*hidden_size, :];</code></td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr>
+    <td>Aggregate</td>
+    <td>Long Short Term Memory</td>
+    <td class="webnnColumn">lstm</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
+    <td class="dmlColumn">DML_OPERATOR_LSTM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Iteratively apply matrix multiplication. TODO: Need better summary.
+<code>
+I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
+F = Activation1f(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + Mul(p, initial_c) + b2), -clip, +clip)
+Z = Activation2g(Clip(MatMul(X, Transpose(W3)) + MatMul(Initial_h1, Transpose(R3)) + b3), -clip, +clip)
+C = Mul(Initial_h1, F) + Mul(I, Z)
+O = Activation2g(clip(MatMul(X, Transpose(W4)) + MatMul(Initial_h1, Transpose(R4)) + Mul(p, initial_c) + b4))
+Y = Mul(Activation3h(C), O)
+&nbsp;
+W = [W1, W2, W3, W4];
+b1 = B[0, :] + B[4*hidden_size, :];
+b2 = B[1, :] + B[5*hidden_size, :];
+b3 = B[2, :] + B[6*hidden_size, :];
+b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr class="elementwiseOperator">
@@ -4676,41 +4711,6 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
     <td>???</td>
-    <td>Precision TBD</td>
-  </tr>
-  <tr>
-    <td>Aggregate</td>
-    <td>Long Short Term Memory</td>
-    <td class="webnnColumn">lstm</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LSTM">LSTM</a></td>
-    <td class="dmlColumn">DML_OPERATOR_LSTM</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>Iteratively apply matrix multiplication. TODO: Need better summary.
-<code>
-I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
-F = Activation1f(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + Mul(p, initial_c) + b2), -clip, +clip)
-Z = Activation2g(Clip(MatMul(X, Transpose(W3)) + MatMul(Initial_h1, Transpose(R3)) + b3), -clip, +clip)
-C = Mul(Initial_h1, F) + Mul(I, Z)
-O = Activation2g(clip(MatMul(X, Transpose(W4)) + MatMul(Initial_h1, Transpose(R4)) + Mul(p, initial_c) + b4))
-Y = Mul(Activation3h(C), O)
-&nbsp;
-W = [W1, W2, W3, W4];
-b1 = B[0, :] + B[4*hidden_size, :];
-b2 = B[1, :] + B[5*hidden_size, :];
-b3 = B[2, :] + B[6*hidden_size, :];
-b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
   <tr>
@@ -5159,10 +5159,9 @@ Also add:
 NCNN - https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md
 StableHLO - https://github.com/openxla/stablehlo/blob/main/docs/spec.md
 TOSA - https://mlir.llvm.org/docs/Dialects/TOSA/#tosaselect-mlirtosaselectop
-CoreML - https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html
 
 
-From https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html:
+CoreML https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html:
 
         ConvolutionLayerParams convolution = 100;
 
@@ -5445,7 +5444,6 @@ LRN
 LSTM
 MemoryData
 Mish
-MultiHeadAttention
 MVN
 Noop
 Normalize
