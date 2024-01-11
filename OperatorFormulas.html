@@ -48,6 +48,7 @@ th {
 .mlxColumn { display: none; }
 .ncnnColumn { display: none; }
 .cntkColumn { display: none; }
+.openVinoColumn { display: none; }
 .futureColumn { display: none; }
 
 /* Show hidden content when the checkbox is checked */
@@ -74,6 +75,7 @@ th {
 #toggleMlxColumn:checked ~ * .mlxColumn { display: table-cell; }
 #toggleNcnnColumn:checked ~ * .ncnnColumn { display: table-cell; }
 #toggleCntkColumn:checked ~ * .cntkColumn { display: table-cell; }
+#toggleOpenVinoColumn:checked ~ * .openVinoColumn { display: table-cell; }
 </style>
 </head>
 <body>
@@ -123,13 +125,12 @@ th {
 <input type="checkbox" id="toggleMlxColumn" checked="on"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
 <input type="checkbox" id="toggleNcnnColumn" checked="on"/><label for="toggleNcnnColumn">NCNN (<b>T</b>en<b>c</b>ent <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/">(info)</a> <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(ops)</a></label><br/>
 <input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
+<!--
+<input type="checkbox" id="toggleOpenVinoColumn" checked="on"/><label for="toggleOpenVinoColumn">OpenVINO (Intel <b>V</b>isual <b>I</b>nference and <b>N</b>eural Network <b>O</b>ptimization) <a href="https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html">(info)</a></label><br/>
+-->
 
 <br/><br/>
 <h1 id="DataTypes">Data Types</h1>
-
-
-
-
 
 <table border="1" cellpadding="1" cellspacing="0" style="border-collapse:collapse; border:none">
   <tbody>
@@ -5866,6 +5867,343 @@ VariableMixin	Variable Mixin
 VarInfo	Variable Information
 visualize_network	Visualize Network Architecture
 WorkerDescriptor	New Distributed Worker Descriptor
+
+
+https://developer.apple.com/documentation/metalperformanceshadersgraph/mpsgraph
+
+func GRU(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, descriptor: MPSGraphGRUDescriptor, name: String?) -> [MPSGraphTensor]
+func GRU(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, descriptor: MPSGraphGRUDescriptor, name: String?) -> [MPSGraphTensor]
+func GRU(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, mask: MPSGraphTensor?, secondaryBias: MPSGraphTensor?, descriptor: MPSGraphGRUDescriptor, name: String?) -> [MPSGraphTensor]
+func GRUGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, outputFwd: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, descriptor: MPSGraphGRUDescriptor, name: String?) -> [MPSGraphTensor]
+func GRUGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, outputFwd: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, descriptor: MPSGraphGRUDescriptor, name: String?) -> [MPSGraphTensor]
+func GRUGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, outputFwd: MPSGraphTensor, stateGradient: MPSGraphTensor?, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, mask: MPSGraphTensor?, secondaryBias: MPSGraphTensor?, descriptor: MPSGraphGRUDescriptor, name: String?) -> [MPSGraphTensor]
+func HammingDistance(primary: MPSGraphTensor, secondary: MPSGraphTensor, resultDataType: MPSDataType, name: String?) -> MPSGraphTensor
+func L2NormPooling4D(MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func L2NormPooling4DGradient(MPSGraphTensor, source: MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func LSTM(MPSGraphTensor, recurrentWeight: MPSGraphTensor, initState: MPSGraphTensor?, initCell: MPSGraphTensor?, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func LSTM(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, initCell: MPSGraphTensor?, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func LSTM(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, initCell: MPSGraphTensor?, mask: MPSGraphTensor?, peephole: MPSGraphTensor?, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func LSTMGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, cellOutputFwd: MPSGraphTensor, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func LSTMGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, cellOutputFwd: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, initCell: MPSGraphTensor?, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func LSTMGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, cellOutputFwd: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, initCell: MPSGraphTensor?, mask: MPSGraphTensor?, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func LSTMGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, cellOutputFwd: MPSGraphTensor, stateGradient: MPSGraphTensor?, cellGradient: MPSGraphTensor?, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, initCell: MPSGraphTensor?, mask: MPSGraphTensor?, peephole: MPSGraphTensor?, descriptor: MPSGraphLSTMDescriptor, name: String?) -> [MPSGraphTensor]
+func absolute(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func acos(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func acosh(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func adam(currentLearningRate: MPSGraphTensor, beta1: MPSGraphTensor, beta2: MPSGraphTensor, epsilon: MPSGraphTensor, values: MPSGraphTensor, momentum: MPSGraphTensor, velocity: MPSGraphTensor, maximumVelocity: MPSGraphTensor?, gradient: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func adam(learningRate: MPSGraphTensor, beta1: MPSGraphTensor, beta2: MPSGraphTensor, epsilon: MPSGraphTensor, beta1Power: MPSGraphTensor, beta2Power: MPSGraphTensor, values: MPSGraphTensor, momentum: MPSGraphTensor, velocity: MPSGraphTensor, maximumVelocity: MPSGraphTensor?, gradient: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func addition(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func applyStochasticGradientDescent(learningRate: MPSGraphTensor, variable: MPSGraphVariableOp, gradient: MPSGraphTensor, name: String?) -> MPSGraphOperation
+func argSort(MPSGraphTensor, axis: Int, descending: Bool, name: String?) -> MPSGraphTensor
+func argSort(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func argSort(MPSGraphTensor, axisTensor: MPSGraphTensor, descending: Bool, name: String?) -> MPSGraphTensor
+func argSort(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func asin(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func asinh(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func assign(MPSGraphTensor, tensor: MPSGraphTensor, name: String?) -> MPSGraphOperation
+func atan(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func atan2(withPrimaryTensor: MPSGraphTensor, secondaryTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func atanh(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func avgPooling2D(withSourceTensor: MPSGraphTensor, descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> MPSGraphTensor
+func avgPooling2DGradient(withGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> MPSGraphTensor
+func avgPooling4D(MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func avgPooling4DGradient(MPSGraphTensor, source: MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func bandPart(MPSGraphTensor, numLower: Int, numUpper: Int, name: String?) -> MPSGraphTensor
+func bandPart(MPSGraphTensor, numLowerTensor: MPSGraphTensor, numUpperTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func batchToSpace(MPSGraphTensor, spatialAxes: [NSNumber], batchAxis: Int, blockDimensions: [NSNumber], usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func batchToSpace(MPSGraphTensor, spatialAxesTensor: MPSGraphTensor, batchAxisTensor: MPSGraphTensor, blockDimensionsTensor: MPSGraphTensor, usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func bitwiseAND(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func bitwiseLeftShift(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func bitwiseNOT(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func bitwiseOR(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func bitwisePopulationCount(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func bitwiseRightShift(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func bitwiseXOR(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func broadcast(MPSGraphTensor, shape: [NSNumber], name: String?) -> MPSGraphTensor
+func broadcast(MPSGraphTensor, shapeTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cast(MPSGraphTensor, to: MPSDataType, name: String?) -> MPSGraphTensor
+func ceil(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func clamp(MPSGraphTensor, min: MPSGraphTensor, max: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func compile(with: MPSGraphDevice?, feeds: [MPSGraphTensor : MPSGraphShapedType], targetTensors: [MPSGraphTensor], targetOperations: [MPSGraphOperation]?, compilationDescriptor: MPSGraphCompilationDescriptor?) -> MPSGraphExecutable
+func concatTensor(MPSGraphTensor, with: MPSGraphTensor, dimension: Int, name: String?) -> MPSGraphTensor
+func concatTensors([MPSGraphTensor], dimension: Int, interleave: Bool, name: String?) -> MPSGraphTensor
+func concatTensors([MPSGraphTensor], dimension: Int, name: String?) -> MPSGraphTensor
+func constant(Double, dataType: MPSDataType) -> MPSGraphTensor
+func constant(Data, shape: [NSNumber], dataType: MPSDataType) -> MPSGraphTensor
+func constant(Double, shape: [NSNumber], dataType: MPSDataType) -> MPSGraphTensor
+func controlDependency(with: [MPSGraphOperation], dependentBlock: MPSGraphControlFlowDependencyBlock, name: String?) -> [MPSGraphTensor]
+func convolution2D(MPSGraphTensor, weights: MPSGraphTensor, descriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution2DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber], forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution2DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution2DWeightsGradient(MPSGraphTensor, source: MPSGraphTensor, outputShape: [NSNumber], forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution2DWeightsGradient(MPSGraphTensor, source: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution3D(MPSGraphTensor, weights: MPSGraphTensor, descriptor: MPSGraphConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution3DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber], forwardConvolutionDescriptor: MPSGraphConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution3DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, forwardConvolutionDescriptor: MPSGraphConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution3DWeightsGradient(MPSGraphTensor, source: MPSGraphTensor, outputShape: [NSNumber], forwardConvolutionDescriptor: MPSGraphConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolution3DWeightsGradient(MPSGraphTensor, source: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, forwardConvolutionDescriptor: MPSGraphConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolutionTranspose2D(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber], descriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolutionTranspose2D(MPSGraphTensor, weights: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, descriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolutionTranspose2DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber], forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolutionTranspose2DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolutionTranspose2DWeightsGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber], forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func convolutionTranspose2DWeightsGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, forwardConvolutionDescriptor: MPSGraphConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func coordinate(alongAxis: Int, withShape: [NSNumber], name: String?) -> MPSGraphTensor
+func coordinate(alongAxis: Int, withShapeTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func coordinate(alongAxisTensor: MPSGraphTensor, withShape: [NSNumber], name: String?) -> MPSGraphTensor
+func coordinate(alongAxisTensor: MPSGraphTensor, withShapeTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cos(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cosh(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cumulativeMaximum(MPSGraphTensor, axis: Int, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeMaximum(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func cumulativeMaximum(MPSGraphTensor, axisTensor: MPSGraphTensor, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeMaximum(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cumulativeMinimum(MPSGraphTensor, axis: Int, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeMinimum(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func cumulativeMinimum(MPSGraphTensor, axisTensor: MPSGraphTensor, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeMinimum(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cumulativeProduct(MPSGraphTensor, axis: Int, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeProduct(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func cumulativeProduct(MPSGraphTensor, axisTensor: MPSGraphTensor, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeProduct(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func cumulativeSum(MPSGraphTensor, axis: Int, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeSum(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func cumulativeSum(MPSGraphTensor, axisTensor: MPSGraphTensor, exclusive: Bool, reverse: Bool, name: String?) -> MPSGraphTensor
+func cumulativeSum(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func depth(toSpace2DTensor: MPSGraphTensor, widthAxis: Int, heightAxis: Int, depthAxis: Int, blockSize: Int, usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func depth(toSpace2DTensor: MPSGraphTensor, widthAxisTensor: MPSGraphTensor, heightAxisTensor: MPSGraphTensor, depthAxisTensor: MPSGraphTensor, blockSize: Int, usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func depthwiseConvolution2D(MPSGraphTensor, weights: MPSGraphTensor, descriptor: MPSGraphDepthwiseConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func depthwiseConvolution2DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber], descriptor: MPSGraphDepthwiseConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func depthwiseConvolution2DWeightsGradient(MPSGraphTensor, source: MPSGraphTensor, outputShape: [NSNumber], descriptor: MPSGraphDepthwiseConvolution2DOpDescriptor, name: String?) -> MPSGraphTensor
+func depthwiseConvolution3D(MPSGraphTensor, weights: MPSGraphTensor, descriptor: MPSGraphDepthwiseConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func depthwiseConvolution3DDataGradient(MPSGraphTensor, weights: MPSGraphTensor, outputShape: [NSNumber]?, descriptor: MPSGraphDepthwiseConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func depthwiseConvolution3DWeightsGradient(MPSGraphTensor, source: MPSGraphTensor, outputShape: [NSNumber], descriptor: MPSGraphDepthwiseConvolution3DOpDescriptor, name: String?) -> MPSGraphTensor
+func dequantize(MPSGraphTensor, scale: Double, zeroPoint: Double, dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func dequantize(MPSGraphTensor, scaleTensor: MPSGraphTensor, zeroPoint: Double, dataType: MPSDataType, axis: Int, name: String?) -> MPSGraphTensor
+func dequantize(MPSGraphTensor, scaleTensor: MPSGraphTensor, zeroPointTensor: MPSGraphTensor, dataType: MPSDataType, axis: Int, name: String?) -> MPSGraphTensor
+func division(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func divisionNoNaN(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func dropout(MPSGraphTensor, rate: Double, name: String?) -> MPSGraphTensor
+func dropout(MPSGraphTensor, rate: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func encode(to: MPSCommandBuffer, feeds: [MPSGraphTensor : MPSGraphTensorData], targetOperations: [MPSGraphOperation]?, resultsDictionary: [MPSGraphTensor : MPSGraphTensorData], executionDescriptor: MPSGraphExecutionDescriptor?)
+func encode(to: MPSCommandBuffer, feeds: [MPSGraphTensor : MPSGraphTensorData], targetTensors: [MPSGraphTensor], targetOperations: [MPSGraphOperation]?, executionDescriptor: MPSGraphExecutionDescriptor?) -> [MPSGraphTensor : MPSGraphTensorData]
+func equal(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func erf(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func expandDims(MPSGraphTensor, axes: [NSNumber], name: String?) -> MPSGraphTensor
+func expandDims(MPSGraphTensor, axesTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func expandDims(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func exponent(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func exponentBase10(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func exponentBase2(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func flatten2D(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func flatten2D(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func floor(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func floorModulo(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func `for`(lowerBound: MPSGraphTensor, upperBound: MPSGraphTensor, step: MPSGraphTensor, initialBodyArguments: [MPSGraphTensor], body: MPSGraphForLoopBodyBlock, name: String?) -> [MPSGraphTensor]
+func `for`(numberOfIterations: MPSGraphTensor, initialBodyArguments: [MPSGraphTensor], body: MPSGraphForLoopBodyBlock, name: String?) -> [MPSGraphTensor]
+func gather(withUpdatesTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, axis: Int, batchDimensions: Int, name: String?) -> MPSGraphTensor
+func gatherAlongAxis(Int, updates: MPSGraphTensor, indices: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func gatherAlongAxisTensor(MPSGraphTensor, updates: MPSGraphTensor, indices: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func gatherND(withUpdatesTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, batchDimensions: Int, name: String?) -> MPSGraphTensor
+func gradients(of: MPSGraphTensor, with: [MPSGraphTensor], name: String?) -> [MPSGraphTensor : MPSGraphTensor]
+func greaterThan(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func greaterThanOrEqualTo(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func identity(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func `if`(MPSGraphTensor, then: MPSGraphIfThenElseBlock, else: MPSGraphIfThenElseBlock?, name: String?) -> [MPSGraphTensor]
+func inverse(input: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func isFinite(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func isInfinite(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func isNaN(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func leakyReLU(with: MPSGraphTensor, alpha: Double, name: String?) -> MPSGraphTensor
+func leakyReLU(with: MPSGraphTensor, alphaTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func leakyReLUGradient(withIncomingGradient: MPSGraphTensor, sourceTensor: MPSGraphTensor, alphaTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func lessThan(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func lessThanOrEqualTo(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logarithm(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logarithmBase10(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logarithmBase2(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logicalAND(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logicalNAND(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logicalNOR(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logicalOR(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logicalXNOR(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func logicalXOR(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func matrixMultiplication(primary: MPSGraphTensor, secondary: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func maxPooling2D(withSourceTensor: MPSGraphTensor, descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling2DGradient(withGradientTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, outputShape: [NSNumber], descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling2DGradient(withGradientTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling2DGradient(withGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling2DReturnIndices(MPSGraphTensor, descriptor: MPSGraphPooling2DOpDescriptor, name: String?) -> [MPSGraphTensor]
+func maxPooling4D(MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling4DGradient(MPSGraphTensor, source: MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling4DGradient(withGradientTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, outputShape: [NSNumber], descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling4DGradient(withGradientTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, outputShapeTensor: MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> MPSGraphTensor
+func maxPooling4DReturnIndices(MPSGraphTensor, descriptor: MPSGraphPooling4DOpDescriptor, name: String?) -> [MPSGraphTensor]
+func maximum(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func maximumWithNaNPropagation(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func mean(of: MPSGraphTensor, axes: [NSNumber], name: String?) -> MPSGraphTensor
+func minimum(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func minimumWithNaNPropagation(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func modulo(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func multiplication(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func negative(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func normalizationBetaGradient(withIncomingGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, reductionAxes: [NSNumber], name: String?) -> MPSGraphTensor
+func normalizationGammaGradient(withIncomingGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, mean: MPSGraphTensor, varianceTensor: MPSGraphTensor, reductionAxes: [NSNumber], epsilon: Float, name: String?) -> MPSGraphTensor
+func normalizationGradient(withIncomingGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, mean: MPSGraphTensor, varianceTensor: MPSGraphTensor, gammaTensor: MPSGraphTensor?, gammaGradientTensor: MPSGraphTensor?, betaGradientTensor: MPSGraphTensor?, reductionAxes: [NSNumber], epsilon: Float, name: String?) -> MPSGraphTensor
+func normalize(MPSGraphTensor, mean: MPSGraphTensor, variance: MPSGraphTensor, gamma: MPSGraphTensor?, beta: MPSGraphTensor?, epsilon: Float, name: String?) -> MPSGraphTensor
+func not(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func notEqual(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func oneHot(withIndicesTensor: MPSGraphTensor, depth: Int, axis: Int, dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func oneHot(withIndicesTensor: MPSGraphTensor, depth: Int, axis: Int, dataType: MPSDataType, onValue: Double, offValue: Double, name: String?) -> MPSGraphTensor
+func oneHot(withIndicesTensor: MPSGraphTensor, depth: Int, axis: Int, name: String?) -> MPSGraphTensor
+func oneHot(withIndicesTensor: MPSGraphTensor, depth: Int, dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func oneHot(withIndicesTensor: MPSGraphTensor, depth: Int, dataType: MPSDataType, onValue: Double, offValue: Double, name: String?) -> MPSGraphTensor
+func oneHot(withIndicesTensor: MPSGraphTensor, depth: Int, name: String?) -> MPSGraphTensor
+func padGradient(withIncomingGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, paddingMode: MPSGraphPaddingMode, leftPadding: [NSNumber], rightPadding: [NSNumber], name: String?) -> MPSGraphTensor
+func padTensor(MPSGraphTensor, with: MPSGraphPaddingMode, leftPadding: [NSNumber], rightPadding: [NSNumber], constantValue: Double, name: String?) -> MPSGraphTensor
+func placeholder(shape: [NSNumber]?, dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func placeholder(shape: [NSNumber]?, name: String?) -> MPSGraphTensor
+func power(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func quantize(MPSGraphTensor, scale: Double, zeroPoint: Double, dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func quantize(MPSGraphTensor, scaleTensor: MPSGraphTensor, zeroPoint: Double, dataType: MPSDataType, axis: Int, name: String?) -> MPSGraphTensor
+func quantize(MPSGraphTensor, scaleTensor: MPSGraphTensor, zeroPointTensor: MPSGraphTensor, dataType: MPSDataType, axis: Int, name: String?) -> MPSGraphTensor
+func randomPhiloxStateTensor(withCounterLow: Int, counterHigh: Int, key: Int, name: String?) -> MPSGraphTensor
+func randomPhiloxStateTensor(withSeed: Int, name: String?) -> MPSGraphTensor
+func randomTensor(withShape: [NSNumber], descriptor: MPSGraphRandomOpDescriptor, name: String?) -> MPSGraphTensor
+func randomTensor(withShape: [NSNumber], descriptor: MPSGraphRandomOpDescriptor, seed: Int, name: String?) -> MPSGraphTensor
+func randomTensor(withShape: [NSNumber], descriptor: MPSGraphRandomOpDescriptor, stateTensor: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func randomTensor(withShapeTensor: MPSGraphTensor, descriptor: MPSGraphRandomOpDescriptor, name: String?) -> MPSGraphTensor
+func randomTensor(withShapeTensor: MPSGraphTensor, descriptor: MPSGraphRandomOpDescriptor, seed: Int, name: String?) -> MPSGraphTensor
+func randomTensor(withShapeTensor: MPSGraphTensor, descriptor: MPSGraphRandomOpDescriptor, stateTensor: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func randomUniformTensor(withShape: [NSNumber], name: String?) -> MPSGraphTensor
+func randomUniformTensor(withShape: [NSNumber], seed: Int, name: String?) -> MPSGraphTensor
+func randomUniformTensor(withShape: [NSNumber], stateTensor: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func randomUniformTensor(withShapeTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func randomUniformTensor(withShapeTensor: MPSGraphTensor, seed: Int, name: String?) -> MPSGraphTensor
+func randomUniformTensor(withShapeTensor: MPSGraphTensor, stateTensor: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func reLU(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func reLUGradient(withIncomingGradient: MPSGraphTensor, sourceTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func read(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func reciprocal(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func reductionAnd(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionAnd(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionArgMaximum(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionArgMinimum(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionMaximum(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionMaximum(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionMaximumPropagateNaN(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionMaximumPropagateNaN(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionMinimum(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionMinimum(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionMinimumPropagateNaN(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionMinimumPropagateNaN(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionOr(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionOr(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionProduct(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionProduct(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reductionSum(with: MPSGraphTensor, axes: [NSNumber]?, name: String?) -> MPSGraphTensor
+func reductionSum(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func reinterpretCast(MPSGraphTensor, to: MPSDataType, name: String?) -> MPSGraphTensor
+func reshape(MPSGraphTensor, shape: [NSNumber], name: String?) -> MPSGraphTensor
+func reshape(MPSGraphTensor, shapeTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func resize(MPSGraphTensor, size: [NSNumber], mode: MPSGraphResizeMode, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resize(MPSGraphTensor, sizeTensor: MPSGraphTensor, mode: MPSGraphResizeMode, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resize(MPSGraphTensor, sizeTensor: MPSGraphTensor, scaleOffsetTensor: MPSGraphTensor, mode: MPSGraphResizeMode, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resize(withGradientTensor: MPSGraphTensor, input: MPSGraphTensor, mode: MPSGraphResizeMode, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resize(withGradientTensor: MPSGraphTensor, input: MPSGraphTensor, scaleOffsetTensor: MPSGraphTensor, mode: MPSGraphResizeMode, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeBilinear(MPSGraphTensor, sizeTensor: MPSGraphTensor, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeBilinear(MPSGraphTensor, sizeTensor: MPSGraphTensor, scaleOffsetTensor: MPSGraphTensor, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeBilinear(withGradientTensor: MPSGraphTensor, input: MPSGraphTensor, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeBilinear(withGradientTensor: MPSGraphTensor, input: MPSGraphTensor, scaleOffsetTensor: MPSGraphTensor, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeNearest(MPSGraphTensor, sizeTensor: MPSGraphTensor, nearestRoundingMode: MPSGraphResizeNearestRoundingMode, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeNearest(MPSGraphTensor, sizeTensor: MPSGraphTensor, scaleOffsetTensor: MPSGraphTensor, nearestRoundingMode: MPSGraphResizeNearestRoundingMode, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeNearest(withGradientTensor: MPSGraphTensor, input: MPSGraphTensor, nearestRoundingMode: MPSGraphResizeNearestRoundingMode, centerResult: Bool, alignCorners: Bool, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func resizeNearest(withGradientTensor: MPSGraphTensor, input: MPSGraphTensor, scaleOffsetTensor: MPSGraphTensor, nearestRoundingMode: MPSGraphResizeNearestRoundingMode, layout: MPSGraphTensorNamedDataLayout, name: String?) -> MPSGraphTensor
+func reverse(MPSGraphTensor, axes: [NSNumber], name: String?) -> MPSGraphTensor
+func reverse(MPSGraphTensor, axesTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func reverse(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func reverseSquareRoot(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func rint(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func round(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func run(feeds: [MPSGraphTensor : MPSGraphTensorData], targetTensors: [MPSGraphTensor], targetOperations: [MPSGraphOperation]?) -> [MPSGraphTensor : MPSGraphTensorData]
+func run(with: MTLCommandQueue, feeds: [MPSGraphTensor : MPSGraphTensorData], targetOperations: [MPSGraphOperation]?, resultsDictionary: [MPSGraphTensor : MPSGraphTensorData])
+func run(with: MTLCommandQueue, feeds: [MPSGraphTensor : MPSGraphTensorData], targetTensors: [MPSGraphTensor], targetOperations: [MPSGraphOperation]?) -> [MPSGraphTensor : MPSGraphTensorData]
+func runAsync(feeds: [MPSGraphTensor : MPSGraphTensorData], targetTensors: [MPSGraphTensor], targetOperations: [MPSGraphOperation]?, executionDescriptor: MPSGraphExecutionDescriptor?) -> [MPSGraphTensor : MPSGraphTensorData]
+func runAsync(with: MTLCommandQueue, feeds: [MPSGraphTensor : MPSGraphTensorData], targetOperations: [MPSGraphOperation]?, resultsDictionary: [MPSGraphTensor : MPSGraphTensorData], executionDescriptor: MPSGraphExecutionDescriptor?)
+func runAsync(with: MTLCommandQueue, feeds: [MPSGraphTensor : MPSGraphTensorData], targetTensors: [MPSGraphTensor], targetOperations: [MPSGraphOperation]?, executionDescriptor: MPSGraphExecutionDescriptor?) -> [MPSGraphTensor : MPSGraphTensorData]
+func sampleGrid(withSourceTensor: MPSGraphTensor, coordinateTensor: MPSGraphTensor, layout: MPSGraphTensorNamedDataLayout, normalizeCoordinates: Bool, relativeCoordinates: Bool, alignCorners: Bool, paddingMode: MPSGraphPaddingMode, nearestRoundingMode: MPSGraphResizeNearestRoundingMode, constantValue: Double, name: String?) -> MPSGraphTensor
+func sampleGrid(withSourceTensor: MPSGraphTensor, coordinateTensor: MPSGraphTensor, layout: MPSGraphTensorNamedDataLayout, normalizeCoordinates: Bool, relativeCoordinates: Bool, alignCorners: Bool, paddingMode: MPSGraphPaddingMode, samplingMode: MPSGraphResizeMode, constantValue: Double, name: String?) -> MPSGraphTensor
+func scatter(MPSGraphTensor, indices: MPSGraphTensor, shape: [NSNumber], axis: Int, mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterAlongAxis(Int, data: MPSGraphTensor, updates: MPSGraphTensor, indices: MPSGraphTensor, mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterAlongAxis(Int, updates: MPSGraphTensor, indices: MPSGraphTensor, shape: [NSNumber], mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterAlongAxisTensor(MPSGraphTensor, data: MPSGraphTensor, updates: MPSGraphTensor, indices: MPSGraphTensor, mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterAlongAxisTensor(MPSGraphTensor, updates: MPSGraphTensor, indices: MPSGraphTensor, shape: [NSNumber], mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterND(withUpdatesTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, shape: [NSNumber], batchDimensions: Int, mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterND(withUpdatesTensor: MPSGraphTensor, indicesTensor: MPSGraphTensor, shape: [NSNumber], batchDimensions: Int, name: String?) -> MPSGraphTensor
+func scatterNDWithData(MPSGraphTensor, updates: MPSGraphTensor, indices: MPSGraphTensor, batchDimensions: Int, mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func scatterWithData(MPSGraphTensor, updates: MPSGraphTensor, indices: MPSGraphTensor, axis: Int, mode: MPSGraphScatterMode, name: String?) -> MPSGraphTensor
+func select(predicate: MPSGraphTensor, trueTensor: MPSGraphTensor, falseTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func shapeOf(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func sigmoid(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func sigmoidGradient(withIncomingGradient: MPSGraphTensor, sourceTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func sign(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func signbit(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func sin(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func singleGateRNN(MPSGraphTensor, recurrentWeight: MPSGraphTensor, initState: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func singleGateRNN(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func singleGateRNN(MPSGraphTensor, recurrentWeight: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, mask: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func singleGateRNNGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, initState: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func singleGateRNNGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func singleGateRNNGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, mask: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func singleGateRNNGradients(MPSGraphTensor, recurrentWeight: MPSGraphTensor, sourceGradient: MPSGraphTensor, zState: MPSGraphTensor, stateGradient: MPSGraphTensor?, inputWeight: MPSGraphTensor?, bias: MPSGraphTensor?, initState: MPSGraphTensor?, mask: MPSGraphTensor?, descriptor: MPSGraphSingleGateRNNDescriptor, name: String?) -> [MPSGraphTensor]
+func sinh(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func sliceGradientTensor(MPSGraphTensor, fwdInShapeTensor: MPSGraphTensor, starts: [NSNumber], ends: [NSNumber], strides: [NSNumber], name: String?) -> MPSGraphTensor
+func sliceGradientTensor(MPSGraphTensor, fwdInShapeTensor: MPSGraphTensor, starts: [NSNumber], ends: [NSNumber], strides: [NSNumber], startMask: UInt32, endMask: UInt32, squeezeMask: UInt32, name: String?) -> MPSGraphTensor
+func sliceTensor(MPSGraphTensor, dimension: Int, start: Int, length: Int, name: String?) -> MPSGraphTensor
+func sliceTensor(MPSGraphTensor, starts: [NSNumber], ends: [NSNumber], strides: [NSNumber], name: String?) -> MPSGraphTensor
+func sliceTensor(MPSGraphTensor, starts: [NSNumber], ends: [NSNumber], strides: [NSNumber], startMask: UInt32, endMask: UInt32, squeezeMask: UInt32, name: String?) -> MPSGraphTensor
+func softMax(with: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func softMaxCrossEntropy(MPSGraphTensor, labels: MPSGraphTensor, axis: Int, reuctionType: MPSGraphLossReductionType, name: String?) -> MPSGraphTensor
+func softMaxCrossEntropyGradient(MPSGraphTensor, source: MPSGraphTensor, labels: MPSGraphTensor, axis: Int, reuctionType: MPSGraphLossReductionType, name: String?) -> MPSGraphTensor
+func softMaxGradient(withIncomingGradient: MPSGraphTensor, sourceTensor: MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func sort(MPSGraphTensor, axis: Int, descending: Bool, name: String?) -> MPSGraphTensor
+func sort(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func sort(MPSGraphTensor, axisTensor: MPSGraphTensor, descending: Bool, name: String?) -> MPSGraphTensor
+func sort(MPSGraphTensor, axisTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func space(toDepth2DTensor: MPSGraphTensor, widthAxis: Int, heightAxis: Int, depthAxis: Int, blockSize: Int, usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func space(toDepth2DTensor: MPSGraphTensor, widthAxisTensor: MPSGraphTensor, heightAxisTensor: MPSGraphTensor, depthAxisTensor: MPSGraphTensor, blockSize: Int, usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func spaceToBatch(MPSGraphTensor, spatialAxes: [NSNumber], batchAxis: Int, blockDimensions: [NSNumber], usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func spaceToBatch(MPSGraphTensor, spatialAxesTensor: MPSGraphTensor, batchAxisTensor: MPSGraphTensor, blockDimensionsTensor: MPSGraphTensor, usePixelShuffleOrder: Bool, name: String?) -> MPSGraphTensor
+func sparseTensor(sparseTensorWithDescriptor: MPSGraphCreateSparseOpDescriptor, tensors: [MPSGraphTensor], shape: [NSNumber], name: String?) -> MPSGraphTensor
+func sparseTensor(sparseTensorWithType: MPSGraphSparseStorageType, tensors: [MPSGraphTensor], shape: [NSNumber], dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func split(MPSGraphTensor, numSplits: Int, axis: Int, name: String?) -> [MPSGraphTensor]
+func split(MPSGraphTensor, splitSizes: [NSNumber], axis: Int, name: String?) -> [MPSGraphTensor]
+func split(MPSGraphTensor, splitSizesTensor: MPSGraphTensor, axis: Int, name: String?) -> [MPSGraphTensor]
+func square(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func squareRoot(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func squeeze(MPSGraphTensor, axes: [NSNumber], name: String?) -> MPSGraphTensor
+func squeeze(MPSGraphTensor, axesTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func squeeze(MPSGraphTensor, axis: Int, name: String?) -> MPSGraphTensor
+func squeeze(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func stack([MPSGraphTensor], axis: Int, name: String?) -> MPSGraphTensor
+func stencil(withSourceTensor: MPSGraphTensor, weightsTensor: MPSGraphTensor, descriptor: MPSGraphStencilOpDescriptor, name: String?) -> MPSGraphTensor
+func stochasticGradientDescent(learningRate: MPSGraphTensor, values: MPSGraphTensor, gradient: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func subtraction(MPSGraphTensor, MPSGraphTensor, name: String?) -> MPSGraphTensor
+func tan(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func tanh(with: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func tileGradient(withIncomingGradientTensor: MPSGraphTensor, sourceTensor: MPSGraphTensor, withMultiplier: [NSNumber], name: String?) -> MPSGraphTensor
+func tileTensor(MPSGraphTensor, withMultiplier: [NSNumber], name: String?) -> MPSGraphTensor
+func topK(MPSGraphTensor, k: Int, name: String?) -> [MPSGraphTensor]
+func topK(MPSGraphTensor, kTensor: MPSGraphTensor, name: String?) -> [MPSGraphTensor]
+func topKGradient(MPSGraphTensor, input: MPSGraphTensor, k: Int, name: String?) -> MPSGraphTensor
+func topKGradient(MPSGraphTensor, input: MPSGraphTensor, kTensor: MPSGraphTensor, name: String?) -> MPSGraphTensor
+func transpose(MPSGraphTensor, permutation: [NSNumber], name: String?) -> MPSGraphTensor
+func transposeTensor(MPSGraphTensor, dimension: Int, withDimension: Int, name: String?) -> MPSGraphTensor
+func truncate(MPSGraphTensor, name: String?) -> MPSGraphTensor
+func variable(with: Data, shape: [NSNumber], dataType: MPSDataType, name: String?) -> MPSGraphTensor
+func variance(of: MPSGraphTensor, axes: [NSNumber], name: String?) -> MPSGraphTensor
+func variance(of: MPSGraphTensor, mean: MPSGraphTensor, axes: [NSNumber], name: String?) -> MPSGraphTensor
+func `while`(initialInputs: [MPSGraphTensor], before: MPSGraphWhileBeforeBlock, after: MPSGraphWhileAfterBlock, name: String?) -> [MPSGraphTensor]
 -->
 
 
