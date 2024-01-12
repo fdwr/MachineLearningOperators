@@ -1,4 +1,5 @@
 ```mermaid
+%%{ init: { 'flowchart': { 'curve': 'linear' } } }%%
 flowchart TB
     subgraph ML_Operator_Set_Definitions
         ONNX[<a href='https://onnx.ai/onnx/operators/index.html'><abbr title='Open Neural Network Exchange'>ONNX</abbr></a>]
