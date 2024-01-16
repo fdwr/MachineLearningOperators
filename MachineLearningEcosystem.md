@@ -149,6 +149,7 @@ TODO: Integrate all/some of these into diagram...
 - Halide
 - XLA
 - MLIR
+- Triton MLIR
 - PyTorch https://pytorch.org/docs/stable/generated/torch.sqrt.html
 - TensorFlow https://www.tensorflow.org/api_docs/python/tf/math/sqrt
 - ONNX Runtime https://onnxruntime.ai/
