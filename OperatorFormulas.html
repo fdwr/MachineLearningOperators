@@ -205,7 +205,7 @@ th {
       <td class="mlxColumn">x</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">?</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::u1</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -228,7 +228,7 @@ th {
       <td class="mlxColumn">x</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">?</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::u4</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -251,8 +251,8 @@ th {
       <td class="mlxColumn">mx.uint8</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">CNTK.DataType.UChar</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::u8</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_u8</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -274,7 +274,7 @@ th {
       <td class="mlxColumn">mx.uint16</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::u16</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -297,7 +297,7 @@ th {
       <td class="mlxColumn">mx.uint32</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::u32</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -343,7 +343,7 @@ th {
       <td class="mlxColumn">mx.uint64</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::u64</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -366,7 +366,7 @@ th {
       <td class="mlxColumn">x</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::i4</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -389,8 +389,8 @@ th {
       <td class="mlxColumn">mx.int8</td>
       <td class="ncnnColumn">int8</td>
       <td class="cntkColumn">CNTK.DataType.Int8</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::i8</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_s8</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -412,7 +412,7 @@ th {
       <td class="mlxColumn">mx.int16</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">CNTK.DataType.Int16</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::i16</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -435,8 +435,8 @@ th {
       <td class="mlxColumn">mx.int32</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::i32</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_s32</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -481,7 +481,7 @@ th {
       <td class="mlxColumn">mx.int64</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::i64</td>
       <td class="oneDnnColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
@@ -505,7 +505,7 @@ th {
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f8_e4m3</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -551,7 +551,7 @@ th {
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f8_e5m2</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -619,8 +619,8 @@ th {
       <td class="mlxColumn">mx.float16</td>
       <td class="ncnnColumn">float16</td>
       <td class="cntkColumn">CNTK.DataType.Float16</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::f16</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f16</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -642,8 +642,8 @@ th {
       <td class="mlxColumn">x</td>
       <td class="ncnnColumn">bfloat16</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::bf16</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_bf16</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -665,8 +665,8 @@ th {
       <td class="mlxColumn">mx.float32</td>
       <td class="ncnnColumn">float32</td>
       <td class="cntkColumn">CNTK.DataType.Float</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::f32</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f32</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -688,8 +688,8 @@ th {
       <td class="mlxColumn">x</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">CNTK.DataType.Double</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::f64</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f64</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -780,8 +780,8 @@ th {
       <td class="mlxColumn">bool_</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
-      <td class="openVinoColumn">?</td>
-      <td class="oneDnnColumn">?</td>
+      <td class="openVinoColumn">ov::element::Type_t::boolean</td>
+      <td class="oneDnnColumn">dnnl_data_type_t::dnnl_boolean</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -6594,39 +6594,6 @@ Fine-Grained Vehicle Classification With Channel Max Pooling Modified CNNs
 
 <!--
 TODO:Add these
-
-https://docs.openvino.ai/2023.0/groupov_element_cpp_api.html#doxid-group-ov-element-cpp-api
-constexpr Type ov::element::undefined(Type_t::undefined);
-constexpr Type ov::element::dynamic(Type_t::dynamic);
-constexpr Type ov::element::boolean(Type_t::boolean);
-constexpr Type ov::element::bf16(Type_t::bf16);
-constexpr Type ov::element::f16(Type_t::f16);
-constexpr Type ov::element::f32(Type_t::f32);
-constexpr Type ov::element::f64(Type_t::f64);
-constexpr Type ov::element::i4(Type_t::i4);
-constexpr Type ov::element::i8(Type_t::i8);
-constexpr Type ov::element::i16(Type_t::i16);
-constexpr Type ov::element::i32(Type_t::i32);
-constexpr Type ov::element::i64(Type_t::i64);
-constexpr Type ov::element::u1(Type_t::u1);
-constexpr Type ov::element::u4(Type_t::u4);
-constexpr Type ov::element::u8(Type_t::u8);
-constexpr Type ov::element::u16(Type_t::u16);
-constexpr Type ov::element::u32(Type_t::u32);
-constexpr Type ov::element::u64(Type_t::u64);
-
-https://oneapi-src.github.io/oneDNN/enum_dnnl_data_type_t.html
-    dnnl_f16             = 1,
-    dnnl_bf16            = 2,
-    dnnl_f32             = 3,
-    dnnl_s32             = 4,
-    dnnl_s8              = 5,
-    dnnl_u8              = 6,
-    dnnl_f64             = 7,
-    dnnl_boolean         = 8,
-    dnnl_f8_e5m2         = 9,
-    dnnl_f8_e4m3         = 10,
-
 
 Apple MPS (Metal Performance Shaders) - https://developer.apple.com/documentation/metalperformanceshadersgraph/mpsgraphtensor/3564663-datatype
 MPSDataType.unorm1
