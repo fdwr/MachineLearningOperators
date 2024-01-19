@@ -4653,31 +4653,31 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="futureColumn"></td>
     <td>For each output element, subtract the mean, and divide by standard deviation.
 
-MeanVarianceNormalization(X) = (X - mean) / standardDeviation
-MeanVarianceNormalization(X) = (X - mean) / sqrt(variance + epsilon)
-MeanVarianceNormalization(X) = (X - mean(X)) / sqrt(mean((X - mean(X))^2))
-MeanVarianceNormalization(X) = (X - mean(X)) / sqrt(mean(X^2) - mean(X)^2))
+MeanVarianceNormalization(input) = (input - mean) / standardDeviation
+MeanVarianceNormalization(input) = (input - mean) / sqrt(variance + epsilon)
+MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean((input - mean(input))^2))
+MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean(input^2) - mean(input)^2)
 
-ONNX:
-Exponent = Const(2.0)
-Epsilon = Const(1e-9)
-X_RM = ReduceMean(X)
-EX_squared = Pow(X_RM, Exponent)
-X_squared = Pow(X, Exponent)
-E_Xsquared = ReduceMean(X_squared)
-Variance = Sub(E_Xsquared, EX_squared)
-STD = Sqrt(Variance)
-X_variance = Sub(X, X_RM)
-Processed_STD = Add(STD, Epsilon)
-X_MVN = Div(X_variance, Processed_STD)
+<b>ONNX:</b>
+exponent = Const(2.0)
+epsilon = Const(1e-9)
+inputMean = ReduceMean(input)
+inputMeanSquared = Pow(inputMean, exponent)
+inputSquared = Pow(input, exponent)
+inputSquareMeaned = ReduceMean(inputSquared, keepdims=1)
+variance = Sub(inputSquareMeaned, inputMeanSquared)
+standardDeviation = Sqrt(variance)
+inputCentered = Sub(input, inputMean)
+standardDeviationWithEpsilon = Add(standardDeviation, epsilon)
+X_MVN = Div(inputCentered, standardDeviationWithEpsilon)
 
-NumPy:
-dataMean = np.mean(inputData, axes, keepdims=1)
-dataMeanSquared = np.power(dataMean, 2)
-dataSquared = np.power(inputData, 2)
-dataSquareMeaned = np.mean(dataSquared, axes, keepdims=1)
-std = np.sqrt(dataSquareMeaned - dataMeanSquared)
-output = (inputData - dataMean) / (std + 1e-9)
+<b>NumPy:</b>
+inputMean = np.mean(input, axes, keepdims=1)
+inputMeanSquared = np.power(inputMean, 2)
+inputSquared = np.power(input, 2)
+inputSquareMeaned = np.mean(inputSquared, axes, keepdims=1)
+standardDeviation = np.sqrt(inputSquareMeaned - inputMeanSquared)
+output = (input - inputMean) / (standardDeviation + 1e-9)
 </td>
     <td>Precision TBD</td>
   </tr>
@@ -4755,43 +4755,6 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
 Mean and variance are computed across all dimensions from and after axis, independently per leading batches:
 
 axes = [axis, axis+1, ..., inputRank-1] // Exclude axes {0, ..., axis-1}
-mean = (x0 + x1 + …) / xn;
-variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
-
-ONNX:
-mean = ReduceAverage(axes, keepdims=true)
-variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)
-
-NumPy:
-mean = np.mean(x, axis=axes, keepdims=True)
-variance = np.var(x, axis=axes, keepdims=True)</td>
-    <td>Precision TBD</td>
-  </tr>
-  <tr class="normalizationOperator">
-    <td>Normalization</td>
-    <td>Spatial&Channel Normalization</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">NA (alternate layer normalization</a>)</td>
-    <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
-    axes = [1,2,3,...].</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + Bias
-
-Mean and variance are computed across spatial&channel dimensions CDHW, independently per batch N:
-
-axes = [1,2,3, ..., inputRank-1] // Exclude axes {0}
 mean = (x0 + x1 + …) / xn;
 variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
 
@@ -5131,35 +5094,6 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Precision TBD</td>
-  </tr>
-  <tr class="elementwiseOperator">
-    <td>Input (Deleted)</td>
-    <td>Constant Fill</td>
-    <td class="webnnColumn">constant+expand</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.2.1/docs/Operators.md#ConstantFill">ConstantFill</a> (see ConstantOfShape)</td>
-    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides for broadcasting</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td><code>function ConstantFill(dtype, extra_shape, input_as_shape, shape, value; inputOfDesiredShape)
-    assert(!exists(shape) || !input_as_shape)
-    output.dataType = dtype
-    output.shape = if exists(shape) then shape else Shape(inputOfDesiredShape) + extra_shape
-    for each element in output tensor
-        element = value
-    endfor
-endfunction</code></td>
-    <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise, Training</td>
