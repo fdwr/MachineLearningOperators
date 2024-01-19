@@ -111,7 +111,6 @@ th {
 
 <h1>Notation</h1>
 <ul style="list-style: inside; padding-left: 0;">
-<li>Lowercase values are scalar. Uppercase are full tensors. So, x is scalar while X is a tensor, and abs(x) means it returns a scalar while Abs(X) returns a tensor.</li>
 <li>Any multiplication signs '*' mean elementwise multiplication (per NumPy, PyTorch, TensorFlow).</li>
 <li>Any matrix style compound dot product will explicitly use MatMul() rather than '*' to avoid unacceptable notation ambiguity.</li>
 <li>Any addition signs '+' mean elementwise addition, never the horrible notation abuse of concatenation.</li>
@@ -183,8 +182,8 @@ th {
       <th class="mlxColumn"><a href="https://ml-explore.github.io/mlx/build/html/python/data_types.html">MLX</a></th>
       <th class="ncnnColumn"><a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md#cast">NCNN</a></th>
       <th class="cntkColumn"><a href="https://github.com/microsoft/CNTK/blob/ae9c9c7c5f9e6072cc9c94c254f816dbdc1c5be6/Source/CNTKv2LibraryDll/API/CNTKLibrary.h#L82">CNTK</a></th>
-      <th class="openVinoColumn">OpenVINO</th>
-      <th class="oneDnnColumn">OneDnn</th>
+      <th class="openVinoColumn"><a href="https://docs.openvino.ai/2023.0/groupov_element_cpp_api.html#doxid-group-ov-element-cpp-api">OpenVINO</a></th>
+      <th class="oneDnnColumn"><a href="https://oneapi-src.github.io/oneDNN/enum_dnnl_data_type_t.html">OneDNN</a></th>
       <th class="futureColumn">(for future additions)</th>
     </tr>
     <tr>
@@ -878,14 +877,14 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="numpyColumn">numpy.identity</td>
     <td class="tensorFlowColumn">tf.identity</td>
     <td class="pytorchColumn">torch.nn.Identity</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
+    <td class="coreMlColumn">CopyLayerParams</td>
+    <td class="bnnsColumn">BNNSActivationFunctionIdentity</td>
     <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
+    <td class="mlxColumn">mlx.identity</td>
     <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
+    <td class="cntkColumn">activation_identity</td>
     <td class="openVinoColumn">?</td>
-    <td class="oneDnnColumn">?</td>
+    <td class="oneDnnColumn">dnnl::reorder</td>
     <td class="futureColumn"></td>
     <td><code>Identity(X) = X</code></td>
     <td>Exact</td>
