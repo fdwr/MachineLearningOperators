@@ -34,6 +34,7 @@ flowchart TB
     subgraph Machine_Learning_APIs
         Microsoft_DirectML
         Intel_OpenVINO[<a href='https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html'><abbr title='Intel Open Visual Inference and Neural Network Optimization'>Intel OpenVINO</abbr></a>]
+        Intel_OneDNN[<a href='https://oneapi-src.github.io/oneDNN/'><abbr title='Intel One Deep Neural Network library'>Intel OneDNN</abbr></a>]
         NVidia_CUDA
         AMD_ROCM
         Google_XNNPack[<a href='https://github.com/google/XNNPACK/blob/master/include/xnnpack.h'>Google <abbr title='X Neural Network Package'>XNNPack</abbr></a>]
