@@ -1,5 +1,7 @@
-﻿<html>
+﻿<html lang="en">
 <head>
+<meta charset="utf-8"/>
+<title>ML Operator Formulas</title>
 <style>
 body
 {
@@ -31,6 +33,12 @@ th {
 .controlFlowOperator { visibility: collapse; }
 .reductionOperator { visibility: collapse; }
 .normalizationOperator { visibility: collapse; }
+.generationOperator { visibility: collapse; }
+.randomOperator { visibility: collapse; }
+.matrixMultiplicationOperator { visibility: collapse; }
+.imagingOperator { visibility: collapse; }
+.aggregateOperator { visibility: collapse; }
+.uncategorizedOperator { visibility: collapse; }
 
 /* visibility: collapse doesn't appear to work as expected for columns using Chrome. So use display: none instead. */
 .webnnColumn { display: none; }
@@ -53,12 +61,18 @@ th {
 
 /* Show hidden content when the checkbox is checked */
 #toggleElementwiseOperators:checked ~ * .elementwiseOperator { visibility: visible; }
-#toggleActivationOperators:checked ~ * .activationOperator { visibility: visible; } 
-#toggleReorganizationOperators:checked ~ * .reorganizationOperator { visibility: visible; } 
-#togglePoolingOperators:checked ~ * .poolingOperator { visibility: visible; } 
-#toggleControlFlowOperators:checked ~ * .controlFlowOperator { visibility: visible; } 
+#toggleActivationOperators:checked ~ * .activationOperator { visibility: visible; }
+#toggleReorganizationOperators:checked ~ * .reorganizationOperator { visibility: visible; }
+#togglePoolingOperators:checked ~ * .poolingOperator { visibility: visible; }
+#toggleControlFlowOperators:checked ~ * .controlFlowOperator { visibility: visible; }
 #toggleReductionOperators:checked ~ * .reductionOperator { visibility: visible; }
 #toggleNormalizationOperators:checked ~ * .normalizationOperator { visibility: visible; }
+#toggleGenerationOperators:checked ~ * .generationOperator { visibility: visible; }
+#toggleRandomOperators:checked ~ * .randomOperator { visibility: visible; }
+#toggleMatrixMultiplicationOperators:checked ~ * .matrixMultiplicationOperator { visibility: visible; }
+#toggleImagingOperators:checked ~ * .imagingOperator { visibility: visible; }
+#toggleAggregateOperators:checked ~ * .aggregateOperator { visibility: visible; }
+#toggleUncategorizedOperators:checked ~ * .uncategorizedOperator { visibility: visible; }
 
 #toggleWebnnColumn:checked ~ * .webnnColumn { display: table-cell; }
 #toggleOnnxColumn:checked ~ * .onnxColumn { display: table-cell; }
@@ -82,17 +96,19 @@ th {
 
 <h1>Links</h1>
 <ul>
-<li>This document</li>
+<li>This document
 <ul>
   <li><a href="https://fdwr.github.io/MachineLearningOperators/OperatorFormulas.html">Original document location</a><br/></li>
   <li><a href="https://github.com/fdwr/MachineLearningOperators/">GitHub repo</a><br/></li>
 </ul>
+</li>
 <li><a href="#DataTypes">Data Types table</a></li>
 <li><a href="#Operators">Operator Formulas table</a></li>
 </ul>
 <br/>
 
 <h1>Notation</h1>
+<ul style="list-style: inside; padding-left: 0;">
 <li>Lowercase values are scalar. Uppercase are full tensors. So, x is scalar while X is a tensor, and abs(x) means it returns a scalar while Abs(X) returns a tensor.</li>
 <li>Any multiplication signs '*' mean elementwise multiplication (per NumPy, PyTorch, TensorFlow).</li>
 <li>Any matrix style compound dot product will explicitly use MatMul() rather than '*' to avoid unacceptable notation ambiguity.</li>
@@ -100,8 +116,11 @@ th {
 <li>All exp() and log() use the natural logarithm 2.718281828 (not base 10 or 2).</li>
 <li>The pseudocode below uses a few undefined functions, but their trivial behavior should be obvious to implement. e.g. min, max, ones, zeroes, iif, assert</li>
 <li>Data type field components are listed in logical bit order (not backwards right-to-left order).</li>
+</ul>
 </p>
 
+<noscript>*This checkbox will not work without Javascript enabled:<br/></noscript>
+<input type="checkbox" id="toggleAllOperators" checked="on" onclick="toggleAllOperatorsOfIdSuffix(this, 'Operators')"/><label for="toggleAllOperators">&lt;All operator categories&gt;</label><br/>
 <input type="checkbox" id="toggleElementwiseOperators" checked="on"/><label for="toggleElementwiseOperators">Elementwise operators (pointwise operation, input.shape == output.shape)</label><br/>
 <input type="checkbox" id="toggleActivationOperators" checked="on"/><label for="toggleActivationOperators">Activation operators (signal <a href="https://en.wikipedia.org/wiki/Activation_function">remapping function</a>)</label><br/>
 <input type="checkbox" id="toggleReorganizationOperators" checked="on"/><label for="toggleReorganizationOperators">Reorganization operators (data movement, no value calculations)</label><br/>
@@ -109,7 +128,16 @@ th {
 <input type="checkbox" id="togglePoolingOperators" checked="on"/><label for="togglePoolingOperators">Pooling operators (overlapping reduction)</label><br/>
 <input type="checkbox" id="toggleNormalizationOperators" checked="on"/><label for="toggleNormalizationOperators">Normalization operators (normalize values based on neighbors)</label><br/>
 <input type="checkbox" id="toggleControlFlowOperators" checked="on"/><label for="toggleControlFlowOperators">Control flow operators (graph level branches and loops)</label><br/>
+<input type="checkbox" id="toggleGenerationOperators" checked="on"/><label for="toggleGenerationOperators">Generation operators (generate data)</label><br/>
+<input type="checkbox" id="toggleRandomOperators" checked="on"/><label for="toggleRandomOperators">Random operators (random number values)</label><br/>
+<input type="checkbox" id="toggleMatrixMultiplicationOperators" checked="on"/><label for="toggleMatrixMultiplicationOperators">Matrix multiplication (multiply and sum)</label><br/>
+<input type="checkbox" id="toggleImagingOperators" checked="on"/><label for="toggleImagingOperators">Imaging operators (for image manipulation)</label><br/>
+<input type="checkbox" id="toggleAggregateOperators" checked="on"/><label for="toggleAggregateOperators">Aggregate operators (multiple combined operators in tiny graph)</label><br/>
+<input type="checkbox" id="toggleUncategorizedOperators" checked="on"/><label for="toggleUncategorizedOperators">Uncategorized operators (no clear category to assign)</label><br/>
 <br/>
+
+<noscript>*This checkbox will not work without Javascript enabled:<br/></noscript>
+<input type="checkbox" id="toggleAllColumns" checked="on" onclick="toggleAllOperatorsOfIdSuffix(this, 'Column')"/><label for="toggleAllColumns">All library columns</label><br/>
 <input type="checkbox" id="toggleWebnnColumn" checked="on"/><label for="toggleWebnnColumn">WebNN (W3C <b>Web</b> <b>N</b>eural <b>N</b>etwork) <a href="https://www.w3.org/TR/webnn/">(info)</a></label><br/>
 <input type="checkbox" id="toggleOnnxColumn" checked="on"/><label for="toggleOnnxColumn">ONNX (<b>O</b>pen <b>N</b>eural <b>N</b>etwork E<b>x</b>change) <a href="https://onnx.ai/">(info)</a> <a href="https://onnx.ai/onnx/operators/index.html">(ops)</a></label><br/>
 <input type="checkbox" id="toggleDmlColumn" checked="on"/><label for="toggleDmlColumn">DirectML (Microsoft <b>Direct</b> <b>M</b>achine <b>L</b>earning) <a href="https://learn.microsoft.com/en-us/windows/ai/directml/dml-intro">(info)</a> <a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_operator_type">(ops)</a></label><br/>
@@ -125,6 +153,8 @@ th {
 <input type="checkbox" id="toggleMlxColumn" checked="on"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
 <input type="checkbox" id="toggleNcnnColumn" checked="on"/><label for="toggleNcnnColumn">NCNN (<b>T</b>en<b>c</b>ent <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/">(info)</a> <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(ops)</a></label><br/>
 <input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
+<br/>
+
 <!--
 <input type="checkbox" id="toggleOpenVinoColumn" checked="on"/><label for="toggleOpenVinoColumn">OpenVINO (Intel <b>V</b>isual <b>I</b>nference and <b>N</b>eural Network <b>O</b>ptimization) <a href="https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html">(info)</a></label><br/>
 -->
@@ -775,8 +805,8 @@ th {
     <th valign="top">Formula</th>
     <th>Precision</th>
   </tr>
-  <tr>
-    <td>Generic</td>
+  <tr class="elementwiseOperator">
+    <td>Elementwise</td>
     <td>Identity</td>
     <td class="webnnColumn">identity</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></th>
@@ -798,7 +828,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td><code>Identity(X) = X</code></td>
     <td>Exact</td>
   </tr>
-  <tr>
+  <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant</td>
     <td class="webnnColumn">constant</td>
@@ -820,7 +850,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td><code>Constant() = Value</code></td>
     <td>Exact</td>
   </tr>
-  <tr>
+  <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant Of Shape</td>
     <td class="webnnColumn">constant+expand</td>
@@ -2142,8 +2172,8 @@ endfunction</code></td>
       return output:float32 = (input - zero_point) * scale</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Sigmoid</td>
     <td class="webnnColumn">sigmoid</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sigmoid">Sigmoid</a></td>
@@ -2166,8 +2196,8 @@ endfunction</code></td>
       or: f(x) = expₑ(x) / (1 + expₑ(x))</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Hard Sigmoid</td>
     <td class="webnnColumn">hardSigmoid</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#HardSigmoid">HardSigmoid</a></td>
@@ -2190,8 +2220,8 @@ endfunction</code></td>
       defaults: alpha = 0.2, beta = 0.5</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Hyperbolic Tangent</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tanh">Tanh</a></td>
@@ -2215,8 +2245,8 @@ endfunction</code></td>
       or: f(x) = (expₑ(x) - expₑ(-x)) / (expₑ(x) + expₑ(-x))</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Scaled Hyperbolic Tangent</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ScaledTanh">ScaledTanh</a></td>
@@ -2238,8 +2268,8 @@ endfunction</code></td>
       or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Clamp Positive (Rectified Linear Unit)</td>
     <td class="webnnColumn">relu</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Relu">Relu</a></td>
@@ -2262,8 +2292,8 @@ endfunction</code></td>
       or: if x &gt;= 0 then x else 0</td>
     <td>Exact</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Leaky Rectified Linear Unit</td>
     <td class="webnnColumn">leakyRelu</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LeakyRelu">LeakyRelu</a></td>
@@ -2285,8 +2315,8 @@ endfunction</code></td>
       or: f(x, alpha) = if x &gt;= 0 then x else alpha * x</td>
     <td>&lt;= Mul precision</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Parameterized Rectified Linear Unit</td>
     <td class="webnnColumn">prelu</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
@@ -2309,8 +2339,8 @@ endfunction</code></td>
       PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Thresholded Rectified Linear Unit</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ThresholdedRelu">ThresholdedRelu</a></td>
@@ -2332,8 +2362,8 @@ endfunction</code></td>
       f(x) = if x &gt; alpha then x else 0</td>
     <td>Exact</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Exponential Linear Unit</td>
     <td class="webnnColumn">elu</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Elu">Elu</a></td>
@@ -2356,8 +2386,8 @@ endfunction</code></td>
       or: f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (expₑ(x) - 1)</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Scaled Exponential Linear Unit</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Selu">Selu</a></td>
@@ -2466,8 +2496,8 @@ endfunction
       *but only for first element along that axis</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Soft Sign</td>
     <td class="webnnColumn">softsign</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softsign">Softsign</a></td>
@@ -2489,8 +2519,8 @@ endfunction
       or: f(x) = x / (1 + abs(x))</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Softplus</td>
     <td class="webnnColumn">softplus</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softplus">Softplus</a></td>
@@ -2512,8 +2542,8 @@ endfunction
       or: f(x) = logₑ(1 + expₑ(x))</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Affine</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Affine">Affine</a></td>
@@ -2535,8 +2565,8 @@ endfunction
   or: f(x, alpha, beta) = alpha * x + beta</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Symmetric signal shift</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
@@ -2560,8 +2590,8 @@ endfunction
       else y = 0</td>
     <td>Precision TBD</td>
   </tr>
-  <tr class="activationOperator">
-    <td>Activation (Deleted)</td>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Parametric Softplus</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ParametricSoftplus">ParametricSoftplus</a></td>
@@ -2584,8 +2614,8 @@ endfunction
   </td>
     <td>Precision TBD</td>
   </tr>
- <tr>
-    <td>Generation Random</td>
+ <tr class="generationOperator randomOperator">
+    <td>Generation, Random</td>
     <td>Random Normal</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormal">RandomNormal</a></td>
@@ -2606,8 +2636,8 @@ endfunction
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
   </tr>
- <tr>
-    <td>Generation Random</td>
+ <tr class="generationOperator randomOperator">
+    <td>Generation, Random</td>
     <td>Random Normal Like</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormalLike">RandomNormalLike</a></td>
@@ -2628,8 +2658,8 @@ endfunction
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
   </tr>
- <tr>
-    <td>Generation Random</td>
+ <tr class="generationOperator randomOperator">
+    <td>Generation, Random</td>
     <td>Random Uniform</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a></td>
@@ -2653,8 +2683,8 @@ endfunction
       if float: (rand() / randmax) * range + low</td>
     <td>Unpredictable</td>
   </tr>
- <tr>
-    <td>Generation Random</td>
+ <tr class="generationOperator randomOperator">
+    <td>Generation, Random</td>
     <td>Random Uniform Normal</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniformLike">RandomUniformLike</a></td>
@@ -2678,8 +2708,8 @@ endfunction
       if float: (rand() / randmax) * range + low</td>
     <td>Unpredictable</td>
   </tr>
- <tr>
-    <td>Generation Random</td>
+  <tr class="generationOperator randomOperator">
+    <td>Generation, Random</td>
     <td>Random Multinomial</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Multinomial">Multinomial</a></td>
@@ -2700,8 +2730,8 @@ endfunction
     <td>TODO:</td>
     <td>Unpredictable</td>
   </tr>
- <tr>
-    <td>Generation Matrix Multiplication</td>
+ <tr class="generationOperator matrixMultiplicationOperator">
+    <td>Generation, Matrix Multiplication</td>
     <td>Diagonal Matrix</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#EyeLike">EyeLike</a></td>
@@ -2729,7 +2759,7 @@ function EyeLike(input, k=0):
 endfunction</code></td>
     <td>Exact</td>
   </tr>
- <tr>
+ <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Generic Matrix Multiplication</td>
     <td class="webnnColumn">gemm</td>
@@ -2754,7 +2784,7 @@ endfunction</code></td>
       Y = Add(Mul(alpha, MatMul(A2, B2)), Mul(beta, C))</td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+ <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Matrix Multiplication</td>
     <td class="webnnColumn">matmul</td>
@@ -2780,7 +2810,7 @@ endfunction</code></td>
       The batch count can be broadcast too.</td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+ <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Convolve</td>
     <td class="webnnColumn">conv</td>
@@ -2835,7 +2865,7 @@ endfunction
 </code></td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+ <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Convolve Tranposed</td>
     <td class="webnnColumn">?</td>
@@ -2860,8 +2890,8 @@ endfunction
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
     <td>Precision TBD</td>
   </tr>
- <tr>
-    <td>Data Conversion</td>
+ <tr class="elementwiseOperator">
+    <td>Data Conversion, Elementwise</td>
     <td>Cast</td>
     <td class="webnnColumn">cast</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cast">Cast</a></td>
@@ -3650,10 +3680,10 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
-    <td>Data reorganization <a href="https://github.com/onnx/onnx/pull/1882">(Reverted)</a></td>
+    <td>Data reorganization</td>
     <td>Reverse axes</td>
     <td class="webnnColumn">?</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/pull/1804">Reverse</a></td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/pull/1804">Reverse</a> <a href="https://github.com/onnx/onnx/pull/1882">(Reverted)</a></td>
     <td class="dmlColumn">DML_OPERATOR_SLICE1<br/>with negative strides</td>
     <td class="xnnPackColumn">?</td>
     <td class="stableHloColumn">?</td>
@@ -4145,7 +4175,30 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td>int32 {i j k ..} = minindex(X Y Z …)</td>
     <td>Exact</td>
   </tr>
- <tr>
+  <tr class="imagingOperator">
+    <td>Imaging Operators</td>
+    <td>Resample</td>
+    <td class="webnnColumn">resample</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Resize">Resize</a></td>
+    <td class="dmlColumn">DML_OPERATOR_RESAMPLE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Output.Shape = Floor(Shape(Input) * Scales)
+      Output[output_i] = Input[output_i / Scales]</td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="imagingOperator">
     <td>Imaging Operators</td>
     <td>Resample Up</td>
     <td class="webnnColumn">resample</td>
@@ -4164,8 +4217,8 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="ncnnColumn">?</td>
     <td class="cntkColumn">?</td>
     <td class="futureColumn"></td>
-    <td>Y.Shape = Floor(Shape(X) * Scales)
-      Y[output_i] = X[output_i / Scales]</td>
+    <td>Output.Shape = Floor(Shape(Input) * Scales)
+      Output[output_i] = Input[output_i / Scales]</td>
     <td>Precision TBD</td>
   </tr>
   <tr class="controlFlowOperator">
@@ -4289,7 +4342,7 @@ output = (inputData - dataMean) / (std + 1e-9)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Spatial Normalization (independent batch&channel)</td>
-    <td class="webnnColumn">?</td>
+    <td class="webnnColumn">instanceNormalization</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
     <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
     axes = [2,3,4,...] excluding (N,C).
@@ -4329,11 +4382,11 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
   </tr>
   <tr class="normalizationOperator">
     <td>Normalization</td>
-    <td>Layer Normalization (independent leading batches)</td>
-    <td class="webnnColumn">?</td>
+    <td>Layer Normalization (independent leading batches) <a href="https://arxiv.org/abs/1803.08494">ref</a></td>
+    <td class="webnnColumn">layerNormalization</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/main/docs/Operators.md#LayerNormalization">LayerNormalization</a></td>
     <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
-    axes = [firstAxis, firstAxis+1, ...].
+    axes = [firstAxis, firstAxis+1, ..., input.rank - 1].
 DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     acrossChannels=false
     normalizeVariance=true
@@ -4372,7 +4425,7 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
     <td>Normalization</td>
     <td>Spatial&Channel Normalization</td>
     <td class="webnnColumn">?</td>
-    <td class="onnxColumn">NA (<a href="https://arxiv.org/abs/1803.08494">alternate layer normalization</a>)</td>
+    <td class="onnxColumn">NA (alternate layer normalization</a>)</td>
     <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
     axes = [1,2,3,...].</td>
     <td class="xnnPackColumn">?</td>
@@ -4509,7 +4562,7 @@ Output = Input / Pow(Biased, Beta)
 endaggregate</code></td>
     <td>Precision TBD</td>
   </tr>
- <tr>
+ <tr class="uncategorizedOperator">
     <td>Sparse tensor collation</td>
     <td>Nonzero Indices List</td>
     <td class="webnnColumn">?</td>
@@ -4532,7 +4585,7 @@ endaggregate</code></td>
     So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
     <td>Exact</td>
   </tr>
- <tr>
+ <tr class="uncategorizedOperator">
     <td>NGram</td>
     <td>Term Frequency Inverse Document Frequency Vectorizer</td>
     <td class="webnnColumn">?</td>
@@ -4555,7 +4608,7 @@ endaggregate</code></td>
 It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
     <td>Exact</td>
   </tr>
- <tr>
+ <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Recurrent Neural Network</td>
     <td class="webnnColumn">?</td>
@@ -4577,7 +4630,7 @@ It's basically a word count algorithm with the output histogram size equalling t
     <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
     <td>Precision TBD</td>
   </tr>
-  <tr>
+  <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Gated Recurrent Unit</td>
     <td class="webnnColumn">?</td>
@@ -4610,7 +4663,29 @@ b2 = B[1, :] + B[4*hidden_size, :];
 b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
-  <tr>
+  <tr class="aggregateOperator">
+    <td>Aggregate</td>
+    <td>Gated Recurrent Unit Unit</td>
+    <td class="webnnColumn">gruCell</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#GRUUnit">GRUUnit</a> (delete)</td>
+    <td class="dmlColumn">NA</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>???</td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Long Short Term Memory</td>
     <td class="webnnColumn">lstm</td>
@@ -4645,7 +4720,29 @@ b3 = B[2, :] + B[6*hidden_size, :];
 b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Precision TBD</td>
   </tr>
-  <tr>
+  <tr class="aggregateOperator">
+    <td>Aggregate</td>
+    <td>Long Short Term Memory Unit</td>
+    <td class="webnnColumn">lstmCell</td>
+    <td class="onnxColumn">NA</td>
+    <td class="dmlColumn">DML_OPERATOR_LSTM</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>One occurence of LSTM</td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Multihead Attention</td>
     <td class="webnnColumn">X</td>
@@ -4696,52 +4793,8 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
 endfunction</code></td>
     <td>Exact</td>
   </tr>
-  <tr>
-    <td>Input (Deleted)</td>
-    <td>Constant Fill</td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#GivenTensorFill">GivenTensorFill</a></td>
-    <td class="dmlColumn">NA experimental</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>unknown</td>
-    <td>Exact</td>
-  </tr>
-  <tr>
-    <td>Aggregate (Deleted)</td>
-    <td>Gated Recurrent Unit Unit</td>
-    <td class="webnnColumn">gru</td>
-    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#GRUUnit">GRUUnit</a></td>
-    <td class="dmlColumn">NA</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>???</td>
-    <td>Precision TBD</td>
-  </tr>
-  <tr>
-    <td>Training</td>
+  <tr class="elementwiseOperator">
+    <td>Elementwise, Training</td>
     <td>Dropout</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
@@ -4766,8 +4819,8 @@ For forward execution, ratio is 0, and so it's equivalent to: <code>F(X) = Ident
 notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
     <td>Unpredictable</td>
   </tr>
-  <tr>
-    <td>Deleted / Code Execution</td>
+  <tr class="uncategorizedOperator">
+    <td>Deleted, Code Execution</td>
     <td>A TENsor Kernel</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#ATen">ATen</a> <i>experimental and deprecated</i></td>
@@ -4791,7 +4844,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Scale Signal</td>
-    <td class="webnnColumn">?</td>
+    <td class="webnnColumn">mul</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#Scale">Scale</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
     <td class="xnnPackColumn">?</td>
@@ -4857,6 +4910,22 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td>Exact</td>
   </tr>
 </table>
+
+<script>
+    function toggleAllOperatorsOfIdSuffix(control, suffix)
+    {
+        let isChecked = control.checked;
+        let inputs = document.getElementsByTagName("input");
+        for (const input of inputs)
+        {
+            let name = input.id;
+            if (name.endsWith(suffix))
+            {
+                input.checked = isChecked;
+            }
+        }
+    }
+</script>
 
 </body>
 </html>
