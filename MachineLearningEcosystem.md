@@ -86,6 +86,8 @@ flowchart-elk TB
         AMD_GPU
         Qualcomm_GPU
         Intel_GPU
+        NPU
+        TPU
     end
 
     subgraph Unknowns
