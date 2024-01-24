@@ -3813,7 +3813,21 @@ outputIndices = [
     (inputIndices.channel / channelCountDivBlockCount) % blockSize + (inputIndices.width  * blockSize)
 ]
 
-output[outputIndices] = input[inputIndices];</code></td>
+output[outputIndices] = input[inputIndices];</code>
+
+NumPy:
+<code>
+# Using DCR mode (depth/column/row)
+b, c, h, w = x.shape
+tmp = np.reshape(x, [b, blocksize, blocksize, c // (blocksize**2), h, w])
+tmp = np.transpose(tmp, [0, 3, 4, 1, 5, 2])
+y = np.reshape(tmp, [b, c // (blocksize**2), h * blocksize, w * blocksize])
+
+# Using CRD mode (column/row/depth)
+b, c, h, w = x.shape
+tmp = np.reshape(x, [b, c // (blocksize ** 2), blocksize, blocksize, h, w])
+tmp = np.transpose(tmp, [0, 1, 4, 2, 5, 3])
+y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</code></td>
     <td>Exact</td>
   </tr>
   <tr class="reorganizationOperator">
