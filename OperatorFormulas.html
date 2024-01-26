@@ -4942,6 +4942,153 @@ It's basically a word count algorithm with the output histogram size equalling t
   </tr>
  <tr class="aggregateOperator">
     <td>Aggregate</td>
+    <td>Matrix Multiplication</td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#EinSum">EinSum</a></td>
+    <td class="dmlColumn">DML_OPERATOR_GEMM/TRANSPOSE/REDUCE</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td><details><summary>reduceSum(multiply(a.reshape(aToProductshape)[aToProductStep], B.reshape(bToProductshape)[bToProductStep]), axes = reductionAxes)</summary>
+
+Links:
+- https://github.com/onnx/onnx/pull/2504
+- https://ajcr.net/Basic-guide-to-einsum/
+- https://numpy.org/devdocs/reference/generated/numpy.einsum.html
+- https://www.tensorflow.org/api_docs/python/tf/einsum
+- https://pytorch.org/docs/1.2.0/_modules/torch/functional.html
+- https://numpy.org/doc/stable/reference/generated/numpy.dot.html
+- https://numpy.org/doc/stable/reference/generated/numpy.matmul.html
+- https://ajcr.net/Basic-guide-to-einsum/
+
+Einsum combines tranposition/multiplication/sum reduction into a single operator using a concise string notation of comma separated input axes and an output (e.g. "i,j->ij" with two 1D inputs and a 2D output), which can represent the following operators: identity, diag, trace, transpose, sum, dot product, matmul, elementwise multiplication, inner product, outer product. For example:
+
+- i,j->ij means product[i][j] = input0[i] * input1[j]; output[i][j] = product[i][j], two 1D vectors perpendicular to each other, broadcasted, and multiplied to yield a 2D tensor.
+- "ij,jk->ik" means product[i][k][j] = input0[i][j] * input1[k][j]; output[i][k] = sum(product[i][k]) which is the classic matrix "multiplication" (np.matmul).
+- "ij,i->" means product[i][j] = sum(input0[i][j] * input1[i]); output = sum(product, axis=(0,1)) where every element in a 2D input0 is multiplied by the corresponding row elements in 1D input1 and then all summed into a 0D output scalar.
+These can all be expressed generically via...
+
+ONNX general form:
+
+<code>
+ReduceSum(
+    VariadicMul(
+        Reproject(A, aAxesToProductAxes),
+        Reproject(B, bAxesToProductAxes),
+    ),
+    reductionAxes,
+    keepdims=false
+)
+</code>
+
+Numpy Python general form:
+
+<code>
+np.sum(
+    np.multiply(
+        A.reshape(aToProductshape)[aToProductStep],
+        B.reshape(bToProductshape)[bToProductStep],
+    ),
+    axis = reductionAxes
+)
+</code>
+
+VariadicMul and Reproject are helper operators (not actual ONNX). VariadicMul is a variant of Mul that accepts arbitrary input tensors, like ONNX Sum is to Add. Reproject reprojects the input axes to be compatible with the axes order of the intermediate product, using a combination of Transpose, Unsqueeze, and Range+GatherElements along the diagonal (numpy.diag) depending on the input axes and notation.
+
+Any of these steps may be a nop, which is how the generic form can represent any one of 10 operators. For example, if all output axes are expected (reductionAxes is empty), then the ReduceSum step is identity. If there is only one input tensor, then the VariadicMul is identity. If the input axes are homogenous and listed in the same order as the output tensor, then the Reproject step is identity.
+
+Parsing notation
+The difficult part isn't the execution (these fundamentals are already supported in DirectML) but rather parsing the input/output axes from the string and mapping them into actionable operations:
+
+Concatenate all the unique input axes in alphabetic order (ignore the output on the right of the arrow) to yield the intermediate product tensor's axes. "j,i" yields "ij". "ik,kj" yields "ijk". "cx,by,az" yields "abcxyz". Note the axes in the final output may only include axes found in the original inputs (else error), an axis name may not be reused more than once in the output (axes can be repeated in input assuming both uses have the same dimension size), and the output rank will be equal to or less than the product tensor rank. Note case matters, where aZ is reordered Za (since ASCII Z < a).
+Extract the output axes after the arrow (e.g. the ij from i,j->ij). Mentally you can reorder things, putting the right side of the arrow on the left like normal assignment. So i,j->ij becomes ij = i,j.
+If there is no arrow output specified (e.g. "i,j", which differs from "i,j->" where an arrow explicitly yields a 0D scalar) then the output tensor shape defaults to the product tensor ("i,j" becomes "i,j->ij"). If any axis appears more than once in the input terms (either within the same input term or different terms), remove the axis from the output shape ("ik,ij" yields "jk", "iji" yields "j", "i,ik" yields "k", "i,i" yields scalar "").
+Multiply all comma delimited terms for the intermediate product. ij = i,j (originally i,j->ij) becomes ij = i * j, which means product[i][j] = input0[i] * input1[j].
+Normalize all inputs to be broadcast compatible. e.g. product[i][j] = input0[i][0] * input1[0][j]. Using ONNX, this would require a mix of operators (Unsqueeze, Transpose...) whereas with DirectML, these can all be expressed directly via strides.
+If any axes present in the intermediate product are missing from the final output then put those into reductionAxes (e.g. einsum('ij->j', A) is missing i, and einsum('ij,jk', A, B) with implicit output i,k is missing j). Then get the sum along the reduced axes, ReduceSum(product, axes=j, keepdims=false).
+Transpose the reduced sum to the final output order (e.g "i,j->ji" yields product[i][j] which is remapped to output[j][i]). Note this step doesn't actually need a separate tensor and can be folded into earlier steps, using output strides in the ReduceSum or reordering the input broadcast normalization.
+An efficient implementation would attempt to eliminate steps that yield identity or intermediates that can be handled better by another operator (e.g. for MatMul, the product tensor can be eliminated by using the MatMul operator instead).
+
+Examples:
+
+<code>
+#E = np.einsum('ii->i', A)
+A = np.array([[0,1,2],[3,4,5],[6,7,8]])
+Areshaped = A.reshape([9])[0:9:4]) # Or A2.diagonal().
+product = np.multiply(Areshaped, identity) # Nop for only one input term.
+np.sum(product, axis=()) # Nop given no output axes removed from product.
+#Z = np.einsum('ij,kj->ik', A, B)
+#Z = np.inner(A, B)
+A = np.array([[0,1],[2,3]])
+B = np.array([[1,2],[3,4]])
+Areshaped = A.reshape([2,1,2])
+Breshaped = B.reshape([1,2,2])
+Z = np.multiply(Areshaped, Breshaped)
+Z = Z.sum(Z, axis=2)
+</code>
+
+More examples:
+Given...
+
+<code>
+A0 = np.array(2)
+B0 = np.array(3)
+A1 = np.array([0,1,2])
+B1 = np.array([3,4,5])
+A2 = np.array([[0,1],[2,3]])
+B2 = np.array([[1,2],[3,4]])
+A3 = np.array([[[0,1],[2,3]],[[4,5],[6,7]]])
+B3 = np.array([[[1,2],[3,4]],[[5,6],[7,8]]])
+</code>
+
+<table>
+<tr><th>Call signature</th><th>NumPy equivalent</th><th>Description</th></tr>
+<tr><td>('i', A1)</td><td>A1</td><td>returns a view of A1</td></tr>
+<tr><td>('i->', A1)</td><td>sum(A1)</td><td>sums the values of A1</td></tr>
+<tr><td>('i,i->i', A1, B1)</td><td>A1 * B1</td><td>element-wise multiplication of A1 and B1</td></tr>
+<tr><td>('i,i->', A1, B1)</td><td>inner(A1, B1) or dot(A1, B1)</td><td>inner product of A1 and B1</td></tr>
+<tr><td>('i,i', A1, B1)</td><td>inner(A1, B1) or dot(A1, B1)</td><td>inner product of A1 and B1</td></tr>
+<tr><td>('i,j->ij', A1, B1)</td><td>outer(A1, B1)</td><td>outer product of A1 and B1</td></tr>
+<tr><td>('ij->ij', A2)</td><td>A2</td><td>returns a view of A2</td></tr>
+<tr><td>('ij', A2)</td><td>A2</td><td>returns a view of A2</td></tr>
+<tr><td>('ji', A2)</td><td>A2.T</td><td>view transpose of A2</td></tr>
+<tr><td>('ji->ij', A2)</td><td>A2.T</td><td>view transpose of A2</td></tr>
+<tr><td>('ii->i', A2)</td><td>diag(A2)</td><td>view main diagonal of A2</td></tr>
+<tr><td>('ii->', A2)</td><td>trace(A2)</td><td>sums main diagonal of A2</td></tr>
+<tr><td>('ij->', A2)</td><td>sum(A2)</td><td>sums the values of A2</td></tr>
+<tr><td>('ij->j', A2)</td><td>sum(A2, axis=0)</td><td>sum down the columns of A2 (across rows)</td></tr>
+<tr><td>('ij->i', A2)</td><td>sum(A2, axis=1)</td><td>sum horizontally along the rows of A2</td></tr>
+<tr><td>('ij,ij->ij', A2, B2)</td><td>A2 * B2</td><td>element-wise multiplication of A2 and B2</td></tr>
+<tr><td>('ij,ji->ij', A2, B2)</td><td>A2 * B2.transpose()</td><td>element-wise multiplication of A2 and B2.T</td></tr>
+<tr><td>('ij,jk', A2, B2)</td><td>matmul(A2, B2) or dot(A2, B2)</td><td>matrix multiplication of A2 and B2</td></tr>
+<tr><td>('ij,jk->ik', A2, B2)</td><td>matmul(A2, B2) or dot(A2, B2)</td><td>matrix multiplication of A2 and B2</td></tr>
+<tr><td>('bij,bjk->bik', A2, B2)</td><td>matmul(A3, B3)</td><td>matrix multiplication of A3 and B3 (a stack of 2D matrices)</td></tr>
+<tr><td>('bij,bkj->bik', A2, B2)</td><td>matmul(A3, transpose(B3))</td><td>matrix multiplication of A3 and B3 (a stack of 2D matrices)</td></tr>
+<tr><td>('ij,kj->ik', A2, B2)</td><td>inner(A2, B2)</td><td>inner product of A2 and B2</td></tr>
+<tr><td>('ij,kj->ikj', A2, B2)</td><td>A2[:, None] * B2</td><td>each row of A2 multiplied by B2</td></tr>
+<tr><td>('ij,kl->ijkl', A2, B2)</td><td>A2[:, :, None, None] * B2</td><td>each value of A2 multiplied by B2</td></tr>
+<tr><td>(',ij', 3, B2)</td><td></td><td>Scalar times array: array([[ 0, 3, 6], [ 9, 12, 15]])</td></tr>
+<tr><td>("ij,j", A2, B1)</td><td>matvec(A2, B1)</td><td>Matrix and vector.</td></tr>
+<tr><td>("ii,ii->i", A2, B2)</td><td>A2.diag() * B2.diag()</td><td>diagonals multiplied by each other</td></tr>
+<tr><td>("ii,ii->", A2, B2)</td><td>dot(A2.diag(), B2.diag())</td><td>dot product of diagonals</td></tr>
+</table>
+</details></td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="aggregateOperator">
+    <td>Aggregate</td>
     <td>Recurrent Neural Network</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RNN">RNN</a></td>
