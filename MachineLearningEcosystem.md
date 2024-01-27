@@ -28,6 +28,7 @@ flowchart-elk TB
         subgraph ORT_EP_subgraph[ ]
             ORT_EPs[EPs: CPU DML CUDA OpenVINO ROCM WebNN WebGPU QNN CoreML]
         end
+        Apple_MLX[<a href='https://github.com/ml-explore/mlx'>Apple <abbr title='Machine Learning Explore'>MLX</abbr></a>]
         ONEIROS_Keras
         Facebook_Caffe2
         MILA_Theano[<a href='https://github.com/Theano/Theano'><abbr title='Montreal Institute for Learning Algorithms Theano'>MILA Theano</abbr></a>]
@@ -140,6 +141,8 @@ flowchart-elk TB
     Apple_CoreML --> Apple_MPS
     Apple_CoreML --> Apple_ANE
     Apple_MPS --> MSL
+    Apple_MLX --> Apple_MPS
+    Apple_MLX --> Apple_Metal
     PyTorch --> NVidia_CUDA
     Google_TensorFlow --> NVidia_CUDA
     PyTorch --> Microsoft_DirectML
