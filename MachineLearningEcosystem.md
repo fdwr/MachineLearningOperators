@@ -182,6 +182,7 @@ TODO: Figure out how to add links to Mermaid diagram.
 
 TODO: Integrate all/some of these into diagram...
 
+- AMD ROCM HIP Heterogeneous-computing Interface for Portability https://github.com/ROCm/HIP https://rocmdocs.amd.com/projects/HIP/
 - PyTorch https://pytorch.org/docs/stable/generated/
 - TensorFlow https://www.tensorflow.org/api_docs/python/
 - ONNX Runtime https://onnxruntime.ai/
@@ -196,15 +197,23 @@ TODO: Integrate all/some of these into diagram...
 - OpenHLO?
 - IREE team? OpenXLA initiative.
 - BLAS
+- SNPE Snapdragon Neural Processing SDK
 
 TODO: Add links:
     https://halide-lang.org/
     https://github.com/halide/Halide
 TODO: Add links:
     ONEIROS_Keras
-        JAX
-        TF
-        PyTorch
+     -> JAX
+     -> TF
+     -> PyTorch
+    HIP
+     -> AMD
+     -> NVidia
+    Khronos_OpenCL - "Both AMD and Nvidia support OpenCL 1.2"
+     -> AMD
+     -> NVidia
+     HIP is basically C++ like CUDA
 
 - High level: ONNX, PT, TF
 - Low level instructions: x86, HLSL, CUDA...
