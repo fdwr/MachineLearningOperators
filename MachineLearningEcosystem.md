@@ -45,11 +45,18 @@ flowchart-elk TB
         Apple_BNNS[<a href='https://developer.apple.com/documentation/accelerate/bnns'>Apple <abbr title='Basic Neural Network Subroutines'>BNNS</abbr></a>]
         Google_NNAPI[<a href='https://developer.android.com/ndk/guides/neuralnetworks'>Google <abbr title='Android Neural Network API'>NNAPI</abbr></a>]
         Qualcomm_QNN
-        NVidia_cuDNN[NVidia <abbr title='CUDA Deep Neural Network'>cuDNN</abbr>]
+        NVidia_cuDNN[<a href="https://docs.nvidia.com/deeplearning/cudnn/developer-guide/index.html">NVidia <abbr title='CUDA Deep Neural Network'>cuDNN</abbr></a>]
         Microsoft_CNTK[Microsoft <abbr title='Cognitive Tooklit'>CNTK</abbr>]
         Tencent_NCNN[<a href='https://github.com/Tencent/ncnn/wiki#faq'>Tencent <abbr title='Next/New/Naive/Neon Convolutional Neural Network'>NCNN</abbr></a>]
         W3C_WebNN[<a href='https://www.w3.org/TR/webnn/'><abbr title='World Wide Web, Web Neural Network'>W3C WebNN</abbr></a>]
         NVidia_TensorRT[NVidia <abbr title='Tensor Runtime'>TensorRT</abbr>]
+        Google_JAX[<a href='https://jax.readthedocs.io/en/latest/' title="NumPy-like API">Google <abbr title='Just After Execution'>JAX</abbr></a>]
+    end
+
+    subgraph Instruction_Compilers[<abbr title='Lower level individual instructions rather than operator granularity'>Instruction Compilers</abbr>]
+        LLVM_MLIR[<a href='https://mlir.llvm.org/'><abbr title='Low Level Virtual Machine Multi-level Intermediate Representation'>LLVM MLIR</abbr></a>]
+        IREE_MLIR[<a href='https://iree.dev/'><abbr title='Intermediate Representation Execution Environment'>IREE</abbr></a>]
+        Intel_PlaidML[<a href="https://plaidml.github.io/plaidml/"><abbr title='Tile Based Machine Learning'>Intel PlaidML</abbr></a>]
     end
 
     subgraph Compute_Shading_Languages
@@ -95,9 +102,7 @@ flowchart-elk TB
         Apache_TVM[<a href='https://tvm.apache.org/docs/'>Apache <abbr title='Tensor Virtual Machine'>TVM</abbr></a>]
         Halide[<a href='https://halide-lang.org/'>Halide</a>]
         OpenXLA_XLA[<a href='https://github.com/openxla/xla'><abbr title='Open Accelerated Linear Algebra'>OpenXLA XLA</abbr></a>]
-        LLVM_MLIR[<a href='https://mlir.llvm.org/'><abbr title='Low Level Virtual Machine Multi-level Intermediate Representation'>LLVM MLIR</abbr></a>]
         NVidia_Triton_MLIR
-        Google_JAX[<a href='https://jax.readthedocs.io/en/latest/'>Google <abbr title='Just After Execution'>JAX</abbr></a>]
     end
 
     ONNX --> ONNX_File
@@ -185,24 +190,34 @@ TODO: Integrate all/some of these into diagram...
 - AMD ROCM HIP Heterogeneous-computing Interface for Portability https://github.com/ROCm/HIP https://rocmdocs.amd.com/projects/HIP/
 - PyTorch https://pytorch.org/docs/stable/generated/
 - TensorFlow https://www.tensorflow.org/api_docs/python/
-- ONNX Runtime https://onnxruntime.ai/
-- DirectML https://learn.microsoft.com/en-us/windows/ai/directml/dml-intro https://learn.microsoft.com/en-us/windows/win32/api/directml/ns-directml-dml_element_wise_sqrt_operator_desc
-- NVIDIA® CUDA® Deep Neural Network LIbrary (cuDNN) " is a GPU-accelerated library of primitives for deep neural networks. It provides highly tuned implementations of operations arising frequently - in DNN applications." https://docs.nvidia.com/deeplearning/cudnn/developer-guide/index.html
-- Intel plaidML "PlaidML is a portable tensor compiler." https://www.intel.com/content/www/us/en/artificial-intelligence/plaidml.html
 - LLVM IR
-- CUDA
 - AMD Vitis ORT EP https://github.com/Xilinx/Vitis-AI, https://onnxruntime.ai/docs/execution-providers/Vitis-AI-ExecutionProvider.html
 - Vitis AI DPU Deep Learning Processor Unit
 - https://mlir.llvm.org/docs/Dialects/Linalg/
 - OpenHLO?
-- IREE team? OpenXLA initiative.
-- BLAS
-- SNPE Snapdragon Neural Processing SDK
+- BLAS Basic Linear Algebra Subprograms
+- SNPE Snapdragon Neural Processing Engine
 
 TODO: Add links:
     https://halide-lang.org/
     https://github.com/halide/Halide
 TODO: Add links:
+    MLIR IREE compiler and runtime
+        PyTorch -> IREE
+        JAX -> IREE
+        TensorFlow -> IREE
+        TensorFlowLite -> IREE
+        IREE -> LLVM
+        IREE -> SPIR-V
+        IREE -> VMVX (op dialect) Virtual Machine Vector Extensions https://iree.dev/reference/mlir-dialects/VMVX/
+    Intel_PlaidML
+        -> OpenCL
+        -> OpenGL
+        -> LLVM
+        -> CUDA
+    LLVM
+        -> x86
+        -> WASM
     ONEIROS_Keras
      -> JAX
      -> TF
