@@ -1,3 +1,5 @@
+Mermaid diagrams appear broken on GitHub now since some backend change. So this diagram is all messed up.
+
 This may have typos, incorrect connections, and incomplete nodes.
 
 ```mermaid
