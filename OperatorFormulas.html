@@ -1481,8 +1481,8 @@ endfunction</code></td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
-    <td>Equals</td>
-    <td class="webnnColumn">equals</td>
+    <td>Equal</td>
+    <td class="webnnColumn">equal</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Equal">Equal</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_EQUALS</td>
     <td class="xnnPackColumn">?</td>
@@ -1501,6 +1501,30 @@ endfunction</code></td>
     <td class="oneDnnColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x == y)</td>
+    <td>Exact</td>
+  </tr>
+  <tr class="elementwiseOperator">
+    <td>Elementwise Comparison</td>
+    <td>Not Equal</td>
+    <td class="webnnColumn">not equal</td>
+    <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Not">Not</a> and <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Equal">Equal</a></td>
+    <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_NOT and EQUALS</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>f(x, y) = (x != y)</td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
@@ -3675,7 +3699,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
     <td class="futureColumn"></td>
-    <td>Opposite of gather. Write values from updates into data at the given indices. If two output element indices overlap, there is no documented winner, but last write wins in practice.
+    <td>Opposite of gather. Write values from updates into data at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
 <code>
 output = input
 for each coordinate in indices tensor
@@ -4942,7 +4966,7 @@ It's basically a word count algorithm with the output histogram size equalling t
   </tr>
  <tr class="aggregateOperator">
     <td>Aggregate</td>
-    <td>Matrix Multiplication</td>
+    <td>Einstein Summation</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#EinSum">EinSum</a></td>
     <td class="dmlColumn">DML_OPERATOR_GEMM/TRANSPOSE/REDUCE</td>
