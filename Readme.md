@@ -6,4 +6,4 @@ date: 2024-01-25
 ---
 
 - http://fdwr.github.io/MachineLearningOperators/OperatorFormulas.html
-- [Machine Learning Ecosystem diagram](MachineLearningEcosystem.svg) ([markdown](MachineLearningEcosystem.md))
+- [Machine Learning Ecosystem diagram](http://fdwr.github.io/MachineLearningOperators/MachineLearningEcosystem.svg) ([markdown](MachineLearningEcosystem.md))
