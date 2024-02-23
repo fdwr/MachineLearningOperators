@@ -1,4 +1,13 @@
-Mermaid diagrams appear broken on GitHub now since some backend change. So this diagram is all messed up.
+<!--
+To convert this to SVG, use mermaid-cli (https://www.npmjs.com/package/@mermaid-js/mermaid-cli). e.g.:
+
+path %path%;d:\programs\code\node-v16.17.1-win-x64\
+npm install -g @mermaid-js/mermaid-cli
+cd d:\src\MachineLearningOperators\
+mmdc -i .\MachineLearningEcosystem.md -o .\MachineLearningEcosystem.svg
+-->
+
+Mermaid diagrams appear broken now on GitHub since some backend change. So this diagram is all messed up.
 
 This may have typos, incorrect connections, and incomplete nodes.
 
