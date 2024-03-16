@@ -4042,7 +4042,7 @@ endfor
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Global Average Pooling</td>
+    <td>Pool Global Average</td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
     <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
@@ -4073,7 +4073,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Average Pooling</td>
+    <td>Pool Average</td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
     <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
@@ -4097,7 +4097,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Global Maximum Pooling</td>
+    <td>Pool Global Maximum</td>
     <td class="webnnColumn">maxPool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_MAX_POOLING with output being 1 element</td>
@@ -4121,7 +4121,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Maximum Pooling</td>
+    <td>Pool Maximum</td>
     <td class="webnnColumn">maxPool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxPool">MaxPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_MAX_POOLING</td>
@@ -4145,7 +4145,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Maximum Unpooling</td>
+    <td>Unpool Maximum</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#MaxUnpool">MaxUnpool</a></td>
     <td class="dmlColumn">---</td>
@@ -4171,7 +4171,7 @@ Then write each value from the input tensor into the output tensor at the elemen
 </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Lebesgue Pooling</td>
+    <td>Pool Lebesgue</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpPool">LpPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_LP_POOLING</td>
@@ -4195,7 +4195,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Global Lebesgue Pooling</td>
+    <td>Pool Global Lebesgue</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalLpPool">GlobalLpPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_LP_POOLING with output being 1 element</td>
@@ -4221,7 +4221,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Maximum Region of Interest Pooling</td>
+    <td>Pool Maximum Region of Interest</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxRoiPool">MaxRoiPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_ROI_POOLING (only POOLING_MAX is supported)</td>
@@ -6886,11 +6886,35 @@ OperationCode{
   ANEURALNETWORKS_REVERSE = 105
 }
 
+MIL (model intermediate language) https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS15.activation.gelu
 
 Add pooling link:
 Fine-Grained Vehicle Classification With Channel Max Pooling Modified CNNs
     https://ieeexplore.ieee.org/document/8648206
     DML/TF/PT limited to dimensions 2 to N-1.
+
+jax.lax.broadcast
+  https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.broadcast.html
+  Adds leading shape. So input size [2,3,4] with shape [5,6] yields [5,6,2,3,4]
+broadcast_shapes(*shapes)
+  https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.broadcast_shapes.html
+  Returns the shape that results from NumPy broadcasting of shapes
+BroadcastInDim
+  operand	XlaOp	The array to duplicate
+  out_dim_size	ArraySlice<int64>	The sizes of the dimensions of the target shape
+  broadcast_dimensions	ArraySlice<int64>	Which dimension in the target shape each dimension of the operand shape corresponds to
+  https://openxla.org/xla/operation_semantics#broadcastindim
+    Given input shape [1,5] and wanting to broadcast to [2,3,4,5,6]
+      out_dim_size = [2,3,4,5,6]
+      broadcast_dimensions = [1,3]
+      So:
+        output.shape[0..<5] = 1  // initialize to 1's
+        output.shape[1] = input.shape[0] (1)
+        output.shape[3] = input.shape[1] (5)
+    Equivalent to reshape([1,(1),1,(5),1]).expand([2,3,4,5,6])
+    "The order of broadcast dimensions must be strictly increasing." https://openxla.org/xla/broadcasting#formal_definition
+    No duplicate axes
+    So, it cannot be a transpose() operation
 -->
 
 
