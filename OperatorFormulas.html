@@ -58,6 +58,7 @@ th {
 .cntkColumn { display: none; }
 .openVinoColumn { display: none; }
 .oneDnnColumn { display: none; }
+.annColumn { display: none; }
 .futureColumn { display: none; }
 
 /* Show hidden content when the checkbox is checked */
@@ -91,6 +92,7 @@ th {
 #toggleNcnnColumn:checked ~ * .ncnnColumn { display: table-cell; }
 #toggleCntkColumn:checked ~ * .cntkColumn { display: table-cell; }
 #toggleOpenVinoColumn:checked ~ * .openVinoColumn { display: table-cell; }
+#toggleAnnColumn:checked ~ * .annColumn { display: table-cell; }
 #toggleOneDnnColumn:checked ~ * .oneDnnColumn { display: table-cell; }
 </style>
 </head>
@@ -156,6 +158,7 @@ th {
 <input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
 <input type="checkbox" id="toggleOpenVinoColumn" checked="on"/><label for="toggleOpenVinoColumn">OpenVINO (Intel <b>V</b>isual <b>I</b>nference and <b>N</b>eural Network <b>O</b>ptimization) <a href="https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html">(info)</a> <a href="https://docs.openvino.ai/2023.0/api/ie_python_api/_autosummary/openvino.runtime.opset1.html">(ops)</a></label><br/>
 <input type="checkbox" id="toggleOneDnnColumn" checked="on"/><label for="toggleOneDnnColumn">OneDNN (Intel <b>D</b>eep <b>N</b>eural <b>N</b>etwork Library <a href="https://oneapi-src.github.io/oneDNN/group_dnnl_api_primitives.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleAnnColumn" checked="on"/><label for="toggleAnnColumn">Android NDK (Google <b>N</b>neural Network <b>D</b>evelopment <b>K</b>it) <a href="https://developer.android.com/ndk/guides">(info)</a> <a href="https://developer.android.com/ndk/reference/group/neural-networks">(ops)</a></label><br/>
 <br/>
 
 <br/><br/>
@@ -184,6 +187,7 @@ th {
       <th class="cntkColumn"><span title="Updated 2024-01-19"><a href="https://github.com/microsoft/CNTK/blob/ae9c9c7c5f9e6072cc9c94c254f816dbdc1c5be6/Source/CNTKv2LibraryDll/API/CNTKLibrary.h#L82">CNTK</a></span></th>
       <th class="openVinoColumn"><span title="Updated 2024-01-19"><a href="https://docs.openvino.ai/2023.0/groupov_element_cpp_api.html#doxid-group-ov-element-cpp-api">OpenVINO</a></span></th>
       <th class="oneDnnColumn"><span title="Updated 2024-01-19"><a href="https://oneapi-src.github.io/oneDNN/enum_dnnl_data_type_t.html">OneDNN</a></span></th>
+      <th class="annColumn"><span title="Updated 2024-03-26"><a href="https://developer.android.com/ndk/reference/group/neural-networks#operandcode">ANN</a></span></th>
       <th class="futureColumn">(for future additions)</th>
     </tr>
     <tr>
@@ -207,6 +211,7 @@ th {
       <td class="cntkColumn">?</td>
       <td class="openVinoColumn">ov::element::Type_t::u1</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -230,6 +235,7 @@ th {
       <td class="cntkColumn">?</td>
       <td class="openVinoColumn">ov::element::Type_t::u4</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -253,6 +259,7 @@ th {
       <td class="cntkColumn">CNTK.DataType.UChar</td>
       <td class="openVinoColumn">ov::element::Type_t::u8</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_u8</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -276,6 +283,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::u16</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -299,6 +307,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::u32</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">ANEURALNETWORKS_UINT32</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -322,6 +331,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -345,6 +355,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::u64</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -368,6 +379,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::i4</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -391,6 +403,7 @@ th {
       <td class="cntkColumn">CNTK.DataType.Int8</td>
       <td class="openVinoColumn">ov::element::Type_t::i8</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_s8</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -414,6 +427,7 @@ th {
       <td class="cntkColumn">CNTK.DataType.Int16</td>
       <td class="openVinoColumn">ov::element::Type_t::i16</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -437,6 +451,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::i32</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_s32</td>
+      <td class="annColumn">ANEURALNETWORKS_INT32</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -460,6 +475,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -483,6 +499,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::i64</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -506,6 +523,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f8_e4m3</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -529,6 +547,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -552,6 +571,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f8_e5m2</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -575,6 +595,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -598,6 +619,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -621,6 +643,7 @@ th {
       <td class="cntkColumn">CNTK.DataType.Float16</td>
       <td class="openVinoColumn">ov::element::Type_t::f16</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f16</td>
+      <td class="annColumn">ANEURALNETWORKS_FLOAT16</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -644,6 +667,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::bf16</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_bf16</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -667,6 +691,7 @@ th {
       <td class="cntkColumn">CNTK.DataType.Float</td>
       <td class="openVinoColumn">ov::element::Type_t::f32</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f32</td>
+      <td class="annColumn">ANEURALNETWORKS_FLOAT32</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -690,6 +715,7 @@ th {
       <td class="cntkColumn">CNTK.DataType.Double</td>
       <td class="openVinoColumn">ov::element::Type_t::f64</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_f64</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -713,6 +739,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -736,6 +763,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -759,6 +787,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -782,6 +811,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::boolean</td>
       <td class="oneDnnColumn">dnnl_data_type_t::dnnl_boolean</td>
+      <td class="annColumn">ANEURALNETWORKS_BOOL8</td>
       <td class="futureColumn">?</td>
     </tr>
     <tr>
@@ -805,6 +835,7 @@ th {
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">x</td>
       <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
     </tr>
     <!--
@@ -828,6 +859,7 @@ th {
       <td class="cntkColumn">?</td>
       <td class="openVinoColumn">?</td>
       <td class="oneDnnColumn">?</td>
+      <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
       <td class="details"></td>
     </tr>
@@ -860,6 +892,7 @@ th {
     <th class="cntkColumn"><a href="https://microsoft.github.io/CNTK-R/reference/index.html">CNTK</a></th>
     <th class="openVinoColumn"><a href="https://docs.openvino.ai/2023.0/api/ie_python_api/_autosummary/openvino.runtime.opset1.html">OpenVINO</a></th>
     <th class="oneDnnColumn"><a href="https://oneapi-src.github.io/oneDNN/group_dnnl_api_primitives.html">OneDNN</a></th>
+    <th class="annColumn"><a href="https://developer.android.com/ndk/reference/group/neural-networks">ANN</a></th>
     <th class="futureColumn">(for future additions)</th>
     <th valign="top">Formula</th>
     <th>Precision</th>
@@ -885,6 +918,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">activation_identity</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">dnnl::reorder</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>Identity(X) = X</code></td>
     <td>Exact</td>
@@ -909,6 +943,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>Constant() = Value</code></td>
     <td>Exact</td>
@@ -933,6 +968,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>ConstantOfShape(scalarTensorValue, inputOfDesiredShape) = Expand(scalarTensorValue, Shape(inputOfDesiredShape))</code></td>
     <td>Exact</td>
@@ -957,6 +993,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x + y</code></td>
     <td>1 ULP</td>
@@ -981,6 +1018,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x - y</code></td>
     <td>1 ULP</td>
@@ -1005,6 +1043,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x * y</code></td>
     <td>1 ULP</td>
@@ -1029,6 +1068,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x / y</code></td>
     <td>1 ULP</td>
@@ -1053,6 +1093,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = 1 / x</code></td>
     <td>1 ULP</td>
@@ -1077,6 +1118,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
     <td>2 ULP</td>
@@ -1101,6 +1143,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
     <td>2 ULP</td>
@@ -1125,6 +1168,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, exponent) = pow(x, exponent)</code></td>
     <td>Precision TBD</td>
@@ -1149,6 +1193,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
     <td>Precision TBD</td>
@@ -1173,6 +1218,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
     <td>Precision TBD</td>
@@ -1197,6 +1243,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
     <td>Precision TBD</td>
@@ -1221,6 +1268,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
     <td>Precision TBD</td>
@@ -1245,6 +1293,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = abs(x)</code></td>
     <td>Exact</td>
@@ -1269,6 +1318,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = -x</code></td>
     <td>Exact</td>
@@ -1293,6 +1343,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = ceil(x)</code></td>
     <td>Exact</td>
@@ -1317,6 +1368,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = floor(x)</code></td>
     <td>Exact</td>
@@ -1341,8 +1393,9 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
-    <td><code>f(x, min, max) = clamp(x, min, max)</code></td>
+    <td><code>f(x, minValue, maxValue) = min(max(x, maxValue), minValue)</code></td>
     <td>Exact</td>
   </tr>
   <tr class="elementwiseOperator">
@@ -1365,6 +1418,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><details><summary><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
 or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code></summary>
@@ -1412,6 +1466,7 @@ double f(double x)
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = isnan(x)
       where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
@@ -1440,6 +1495,7 @@ double f(double x)
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>output.shape = input.shape
 for every coordinate in input tensor
@@ -1471,6 +1527,7 @@ endfor
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>function Sign(x)
     if x == 0 then 0
@@ -1499,6 +1556,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x == y)</td>
     <td>Exact</td>
@@ -1523,6 +1581,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x != y)</td>
     <td>Exact</td>
@@ -1547,6 +1606,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &gt; y)</td>
     <td>Exact</td>
@@ -1571,6 +1631,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &lt; y)</td>
     <td>Exact</td>
@@ -1595,6 +1656,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &gt; y)</td>
     <td>Exact</td>
@@ -1619,6 +1681,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = (x &lt; y)</td>
     <td>Exact</td>
@@ -1643,6 +1706,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = ~x</td>
     <td>Exact</td>
@@ -1667,6 +1731,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &amp; y</td>
     <td>Exact</td>
@@ -1691,6 +1756,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x | y</td>
     <td>Exact</td>
@@ -1715,6 +1781,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x ^ y</td>
     <td>Exact</td>
@@ -1739,6 +1806,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &lt;&lt; y</td>
     <td>Exact</td>
@@ -1763,6 +1831,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &gt;&gt; y</td>
     <td>Exact</td>
@@ -1787,6 +1856,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = add one to count for each set bit in x</td>
     <td>Exact</td>
@@ -1811,6 +1881,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = !x</td>
     <td>Exact</td>
@@ -1835,6 +1906,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x &amp;&amp; y</td>
     <td>Exact</td>
@@ -1859,6 +1931,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = x || y</td>
     <td>Exact</td>
@@ -1883,6 +1956,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y) = !!x xor !!y</td>
     <td>Exact</td>
@@ -1907,6 +1981,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = sin(x)</td>
     <td>Precision TBD</td>
@@ -1931,6 +2006,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = cos(x)</td>
     <td>Precision TBD</td>
@@ -1955,6 +2031,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = tan(x)</td>
     <td>Precision TBD</td>
@@ -1979,6 +2056,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = asin(x)</td>
     <td>Precision TBD</td>
@@ -2003,6 +2081,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = acos(x)</td>
     <td>Precision TBD</td>
@@ -2027,6 +2106,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = atan(x)</td>
     <td>Precision TBD</td>
@@ -2051,6 +2131,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = sinh(x)</td>
     <td>Precision TBD</td>
@@ -2075,6 +2156,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = cosh(x)</td>
     <td>Precision TBD</td>
@@ -2099,6 +2181,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = tanh(x)</td>
     <td>Precision TBD</td>
@@ -2123,6 +2206,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = arccosh(x)
       or: logₑ(x + sqrt(x * x - 1))</td>
@@ -2148,6 +2232,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = arcsinh(x)
       or: logₑ(x + sqrt(x * x + 1))</td>
@@ -2173,6 +2258,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = arctanh(x)
       or: logₑ((1 + x) / (1 - x)) / 2</td>
@@ -2198,6 +2284,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(Dx, X) = Mul(Sin(X), Dx)
       f(dx, x) = sin(x) * dx</td>
@@ -2223,6 +2310,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = x + y + z…</td>
     <td>&lt; N-1 ULP</td>
@@ -2247,6 +2335,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = (x + y + z…) / n</td>
     <td>Precision TBD</td>
@@ -2271,6 +2360,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = max(x, y, z…)</td>
     <td>Exact</td>
@@ -2295,6 +2385,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, minValue) = Max(X, minValue)
       or: f(x) = max(x, minValue)
@@ -2321,6 +2412,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, y, z…) = min(x, y, z…)</td>
     <td>Exact</td>
@@ -2345,6 +2437,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(input:float32, scale:float32, zero_point:int32)
       return output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</td>
@@ -2370,6 +2463,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(input:uint8, scale:float32, zero_point:float32)
       return output:float32 = (input - zero_point) * scale</td>
@@ -2395,6 +2489,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Reciprocal(Add(1, Exp(Neg(X))))
       or: f(x) = 1 / (1 + expₑ(-x))
@@ -2421,6 +2516,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Clip(Add(Mul(alpha, X), beta), 0, 1)
       or: f(x) = max(0, min(alpha * x + beta, 1))
@@ -2447,6 +2543,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Div(Sub(1, Exp(Mul(X, -2)), Add(1, Exp(X, -2)))
       or: f(x) = (1 - expₑ(-2 * x))/(1 + expₑ(-2 * x))
@@ -2474,6 +2571,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)
       or: f(x, alpha, beta) = alpha * tanh(beta * x)</td>
@@ -2499,6 +2597,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Max(X, 0)
       or: f(x) = max(x, 0)
@@ -2525,6 +2624,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Where(Less(X, 0), Mul(X, alpha), X)
       or: f(x, alpha) = if x &gt;= 0 then x else alpha * x</td>
@@ -2550,6 +2650,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Where(Less(X, 0), Mul(X, Slope), X)
       or: f(x, slope) = if x &gt;= 0 then x else slope * x
@@ -2576,6 +2677,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha = 1) = Where(Greater(X, alpha), X, 0)
       f(x) = if x &gt; alpha then x else 0</td>
@@ -2601,6 +2703,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha = 1) = Where(Less(X, 0), Mul(Sub(Exp(X), 1), alpha))
       or: F(X, alpha = 1) = Add(Clip(X, 0, inf), Clip(Mul(Sub(Exp(X), 1), alpha), -inf, 0))
@@ -2627,6 +2730,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha = 1.6732, gamma = 1.0507) = Mul(Elu(X, alpha), gamma)
       or: f(x, alpha = 1.6732, gamma = 1.0507):
@@ -2654,6 +2758,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 <code>function SoftMax2D(Input; Output; axis):
@@ -2694,6 +2799,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(Input, axis) = Log(Softmax(Input, axis))
   or: f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))
@@ -2720,6 +2826,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = if x_i == max(X) then 1 else 0
       *but only for first element along that axis</td>
@@ -2745,6 +2852,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Div(X, Add(Abs(X), 1))
       or: f(x) = x / (1 + abs(x))</td>
@@ -2770,6 +2878,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Log(Add(Exp(x), 1))
       or: f(x) = logₑ(1 + expₑ(x))</td>
@@ -2795,6 +2904,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Add(Mul(X, alpha), beta)
   or: f(x, alpha, beta) = alpha * x + beta</td>
@@ -2820,6 +2930,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x, lambda, bias):
       if x &lt; -lambda then y = x + bias
@@ -2847,6 +2958,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X, alpha, beta) = Mul(alpha, Softplus(Mul(beta, X))).
       or: f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))
@@ -2873,6 +2985,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
@@ -2897,6 +3010,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</td>
     <td>Unpredictable</td>
@@ -2921,6 +3035,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
@@ -2948,6 +3063,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
@@ -2975,6 +3091,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Unpredictable</td>
@@ -2999,6 +3116,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
 output.shape = input.shape
@@ -3030,6 +3148,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(A, B, C; alpha, beta, transA, transB; Y):
       A2 = If(transA, Transpose(A), A)
@@ -3057,6 +3176,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])
       It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
@@ -3087,6 +3207,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Every output element is the convolution of the filter with the corresponding input elements.
   <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</code>
@@ -3144,6 +3265,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>todo: Here be dragons.
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
@@ -3169,6 +3291,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(x) = cast(x)</td>
     <td>&lt; 1 ULP</td>
@@ -3194,6 +3317,7 @@ endfunction
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
@@ -3229,6 +3353,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Broadcast any single size dimensions up to the output dimension counts.
 Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
@@ -3264,6 +3389,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
 Any single size dimensions are stretched to the output dimension size.
@@ -3313,6 +3439,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
     <td>Exact</td>
@@ -3337,6 +3464,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
 
@@ -3379,6 +3507,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
 
@@ -3423,6 +3552,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
 
@@ -3459,6 +3589,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Repeat entire tensor along each axis by repeat counts.
 <code>
@@ -3494,6 +3625,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Split input into multiple output tensors.</td>
     <td>Exact</td>
@@ -3518,6 +3650,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Crop the tensor to the given ranges for each axis.
 <code>function Slice(input, starts, ends, axes, steps)
@@ -3562,6 +3695,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 <code>function Concat(inputs, axis)
@@ -3600,6 +3734,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Exact</td>
@@ -3624,6 +3759,7 @@ endfunction</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
@@ -3674,6 +3810,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>TODO</code></td>
     <td>Exact</td>
@@ -3698,6 +3835,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Opposite of gather. Write values from updates into data at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
 <code>
@@ -3744,6 +3882,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>TODO</code></td>
     <td>Exact</td>
@@ -3768,6 +3907,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Inflate the input with zeroes on the edges</td>
     <td>Exact</td>
@@ -3792,6 +3932,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Rearrange blocks of elements.
 <code>
@@ -3826,6 +3967,7 @@ output[outputIndices] = input[inputIndices];</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Rearrange blocks of elements.
 <code>
@@ -3874,6 +4016,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return the dimensions of the tensor as a 1D tensor.
       F(input): return input.shape
@@ -3900,6 +4043,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Return the element count. ReduceProd(Shape(X), keepdims=0).
 note: <code>Size</code> is unfortunately named, inconsistently so with <code>Resize-10</code> which accepts separate dimensions. 🙃
@@ -3926,6 +4070,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
     <td>Exact</td>
@@ -3950,6 +4095,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>TopK(X, K, axis) = Slice(SortDecreasing(X, axis), starts=0, ends=K, axes=axis)</td>
     <td>Exact</td>
@@ -3974,6 +4120,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(b, x, y) = if b then x else y
       notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
@@ -4000,6 +4147,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
     <td>Exact</td>
@@ -4024,6 +4172,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Reverse all the elements along the given axes.
 <code>
@@ -4060,6 +4209,7 @@ endfor
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Average all elements in each pool. y = (x1 + x2 + … + xn) / pool_size;
 So X[N C H W] reduces to Y[N C 1 1]
@@ -4091,6 +4241,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1 + x2 + … + xn) / pool_size</td>
     <td>Precision TBD</td>
@@ -4115,6 +4266,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = max(x1, x2, … x_pool_size)</td>
     <td>Exact</td>
@@ -4139,6 +4291,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = max(x1, x2, … x_pool_size)</td>
     <td>Exact</td>
@@ -4163,6 +4316,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Opposite of MaxPool.
 Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros.
@@ -4189,6 +4343,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</td>
     <td>Precision TBD</td>
@@ -4213,6 +4368,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1^p + x2^p + ... + xn^p) ^ (1/p);
       So X[N C H W] reduces to Y[N C 1 1]
@@ -4239,6 +4395,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Apply MaxPool to given input within each numbered region:
     [batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive].
@@ -4267,6 +4424,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
       y = (x1 + x2 + ... + xn)</td>
@@ -4292,6 +4450,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1 + x2 + ... + xn) / n</td>
     <td>Precision TBD</td>
@@ -4316,6 +4475,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>y = (x1 * x2 * ... * xn)</td>
     <td>Precision TBD</td>
@@ -4340,6 +4500,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Log(ReduceSum(X, axes, keepdims))
       or: y = logₑ(x1 + x2 + ... + xn)</td>
@@ -4365,6 +4526,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Log(ReduceSum(Exp(X), axes, keepdims))
       or: y = logₑ(expₑ(x1) + expₑ(x2) + ... + expₑ(xn))
@@ -4391,6 +4553,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = ReduceSum(Pow(X, 2), axes, keepdims)
       or: y = x1^2 + x2^2 + ... + xn^2</td>
@@ -4416,6 +4579,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = ReduceSum(Abs(X), axes, keepdims)
       or: y = abs(x1) + abs(x2) + ... + abs(xn)</td>
@@ -4441,6 +4605,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Sqrt(ReduceSum(Pow(X, 2), axes, keepdims))
   or: y = sqrt(x1^2 + x2^2 + ... + xn^2)</td>
@@ -4466,6 +4631,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>x = max(max(max(x1, x2), x3), ..., xn)</td>
     <td>Exact</td>
@@ -4490,6 +4656,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>x = min(min(min(x1, x2), x3), ..., xn)</td>
     <td>Exact</td>
@@ -4514,6 +4681,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>int32 {i j k ..} = maxindex(X Y Z …)</td>
     <td>Exact</td>
@@ -4538,6 +4706,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>int32 {i j k ..} = minindex(X Y Z …)</td>
     <td>Exact</td>
@@ -4562,6 +4731,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Output.Shape = Floor(Shape(Input) * Scales)
       Output[output_i] = Input[output_i / Scales]</td>
@@ -4587,6 +4757,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Output.Shape = Floor(Shape(Input) * Scales)
       Output[output_i] = Input[output_i / Scales]</td>
@@ -4612,6 +4783,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>f(cond, then_graph, else_graph, outputs...):
       subgraph = cond ? then_graph : else_graph
@@ -4639,6 +4811,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:CODE</td>
     <td>Exact</td>
@@ -4663,6 +4836,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:CODE</td>
     <td>Exact</td>
@@ -4687,6 +4861,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>For each output element, subtract the mean, and divide by standard deviation.
 
@@ -4743,6 +4918,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>InstanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
@@ -4786,6 +4962,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
@@ -4824,6 +5001,7 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)
 
@@ -4865,6 +5043,7 @@ variance = np.mean(x, axis=axes, keepdims=True)
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
 
@@ -4901,6 +5080,7 @@ Output = Input / Pow(Biased, Beta)
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
 <code>aggregate F(X, p)
@@ -4934,6 +5114,7 @@ endaggregate</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
     So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
@@ -4959,6 +5140,7 @@ endaggregate</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Read input front to back, incrementing output histogram for each occurrence found of desired patterns.
 It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
@@ -4984,6 +5166,7 @@ It's basically a word count algorithm with the output histogram size equalling t
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td><details><summary>reduceSum(multiply(a.reshape(aToProductshape)[aToProductStep], B.reshape(bToProductshape)[bToProductStep]), axes = reductionAxes)</summary>
 
@@ -5133,6 +5316,7 @@ For well known patterns, they can be mapped directly to better known operators: 
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
     <td>Precision TBD</td>
@@ -5157,6 +5341,7 @@ For well known patterns, they can be mapped directly to better known operators: 
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
@@ -5192,6 +5377,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>???</td>
     <td>Precision TBD</td>
@@ -5216,6 +5402,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
@@ -5253,6 +5440,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>One occurence of LSTM</td>
     <td>Precision TBD</td>
@@ -5277,6 +5465,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>TODO:</td>
     <td>Precision TBD</td>
@@ -5301,6 +5490,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 <code>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
@@ -5329,6 +5519,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>???</td>
     <td>Unpredictable</td>
@@ -5353,6 +5544,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Mul(X, scale)
       or: f(x) = x * scale</td>
@@ -5378,6 +5570,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>F(X) = Add(Mul(X, scale), Unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]
       or: f(x, scale, bias) = x * scale + bias</td>
@@ -5403,6 +5596,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="cntkColumn">?</td>
     <td class="openVinoColumn">?</td>
     <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
     <td class="futureColumn"></td>
     <td>Crop the tensor to the given ranges for each axis. Crop is confusing and redundant. Just use Slice.</td>
     <td>Exact</td>
@@ -5697,8 +5891,7 @@ https://github.com/onnx/onnx/pull/2057
 
 https://github.com/onnx/onnx/pull/1927
 
-
-Gaussian Error Linear Units (GELUs)
+Gaussian Error Linear Units (GELUs) Alternate equations
 
 https://arxiv.org/abs/1606.08415 GELU = 0.5*x*(1 + tanh[2/π(x + 0.044715 * x^3)])
 
@@ -6959,15 +7152,10 @@ xnn_datatype_qdint8 - Dynamically quantized 8-bit signed integer with per-batch 
 -xnn_datatype_fp16 - IEEE754 half-precision floating-point.
 
 ANN - https://developer.android.com/ndk/reference/group/neural-networks#group___neural_networks_1ggaf06d1affd33f3bc698d0c04eceb23298ab275c740307fbffcfec94adcc7b374b9
-ANEURALNETWORKS_BOOL
-ANEURALNETWORKS_FLOAT16
-ANEURALNETWORKS_FLOAT32
-ANEURALNETWORKS_INT32
-ANEURALNETWORKS_UINT32
-ANEURALNETWORKS_TENSOR_QUANT16_ASYMM (uint16)
-ANEURALNETWORKS_TENSOR_QUANT16_SYMM (int16)
+ANEURALNETWORKS_TENSOR_QUANT16_ASYMM (uint16 elements, realValue = integerValue * scale
+ANEURALNETWORKS_TENSOR_QUANT16_SYMM (int16) realValue = (integerValue - zeroPoint) * scale
 ANEURALNETWORKS_TENSOR_QUANT8_ASYMM (uint8)
 ANEURALNETWORKS_TENSOR_QUANT8_ASYMM_SIGNED (int8, scale and zp)
 ANEURALNETWORKS_TENSOR_QUANT8_SYMM (int8, scale, no zp)
-ANEURALNETWORKS_TENSOR_QUANT8_SYMM_PER_CHANNEL (int8)
+ANEURALNETWORKS_TENSOR_QUANT8_SYMM_PER_CHANNEL (int8) a channel axis and float scaleArray[channelDimensionLength]. realValue[..., C, ...] = integerValue[..., C, ...] * scales[C].
 -->
