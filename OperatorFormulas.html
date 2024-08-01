@@ -2214,7 +2214,7 @@ endfunction</code></td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
-    <td>Hyperbolic Arccosine</td>
+    <td>Hyperbolic Arcsine</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Asinh">Asinh</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ASINH</td>
@@ -2240,7 +2240,7 @@ endfunction</code></td>
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
-    <td>Hyperbolic Arccosine</td>
+    <td>Hyperbolic Arctangent</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Atanh">Atanh</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ATANH</td>
@@ -3064,7 +3064,7 @@ endfunction
     <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
-      if integer: return (rand() % (range+1) + low 
+      if integer: return (rand() % (range+1) + low
       if float: (rand() / randmax) * range + low</td>
     <td>Unpredictable</td>
   </tr>
@@ -3092,7 +3092,7 @@ endfunction
     <td class="futureColumn"></td>
     <td>f(low, high): // see MT19937
       range = high - low // note inclusive end
-      if integer: return (rand() % (range+1) + low 
+      if integer: return (rand() % (range+1) + low
       if float: (rand() / randmax) * range + low</td>
     <td>Unpredictable</td>
   </tr>
@@ -3215,7 +3215,7 @@ endfunction</code></td>
     <td>Convolve</td>
     <td class="webnnColumn">conv</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Conv">Conv</a></td>
-    <td class="dmlColumn">DML_OPERATOR_CONVOLUTION 
+    <td class="dmlColumn">DML_OPERATOR_CONVOLUTION
     with DML_CONVOLUTION_MODE_CROSS_CORRELATION
     and DML_CONVOLUTION_DIRECTION_FORWARD</td>
     <td class="xnnPackColumn">?</td>
@@ -5671,13 +5671,13 @@ https://github.com/onnx/onnx/pull/1908
 ## NonMaxSuppression
 
 https://github.com/onnx/onnx/pull/1703
-https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression  
+https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression
 tf.image.non_max_suppression
 https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/kernels/non_max_suppression_op.cc
 
 ## StringNormalizer
 
-https://github.com/onnx/onnx/pull/1745  
+https://github.com/onnx/onnx/pull/1745
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#StringNormalizer
 
 ## Resize (Resample=Upsample+Downsample)
@@ -5725,7 +5725,7 @@ https://github.com/onnx/onnx/pull/1856
 
 ## BitShift left/right elemntwise shift
 
-https://github.com/onnx/onnx/pull/1931  
+https://github.com/onnx/onnx/pull/1931
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitShift
 
     2 << 3 = 8
@@ -5743,14 +5743,14 @@ https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitShift
 
 ## CumSum cumulative summation
 
-https://github.com/onnx/onnx/pull/2030  
+https://github.com/onnx/onnx/pull/2030
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#CumSum
 tf.math.cumsum
 https://www.tensorflow.org/api_docs/python/tf/math/cumsum
 
 Tally the cumulative summation along a given axis.
-output size = input size  
-can proceed along any axis.  
+output size = input size
+can proceed along any axis.
 
     cumsum([a, b, c])  -> [a, a + b, a + b + c]
     cumsum([a, b, c], reverse=true)  -> [a + b + c, b + c, c]
@@ -5789,14 +5789,14 @@ Pseudocode:
 
 ## Det determinant
 
-https://github.com/onnx/onnx/pull/2233  
+https://github.com/onnx/onnx/pull/2233
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#Det
 
 Once factored into upper and lower diagonal matrices, or into "row echelon form" with all the lower diagonal being zeroes, the determinant is the product of all values along the diagonal.
 
 ## DynamicQuantizeLinear
 
-https://github.com/onnx/onnx/pull/2187  
+https://github.com/onnx/onnx/pull/2187
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#DynamicQuantizeLinear
 
 Compute the minimum and maximum element in the input. Then apply QuantizeLinear, rounding halves to nearest evens.
@@ -5813,17 +5813,17 @@ Compute the minimum and maximum element in the input. Then apply QuantizeLinear,
 
 ## GatherElements
 
-https://github.com/onnx/onnx/pull/2143  
+https://github.com/onnx/onnx/pull/2143
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherElements
 
 ## GatherND
 
-https://github.com/onnx/onnx/pull/2106  
+https://github.com/onnx/onnx/pull/2106
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherND
 
 ## Range
 
-https://github.com/onnx/onnx/pull/2242  
+https://github.com/onnx/onnx/pull/2242
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#Range
 
 Generate a 1D increasing/decreasing sequence of numbers.
@@ -5837,12 +5837,12 @@ Generate a 1D increasing/decreasing sequence of numbers.
     endfor
 ```
 
-Example 1 Inputs: `start = 3, limit = 9, delta = 3 Output: [3, 6]`  
+Example 1 Inputs: `start = 3, limit = 9, delta = 3 Output: [3, 6]`
 Example 2 Inputs: `start = 10, limit = 4, delta = -2 Output: [10, 8, 6]`
 
 ## Round
 
-https://github.com/onnx/onnx/pull/2053  
+https://github.com/onnx/onnx/pull/2053
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#Round
 
 For every element, round halves to nearest even.
@@ -5855,57 +5855,57 @@ For every element, round halves to nearest even.
 
 ## ScatterElements
 
-https://github.com/onnx/onnx/pull/2143  
+https://github.com/onnx/onnx/pull/2143
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#ScatterElements
 
 ## ScatterND
 
-https://github.com/onnx/onnx/pull/2220  
+https://github.com/onnx/onnx/pull/2220
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#ScatterND
 
 ## Unique
 
-https://github.com/onnx/onnx/pull/2141  
+https://github.com/onnx/onnx/pull/2141
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unique
 
 ## ConcatFromSequence
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConcatFromSequence
 
 ## SequenceAt
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SequenceAt
 
 ## SequenceConstruct
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SequenceConstruct
 
 ## SequenceEmpty
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SequenceEmpty
 
 ## SequenceErase
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SequenceErase
 
 ## SequenceInsert
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SequenceInsert
 
 ## SequenceLength
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SequenceLength
 
 ## SplitToSequence
 
-https://github.com/onnx/onnx/pull/2249  
+https://github.com/onnx/onnx/pull/2249
 https://github.com/onnx/onnx/blob/master/docs/Operators.md#SplitToSequence
 
 ## Resize (with interpolation model)
@@ -5939,10 +5939,10 @@ https://github.com/apache/incubator-mxnet/pull/14449/files
 
 ## Mod
 
-https://github.com/onnx/onnx/pull/1874  
-https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod  
-https://docs.scipy.org/doc/numpy/reference/generated/numpy.mod.html  
-https://docs.scipy.org/doc/numpy/reference/generated/numpy.fmod.html  
+https://github.com/onnx/onnx/pull/1874
+https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.mod.html
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.fmod.html
 
 numpy.fmod / numpy.mod
 
@@ -6294,7 +6294,7 @@ UnaryOp
 https://www.cntk.ai/pythondocs/cntk.ops.html?highlight=cast#cntk.ops.cast
 https://microsoft.github.io/CNTK-R/reference/index.html
 
-All functions	
+All functions
 activation_identity	Identity Function For CNTK Operations
 Activation	Activation Layer
 all_devices	All Devices
@@ -7133,6 +7133,11 @@ BroadcastInDim
     "The order of broadcast dimensions must be strictly increasing." https://openxla.org/xla/broadcasting#formal_definition
     No duplicate axes
     So, it cannot be a transpose() operation
+
+QNN https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-50/MasterOpDef.html
+
+TFLite dialect https://www.tensorflow.org/mlir/tfl_ops
+
 -->
 
 
