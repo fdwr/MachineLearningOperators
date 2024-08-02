@@ -49,6 +49,7 @@ th {
 .tosaColumn { display: none; }
 .numpyColumn { display: none; }
 .tensorFlowColumn { display: none; }
+.tensorFlowLiteColumn { display: none; }
 .pytorchColumn { display: none; }
 .coreMlColumn { display: none; }
 .bnnsColumn { display: none; }
@@ -84,6 +85,7 @@ th {
 #toggleTosaColumn:checked ~ * .tosaColumn { display: table-cell; }
 #toggleNumpyColumn:checked ~ * .numpyColumn { display: table-cell; }
 #toggleTensorFlowColumn:checked ~ * .tensorFlowColumn { display: table-cell; }
+#toggleTensorFlowLiteColumn:checked ~ * .tensorFlowLiteColumn { display: table-cell; }
 #togglePytorchColumn:checked ~ * .pytorchColumn { display: table-cell; }
 #toggleCoreMlColumn:checked ~ * .coreMlColumn { display: table-cell; }
 #toggleBnnsColumn:checked ~ * .bnnsColumn { display: table-cell; }
@@ -149,6 +151,7 @@ th {
 <input type="checkbox" id="toggleTosaColumn" checked="on"/><label for="toggleTosaColumn">TOSA (ARM <b>T</b>ensor <b>O</b>perator <b>S</b>et <b>A</b>rchitecture) <a href="https://mlir.llvm.org/docs/Dialects/TOSA/">(info)</a></label><br/>
 <input type="checkbox" id="toggleNumpyColumn" checked="on"/><label for="toggleNumpyColumn">NumPy (<b>Num</b>erical <b>Py</b>thon) <a href="https://numpy.org/">(info)</a> <a href="https://numpy.org/doc/stable/reference/routines.html">(ops)</a></label><br/>
 <input type="checkbox" id="toggleTensorFlowColumn" checked="on"/><label for="toggleTensorFlowColumn">TensorFlow (Google's TensorFlow) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
+<input type="checkbox" id="toggleTensorFlowLiteColumn" checked="on"/><label for="toggleTensorFlowLiteColumn">TensorFlow Lite (Google's TensorFlowLite) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
 <input type="checkbox" id="togglePytorchColumn" checked="on"/><label for="togglePytorchColumn">PyTorch (<b>Py</b>thon <b>Torch</b>, originally by Meta) <a href="https://pytorch.org/">(info)</a> <a href="https://pytorch.org/docs/stable/torch.html">(ops)</a> <a href="https://pytorch.org/docs/stable/nn.html">NN ops</a></label><br/>
 <input type="checkbox" id="toggleCoreMlColumn" checked="on"/><label for="toggleCoreMlColumn">CoreML (Apple <b>Core</b> <b>M</b>achine <b>L</b>earning) <a href="https://developer.apple.com/machine-learning/core-ml/">(info)</a> <a href="https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html">(ops)</a></label><br/>
 <input type="checkbox" id="toggleBnnsColumn" checked="on"/><label for="toggleBnnsColumn">BNNS (Apple <b>B</b>asic <b>N</b>eural <b>N</b>etwork <b>S</b>ubroutines) <a href="https://developer.apple.com/documentation/accelerate/bnns">(info)</a></label><br/>
@@ -178,6 +181,7 @@ th {
       <th class="tosaColumn"><span title="Updated 2024-01-19"><a href="https://www.mlplatform.org/tosa/tosa_spec.html">TOSA</a></span></th>
       <th class="numpyColumn"><span title="Updated 2024-01-19"><a href="https://numpy.org/devdocs/user/basics.types.html">NumPy</a></span></th>
       <th class="tensorFlowColumn"><span title="Updated 2024-01-19"><a href="https://www.tensorflow.org/api_docs/python/tf/dtypes">TensorFlow</a></span></th>
+      <th class="tensorFlowLiteColumn"><span title="Updated 2024-08-01"><a href="https://www.tensorflow.org/api_docs/python/tf/dtypes">TensorFlow Lite</a></span></th>
       <th class="pytorchColumn"><span title="Updated 2024-01-19"><a href="https://pytorch.org/docs/stable/tensor_attributes.html">PyTorch</a></span></th>
       <th class="coreMlColumn"><span title="Updated 2024-01-19"><a href="https://chromium-review.googlesource.com/c/chromium/src/+/5075312/12/services/webnn/coreml/ModelFormat/FeatureTypes.proto">CoreML</a></span></th>
       <th class="bnnsColumn"><span title="Updated 2024-01-19"><a href="https://github.com/alexey-lysiuk/macos-sdk/blob/6c1513f5b0667b76e24aaadcad130e90c545f046/MacOSX14.0.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/BNNS/bnns_constants.h#L33-L91">BNNS</a></span></th>
@@ -202,6 +206,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -226,6 +231,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -250,6 +256,7 @@ th {
       <td class="tosaColumn">tosa.uint8_t</td>
       <td class="numpyColumn">numpy.uint8 / ubyte</td>
       <td class="tensorFlowColumn">tensorflow.uint8</td>
+      <td class="tensorFlowLiteColumn">tensorflow.uint8</td>
       <td class="pytorchColumn">torch.uint8</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt8</td>
@@ -274,6 +281,7 @@ th {
       <td class="tosaColumn">tosa.uint16_t</td>
       <td class="numpyColumn">numpy.uint16 / ushort</td>
       <td class="tensorFlowColumn">tensorflow.uint16</td>
+      <td class="tensorFlowLiteColumn">tensorflow.uint16</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt16</td>
@@ -298,6 +306,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.uint32 / uintc</td>
       <td class="tensorFlowColumn">tensorflow.uint32</td>
+      <td class="tensorFlowLiteColumn">tensorflow.uint32</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt32</td>
@@ -322,6 +331,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -346,6 +356,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.uint64 / uint</td>
       <td class="tensorFlowColumn">tensorflow.uint64</td>
+      <td class="tensorFlowLiteColumn">tensorflow.uint64</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt64</td>
@@ -370,6 +381,7 @@ th {
       <td class="tosaColumn">tosa.int4_t</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -394,6 +406,7 @@ th {
       <td class="tosaColumn">tosa.int8_t</td>
       <td class="numpyColumn">numpy.int8 / byte</td>
       <td class="tensorFlowColumn">tensorflow.int8</td>
+      <td class="tensorFlowLiteColumn">tensorflow.int8</td>
       <td class="pytorchColumn">torch.int8</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeInt8</td>
@@ -418,6 +431,7 @@ th {
       <td class="tosaColumn">tosa.int16_t</td>
       <td class="numpyColumn">numpy.int16 / short</td>
       <td class="tensorFlowColumn">tensorflow.int16</td>
+      <td class="tensorFlowLiteColumn">tensorflow.int16</td>
       <td class="pytorchColumn">torch.int16 / short</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeInt16</td>
@@ -442,6 +456,7 @@ th {
       <td class="tosaColumn">tosa.int32_t</td>
       <td class="numpyColumn">numpy.int32 / intc</td>
       <td class="tensorFlowColumn">tensorflow.int32</td>
+      <td class="tensorFlowLiteColumn">tensorflow.int32</td>
       <td class="pytorchColumn">torch.int32 / int</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.INT32</td>
       <td class="bnnsColumn">BNNSDataTypeInt32</td>
@@ -466,6 +481,7 @@ th {
       <td class="tosaColumn">tosa.int48_t</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -490,6 +506,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.int64 / int_</td>
       <td class="tensorFlowColumn">tensorflow.int64</td>
+      <td class="tensorFlowLiteColumn">tensorflow.int64</td>
       <td class="pytorchColumn">torch.int64 / long</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeInt64</td>
@@ -514,6 +531,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -538,6 +556,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -562,6 +581,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -586,6 +606,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -610,6 +631,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -634,6 +656,7 @@ th {
       <td class="tosaColumn">tosa.fp16_t</td>
       <td class="numpyColumn">numpy.float16 / half</td>
       <td class="tensorFlowColumn">tensorflow.float16 / half</td>
+      <td class="tensorFlowLiteColumn">tensorflow.float16 / half</td>
       <td class="pytorchColumn">torch.float16 / half</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.FLOAT16</td>
       <td class="bnnsColumn">BNNSDataTypeFloat16</td>
@@ -658,6 +681,7 @@ th {
       <td class="tosaColumn">tosa.bf16_t</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">tensorflow.bfloat16</td>
+      <td class="tensorFlowLiteColumn">tensorflow.bfloat16</td>
       <td class="pytorchColumn">torch.bfloat16</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeBFloat16</td>
@@ -682,6 +706,7 @@ th {
       <td class="tosaColumn">tosa.fp32_t</td>
       <td class="numpyColumn">numpy.float32 / single</td>
       <td class="tensorFlowColumn">tensorflow.float32 / float</td>
+      <td class="tensorFlowLiteColumn">tensorflow.float32 / float</td>
       <td class="pytorchColumn">torch.float32 / float</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.FLOAT32</td>
       <td class="bnnsColumn">BNNSDataTypeFloat32</td>
@@ -706,6 +731,7 @@ th {
       <td class="tosaColumn">tosa.fp64_t</td>
       <td class="numpyColumn">numpy.float64 / double / float_</td>
       <td class="tensorFlowColumn">tensorflow.float64 / double</td>
+      <td class="tensorFlowLiteColumn">tensorflow.float64 / double</td>
       <td class="pytorchColumn">torch.float64 / double</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.DOUBLE</td>
       <td class="bnnsColumn">x</td>
@@ -730,6 +756,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -754,6 +781,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.complex64 / singlecomplex</td>
       <td class="tensorFlowColumn">tensorflow.complex64</td>
+      <td class="tensorFlowLiteColumn">tensorflow.complex64</td>
       <td class="pytorchColumn">torch.complex64 / cfloat</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -778,6 +806,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.complex128 / doublecomplex</td>
       <td class="tensorFlowColumn">tensorflow.complex128</td>
+      <td class="tensorFlowLiteColumn">tensorflow.complex128</td>
       <td class="pytorchColumn">torch.complex128 / cdouble</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -802,6 +831,7 @@ th {
       <td class="tosaColumn">tosa.bool_t</td>
       <td class="numpyColumn">numpy.bool</td>
       <td class="tensorFlowColumn">tensorflow.bool</td>
+      <td class="tensorFlowLiteColumn">tensorflow.bool</td>
       <td class="pytorchColumn">torch.bool</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeBoolean (bit size?)</td>
@@ -826,6 +856,7 @@ th {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">tensorflow.string</td>
+      <td class="tensorFlowLiteColumn">tensorflow.string</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -850,6 +881,7 @@ th {
       <td class="tosaColumn">?</td>
       <td class="numpyColumn">?</td>
       <td class="tensorFlowColumn">?</td>
+      <td class="tensorFlowLiteColumn">?</td>
       <td class="pytorchColumn">?</td>
       <td class="coreMlColumn">?</td>
       <td class="bnnsColumn">?</td>
@@ -883,6 +915,7 @@ th {
     <th class="tosaColumn"><a href="https://mlir.llvm.org/docs/Dialects/TOSA/">TOSA</a></th>
     <th class="numpyColumn"><a href="https://numpy.org/doc/stable/reference/routines.html">NumPy</a></th>
     <th class="tensorFlowColumn">TensorFlow</th>
+    <th class="tensorFlowLiteColumn">TensorFlowLite</th>
     <th class="pytorchColumn"><a href="https://pytorch.org/docs/stable/torch.html">PyTorch</a></th>
     <th class="coreMlColumn"><a href="https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html">CoreML</a></th>
     <th class="bnnsColumn">BNNS</th>
@@ -909,6 +942,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">tosa.identity</td>
     <td class="numpyColumn">numpy.identity</td>
     <td class="tensorFlowColumn">tf.identity</td>
+    <td class="tensorFlowLiteColumn">tf.identity</td>
     <td class="pytorchColumn">torch.nn.Identity</td>
     <td class="coreMlColumn">CopyLayerParams</td>
     <td class="bnnsColumn">BNNSActivationFunctionIdentity</td>
@@ -934,6 +968,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -959,6 +994,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -984,6 +1020,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1009,6 +1046,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1034,6 +1072,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1059,6 +1098,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1084,6 +1124,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1109,6 +1150,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1134,6 +1176,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1159,6 +1202,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1184,6 +1228,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1209,6 +1254,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1234,6 +1280,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1259,6 +1306,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1284,6 +1332,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1309,6 +1358,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1334,6 +1384,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1359,6 +1410,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1384,6 +1436,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1409,6 +1462,7 @@ DML_ACTIVATION_IDENTITY</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1457,6 +1511,7 @@ double f(double x)
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1486,6 +1541,7 @@ double f(double x)
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1518,6 +1574,7 @@ endfor
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1547,6 +1604,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1572,6 +1630,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1597,6 +1656,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1622,6 +1682,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1647,6 +1708,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1672,6 +1734,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1697,6 +1760,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1722,6 +1786,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1747,6 +1812,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1772,6 +1838,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1797,6 +1864,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1822,6 +1890,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1847,6 +1916,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1872,6 +1942,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">LogicalNotLayerParams</td>
     <td class="bnnsColumn">?</td>
@@ -1897,6 +1968,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1922,6 +1994,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1947,6 +2020,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1972,6 +2046,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -1997,6 +2072,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2022,6 +2098,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2047,6 +2124,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2072,6 +2150,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2097,6 +2176,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2122,6 +2202,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2147,6 +2228,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2172,6 +2254,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2197,6 +2280,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2223,6 +2307,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2249,6 +2334,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2275,6 +2361,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2301,6 +2388,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2326,6 +2414,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2351,6 +2440,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2376,6 +2466,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2403,6 +2494,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2428,6 +2520,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2480,6 +2573,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2507,6 +2601,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2534,6 +2629,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2562,6 +2658,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2588,6 +2685,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2615,6 +2713,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2641,6 +2740,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2668,6 +2768,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2694,6 +2795,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2721,6 +2823,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2749,6 +2852,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2774,6 +2878,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2815,6 +2920,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2842,6 +2948,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2868,6 +2975,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2894,6 +3002,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2920,6 +3029,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2946,6 +3056,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -2974,6 +3085,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3001,6 +3113,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3026,6 +3139,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3051,6 +3165,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3079,6 +3194,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3107,6 +3223,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3132,6 +3249,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3164,6 +3282,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3192,6 +3311,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3223,6 +3343,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3281,6 +3402,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3307,6 +3429,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3333,6 +3456,7 @@ endfunction
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3369,6 +3493,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3455,6 +3580,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3480,6 +3606,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3523,6 +3650,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3568,6 +3696,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3605,6 +3734,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3641,6 +3771,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3666,6 +3797,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3711,6 +3843,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3750,6 +3883,7 @@ endfunction</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3826,6 +3960,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3851,6 +3986,7 @@ output = [[1,1], [4,3], [6,6]]
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3898,6 +4034,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3923,6 +4060,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3948,6 +4086,7 @@ output[i][j][ index[i][j][k] ] = input[i][j][k]  # if dim == 2
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -3983,6 +4122,7 @@ output[outputIndices] = input[inputIndices];</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4032,6 +4172,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4059,6 +4200,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4086,6 +4228,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4111,6 +4254,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4136,6 +4280,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="tosaColumn">tola.select</td>
     <td class="numpyColumn">numpy.where</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4163,6 +4308,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4188,6 +4334,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4225,6 +4372,7 @@ endfor
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4257,6 +4405,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4282,6 +4431,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4307,6 +4457,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4332,6 +4483,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4359,6 +4511,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4384,6 +4537,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4411,6 +4565,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4440,6 +4595,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4466,6 +4622,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4491,6 +4648,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4516,6 +4674,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4542,6 +4701,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4569,6 +4729,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4595,6 +4756,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4621,6 +4783,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4647,6 +4810,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4672,6 +4836,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4697,6 +4862,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4722,6 +4888,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4747,6 +4914,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4773,6 +4941,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4799,6 +4968,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4827,6 +4997,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4852,6 +5023,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4877,6 +5049,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4934,6 +5107,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -4978,6 +5152,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5017,6 +5192,7 @@ variance = np.var(x, axis=axes, keepdims=True)</td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5059,6 +5235,7 @@ variance = np.mean(x, axis=axes, keepdims=True)
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5096,6 +5273,7 @@ Output = Input / Pow(Biased, Beta)
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5130,6 +5308,7 @@ endaggregate</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5156,6 +5335,7 @@ endaggregate</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5182,6 +5362,7 @@ It's basically a word count algorithm with the output histogram size equalling t
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5332,6 +5513,7 @@ For well known patterns, they can be mapped directly to better known operators: 
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5357,6 +5539,7 @@ For well known patterns, they can be mapped directly to better known operators: 
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5393,6 +5576,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5418,6 +5602,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5456,6 +5641,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5506,6 +5692,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5535,6 +5722,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5560,6 +5748,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5586,6 +5775,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
@@ -5612,6 +5802,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
     <td class="tosaColumn">?</td>
     <td class="numpyColumn">?</td>
     <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
     <td class="coreMlColumn">?</td>
     <td class="bnnsColumn">?</td>
