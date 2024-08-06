@@ -41,6 +41,7 @@ th {
 .uncategorizedOperator { visibility: collapse; }
 
 /* visibility: collapse doesn't appear to work as expected for columns using Chrome. So use display: none instead. */
+.detailsColumn { display: none; }
 .webnnColumn { display: none; }
 .onnxColumn { display: none; }
 .dmlColumn { display: none; }
@@ -77,6 +78,7 @@ th {
 #toggleAggregateOperators:checked ~ * .aggregateOperator { visibility: visible; }
 #toggleUncategorizedOperators:checked ~ * .uncategorizedOperator { visibility: visible; }
 
+#toggleDetailsColumn:checked ~ * .detailsColumn { display: table-cell; }
 #toggleWebnnColumn:checked ~ * .webnnColumn { display: table-cell; }
 #toggleOnnxColumn:checked ~ * .onnxColumn { display: table-cell; }
 #toggleDmlColumn:checked ~ * .dmlColumn { display: table-cell; }
@@ -143,6 +145,7 @@ th {
 
 <noscript>*This checkbox will not work without Javascript enabled:<br/></noscript>
 <input type="checkbox" id="toggleAllColumns" checked="on" onclick="toggleAllOperatorsOfIdSuffix(this, 'Column')"/><label for="toggleAllColumns">All library columns</label><br/>
+<input type="checkbox" id="toggleDetailsColumn" checked="on"/><label for="toggleDetailsColumn">Details</label><br/>
 <input type="checkbox" id="toggleWebnnColumn" checked="on"/><label for="toggleWebnnColumn">WebNN (W3C <b>Web</b> <b>N</b>eural <b>N</b>etwork) <a href="https://www.w3.org/TR/webnn/">(info)</a></label><br/>
 <input type="checkbox" id="toggleOnnxColumn" checked="on"/><label for="toggleOnnxColumn">ONNX (<b>O</b>pen <b>N</b>eural <b>N</b>etwork E<b>x</b>change) <a href="https://onnx.ai/">(info)</a> <a href="https://onnx.ai/onnx/operators/index.html">(ops)</a></label><br/>
 <input type="checkbox" id="toggleDmlColumn" checked="on"/><label for="toggleDmlColumn">DirectML (Microsoft <b>Direct</b> <b>M</b>achine <b>L</b>earning) <a href="https://learn.microsoft.com/en-us/windows/ai/directml/dml-intro">(info)</a> <a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_operator_type">(ops)</a></label><br/>
@@ -172,7 +175,7 @@ th {
     <tr>
       <th style="width:12em">Categories</th>
       <th>Name</th>
-      <th valign="top">Details</th>
+      <th class="detailsColumn" valign="top">Details</th>
       <th class="webnnColumn"><span title="Updated 2024-01-19"><a href="https://www.w3.org/TR/webnn/#enumdef-mloperanddatatype">WebNN</a></span></th>
       <th class="onnxColumn"><span title="Updated 2024-01-19"><a href="https://github.com/onnx/onnx/blob/8a782415a69faf626abc032ff6b2a16187e13c4f/onnx/onnx.proto#L485">ONNX</a></span></th>
       <th class="dmlColumn"><span title="Updated 2024-01-19"><a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_tensor_data_type">DML</a></span></th>
@@ -197,7 +200,7 @@ th {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint1</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -222,7 +225,7 @@ th {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint4</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -247,7 +250,7 @@ th {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint8</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">uint8</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.UINT8</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT8</td>
@@ -272,7 +275,7 @@ th {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint16</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.UINT16</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT16</td>
@@ -297,7 +300,7 @@ th {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint32</td>
-      <td class="details"></td>
+      <td class="detailsColumn""></td>
       <td class="webnnColumn">uint32</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.UINT32</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT32</td>
@@ -322,7 +325,7 @@ th {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint48</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -347,7 +350,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>uint64</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">uint64</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.UINT64</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT64</td>
@@ -372,7 +375,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>int4</td>
-      <td class="details">int=3, sign=1, twos complement</td>
+      <td class="detailsColumn">int=3, sign=1, twos complement</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -397,7 +400,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>int8</td>
-      <td class="details">int=7, sign=1, twos complement</td>
+      <td class="detailsColumn">int=7, sign=1, twos complement</td>
       <td class="webnnColumn">int8</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.INT8</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT8</td>
@@ -422,7 +425,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>int16</td>
-      <td class="details">int=15, sign=1, twos complement</td>
+      <td class="detailsColumn">int=15, sign=1, twos complement</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.INT16</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT16</td>
@@ -447,7 +450,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>int32</td>
-      <td class="details">int=31, sign=1, twos complement</td>
+      <td class="detailsColumn">int=31, sign=1, twos complement</td>
       <td class="webnnColumn">int32</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.INT32</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT32</td>
@@ -472,7 +475,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>int48</td>
-      <td class="details">int=47, sign=1, twos complement</td>
+      <td class="detailsColumn">int=47, sign=1, twos complement</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -497,7 +500,7 @@ th {
     <tr>
       <td>Integer Signed</td>
       <td>int64</td>
-      <td class="details">int=63, sign=1, twos complement</td>
+      <td class="detailsColumn">int=63, sign=1, twos complement</td>
       <td class="webnnColumn">int64</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.INT64</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_INT64</td>
@@ -522,7 +525,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float8f3e4s1Fn</td>
-      <td class="details">frac=3 exp=4 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, no inf</td>
+      <td class="detailsColumn">frac=3 exp=4 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, no inf</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E4M3FN</td>
       <td class="dmlColumn">x</td>
@@ -547,7 +550,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float8f3e4s1FnUz</td>
-      <td class="details">frac=3 exp=4 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, no inf, no negative zero</td>
+      <td class="detailsColumn">frac=3 exp=4 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, no inf, no negative zero</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E4M3FNUZ</td>
       <td class="dmlColumn">x</td>
@@ -572,7 +575,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float8f2e5s1</td>
-      <td class="details">frac=2 exp=5 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, has inf, has negative zero</td>
+      <td class="detailsColumn">frac=2 exp=5 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, has inf, has negative zero</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E5M2</td>
       <td class="dmlColumn">x</td>
@@ -597,7 +600,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float8f2e5s1FnUz</td>
-      <td class="details">frac=2 exp=5 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, no inf, no negative zero</td>
+      <td class="detailsColumn">frac=2 exp=5 sign=1 <a href="https://arxiv.org/abs/2209.05433">(1)</a> <a href="https://arxiv.org/pdf/2206.02915.pdf">(2)</a> <a href="https://onnx.ai/onnx/technical/float8.html">(3)</a>, has nan, no inf, no negative zero</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT8E5M2FNUZ</td>
       <td class="dmlColumn">x</td>
@@ -622,7 +625,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float8f2e5bias4s1FnUz</td>
-      <td class="details">frac=2 exp=5 sign=1 <a href="https://proceedings.neurips.cc/paper_files/paper/2019/file/65fc9fb4897a89789352e211ca2d398f-Paper.pdf">(1)</a> TODO: Figure out details</td>
+      <td class="detailsColumn">frac=2 exp=5 sign=1 <a href="https://proceedings.neurips.cc/paper_files/paper/2019/file/65fc9fb4897a89789352e211ca2d398f-Paper.pdf">(1)</a> TODO: Figure out details</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -647,7 +650,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float16f10e5s1 IEEE</td>
-      <td class="details">frac=10 exp=5 sign=1</td>
+      <td class="detailsColumn">frac=10 exp=5 sign=1</td>
       <td class="webnnColumn">float16</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT16</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT16</td>
@@ -672,7 +675,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float16f7e8s1 Brain</td>
-      <td class="details">frac=7 exp=8 sign=1</td>
+      <td class="detailsColumn">frac=7 exp=8 sign=1</td>
       <td class="webnnColumn">x</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.BFLOAT16</td>
       <td class="dmlColumn">x</td>
@@ -697,7 +700,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float32f23e8s1 IEEE</td>
-      <td class="details">frac=23 exp=8 sign=1</td>
+      <td class="detailsColumn">frac=23 exp=8 sign=1</td>
       <td class="webnnColumn">float32</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.FLOAT</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT32</td>
@@ -722,7 +725,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float64f52e11s1 IEEE</td>
-      <td class="details">frac=52 exp=11 sign=1</td>
+      <td class="detailsColumn">frac=52 exp=11 sign=1</td>
       <td class="webnnColumn">float64</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.DOUBLE</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_FLOAT64</td>
@@ -747,7 +750,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float16 x 2</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">NA</td>
       <td class="onnxColumn">x</td>
       <td class="dmlColumn">x</td>
@@ -772,7 +775,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float32 x 2</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">NA</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.COMPLEX64</td>
       <td class="dmlColumn">x</td>
@@ -797,7 +800,7 @@ th {
     <tr>
       <td>Float Signed</td>
       <td>float64 x 2</td>
-      <td class="details"></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">NA</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.COMPLEX128</td>
       <td class="dmlColumn">x</td>
@@ -822,7 +825,7 @@ th {
     <tr>
       <td>Boolean</td>
       <td>bool8</td>
-      <td class="details">typically just lowest bit is used, but anything != 0 is true</td>
+      <td class="detailsColumn">typically just lowest bit is used, but anything != 0 is true</td>
       <td class="webnnColumn">uint8</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.BOOL</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT8</td>
@@ -847,7 +850,7 @@ th {
     <tr>
       <td>String</td>
       <td>string8</td>
-      <td class="details">array of char8's (typically UTF-8)</td>
+      <td class="detailsColumn">array of char8's (typically UTF-8)</td>
       <td class="webnnColumn">NA</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.STRING</td>
       <td class="dmlColumn">x</td>
@@ -873,6 +876,7 @@ th {
     <tr>
       <td>categories</td>
       <td>name</td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">?</td>
       <td class="onnxColumn">?</td>
       <td class="dmlColumn">?</td>
@@ -893,7 +897,6 @@ th {
       <td class="oneDnnColumn">?</td>
       <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
-      <td class="details"></td>
     </tr>
     -->
   </tbody>
@@ -907,7 +910,7 @@ th {
   <tr>
     <th style="width:15em">Categories</th>
     <th>Name</th>
-    <th valign="top">Formula</th>
+    <th class="detailsColumn" valign="top">Details/Formula</th>
     <th class="webnnColumn"><a href="https://www.w3.org/TR/webnn/">WebNN</a></th>
     <th class="onnxColumn"><a href="https://onnx.ai/onnx/operators/index.html">ONNX</a></th>
     <th class="dmlColumn"><a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_operator_type">DML</a></th>
@@ -933,7 +936,7 @@ th {
   <tr class="elementwiseOperator">
     <td>Elementwise</td>
     <td>Identity</td>
-    <td><code>Identity(X) = X</code></td>
+    <td class="detailsColumn"><code>Identity(X) = X</code></td>
     <td class="webnnColumn">identity</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></th>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY or
@@ -960,7 +963,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant</td>
-    <td><code>Constant() = Value</code></td>
+    <td class="detailsColumn"><code>Constant() = Value</code></td>
     <td class="webnnColumn">constant</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Constant">Constant</a></td>
     <td class="dmlColumn">NA just provide the tensor data</td>
@@ -986,7 +989,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant Of Shape</td>
-    <td><code>constantOfShape(scalarValue, newShape) = broadcast(scalarValue, Shape(newShape))</code></td>
+    <td class="detailsColumn"><code>constantOfShape(scalarValue, newShape) = broadcast(scalarValue, Shape(newShape))</code></td>
     <td class="webnnColumn">constant+expand</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
@@ -1012,7 +1015,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Add</td>
-    <td><code>f(x, y) = x + y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x + y</code></td>
     <td class="webnnColumn">add</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Add">Add</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ADD</td>
@@ -1038,7 +1041,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Subtract</td>
-    <td><code>f(x, y) = x - y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x - y</code></td>
     <td class="webnnColumn">sub</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sub">Sub</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SUBTRACT</td>
@@ -1064,7 +1067,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Multiply</td>
-    <td><code>f(x, y) = x * y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x * y</code></td>
     <td class="webnnColumn">mul</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mul">Mul</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
@@ -1090,7 +1093,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Divide</td>
-    <td><code>f(x, y) = x / y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x / y</code></td>
     <td class="webnnColumn">div</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Div">Div</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_DIVIDE</td>
@@ -1116,7 +1119,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Reciprocal</td>
-    <td><code>f(x) = 1 / x</code></td>
+    <td class="detailsColumn"><code>f(x) = 1 / x</code></td>
     <td class="webnnColumn">reciprocal</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_RECIP</td>
@@ -1142,7 +1145,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Truncate</td>
-    <td><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
@@ -1168,7 +1171,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Floor</td>
-    <td><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
@@ -1194,7 +1197,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Power</td>
-    <td><code>f(x, exponent) = pow(x, exponent)</code></td>
+    <td class="detailsColumn"><code>f(x, exponent) = pow(x, exponent)</code></td>
     <td class="webnnColumn">pow</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pow">Pow</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_POW</td>
@@ -1220,7 +1223,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Root</td>
-    <td><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
     <td class="webnnColumn">reciprocal and pow</td>
     <td class="onnxColumn">ONNX NA</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_RECIP & POW</td>
@@ -1246,7 +1249,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Square root</td>
-    <td><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
+    <td class="detailsColumn"><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
     <td class="webnnColumn">sqrt</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SQRT</td>
@@ -1272,7 +1275,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Exponent</td>
-    <td><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
+    <td class="detailsColumn"><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
     <td class="webnnColumn">exp</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_EXP</td>
@@ -1298,7 +1301,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Logarithm</td>
-    <td><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
+    <td class="detailsColumn"><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
     <td class="webnnColumn">log</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOG</td>
@@ -1324,7 +1327,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Absolute</td>
-    <td><code>f(x) = abs(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = abs(x)</code></td>
     <td class="webnnColumn">abs</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Abs">Abs</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ABS</td>
@@ -1350,7 +1353,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Negative</td>
-    <td><code>f(x) = -x</code></td>
+    <td class="detailsColumn"><code>f(x) = -x</code></td>
     <td class="webnnColumn">neg</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Neg">Neg</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with scale = -1</td>
@@ -1376,7 +1379,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Ceiling</td>
-    <td><code>f(x) = ceil(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = ceil(x)</code></td>
     <td class="webnnColumn">ceil</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Ceil">Ceil</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_CEIL</td>
@@ -1402,7 +1405,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Floor</td>
-    <td><code>f(x) = floor(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = floor(x)</code></td>
     <td class="webnnColumn">floor</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Floor">Floor</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_FLOOR</td>
@@ -1428,7 +1431,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Clamp</td>
-    <td><code>f(x, minValue, maxValue) = min(max(x, maxValue), minValue)</code></td>
+    <td class="detailsColumn"><code>f(x, minValue, maxValue) = min(max(x, maxValue), minValue)</code></td>
     <td class="webnnColumn">clamp</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Clip">Clip</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_CLIP</td>
@@ -1454,7 +1457,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Gauss Error Function</td>
-    <td><details><summary><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
+    <td class="detailsColumn"><details><summary><code>erf(x) = 1/sqrt(pi) * integrate(i = -x to x, e ^ -(i^2))</code>
 or: <code>erf(x) = 2/sqrt(pi) * integrate(i = 0 to x, e ^ -(i^2))</code></summary>
 <code>
 double f(double x)
@@ -1503,7 +1506,7 @@ double f(double x)
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Is Not a Number</td>
-    <td>f(x) = isnan(x)
+    <td class="detailsColumn"><code>f(x) = isnan(x)</code>
       where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
       Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>. The sign is ignored.
       e.g. s1111111 10000000 0000000 00000001 - float32
@@ -1533,7 +1536,7 @@ double f(double x)
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Is Infinity</td>
-    <td><code>output.shape = input.shape
+    <td class="detailsColumn"><code>output.shape = input.shape
 for every coordinate in input tensor
     hasExpectedSign = iif(input[coordinate] &gt; 0, detect_positive, detect_negative)
     output[coordinate] = isinf(input[coordinate]) && hasExpectedSign
@@ -1566,7 +1569,7 @@ endfor
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Sign</td>
-    <td><code>function Sign(x)
+    <td class="detailsColumn"><code>function Sign(x)
     if x == 0 then 0
     elif x &gt; 0 then 1
     elif x &lt; 0 then -1
@@ -1596,7 +1599,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
     <td>Equal</td>
-    <td><code>f(x, y) = (x == y)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = (x == y)</code></td>
     <td class="webnnColumn">equal</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Equal">Equal</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_EQUALS</td>
@@ -1622,7 +1625,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
     <td>Not Equal</td>
-    <td><code>f(x, y) = (x != y)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = (x != y)</code></td>
     <td class="webnnColumn">not equal</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Not">Not</a> and <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Equal">Equal</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_NOT and EQUALS</td>
@@ -1648,7 +1651,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
     <td>Greater</td>
-    <td><code>f(x, y) = (x &gt; y)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = (x &gt; y)</code></td>
     <td class="webnnColumn">greater</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Greater">Greater</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_GREATER_THAN</td>
@@ -1674,7 +1677,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
     <td>Lesser</td>
-    <td><code>f(x, y) = (x &lt; y)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = (x &lt; y)</code></td>
     <td class="webnnColumn">lesser</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Less">Less</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_LESS_THAN</td>
@@ -1700,7 +1703,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
     <td>Greater or Equal</td>
-    <td><code>f(x, y) = (x &gt; y)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = (x &gt; y)</code></td>
     <td class="webnnColumn">greaterOrEqual</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GreaterOrEqual">GreaterOrEqual</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_GREATER_THAN_OR_EQUAL</td>
@@ -1726,7 +1729,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Comparison</td>
     <td>Lesser or Equal</td>
-    <td><code>f(x, y) = (x &lt; y)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = (x &lt; y)</code></td>
     <td class="webnnColumn">lesserOrEqual</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LessOrEqual">LessOrEqual</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_LESS_THAN_OR_EQUAL</td>
@@ -1752,7 +1755,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise Not</td>
-    <td><code>f(x) = ~x</code></td>
+    <td class="detailsColumn"><code>f(x) = ~x</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitwiseNot">BitwiseNot</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_NOT</td>
@@ -1778,7 +1781,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise And</td>
-    <td><code>f(x, y) = x &amp; y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x &amp; y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitwiseAnd">BitwiseAnd</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_AND</td>
@@ -1804,7 +1807,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise Or</td>
-    <td><code>f(x, y) = x | y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x | y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitwiseOr">BitwiseOr</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_OR</td>
@@ -1830,7 +1833,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise Xor</td>
-    <td><code>f(x, y) = x ^ y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x ^ y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitwiseXor">BitwiseXor</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_XOR</td>
@@ -1856,7 +1859,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise Left Shift</td>
-    <td><code>f(x, y) = x &lt;&lt; y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x &lt;&lt; y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitwiseXor">BitShift</a> direction = LEFT</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_SHIFT_LEFT</td>
@@ -1882,7 +1885,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise Right Shift</td>
-    <td><code>f(x, y) = x &gt;&gt; y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x &gt;&gt; y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitwiseXor">BitShift</a> direction = RIGHT</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_SHIFT_Right</td>
@@ -1908,7 +1911,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Bitwise</td>
     <td>Bitwise Count</td>
-    <td><code>f(x) = add one to count for each set bit in x</code></td>
+    <td class="detailsColumn"><code>f(x) = add one to count for each set bit in x</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">NA</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_BIT_COUNT</td>
@@ -1934,7 +1937,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Logical</td>
     <td>Logical Not</td>
-    <td><code>f(x) = !x</code></td>
+    <td class="detailsColumn"><code>f(x) = !x</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Not">Not</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_NOT</td>
@@ -1960,7 +1963,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Logical</td>
     <td>Logical And</td>
-    <td><code>f(x, y) = x &amp;&amp; y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x &amp;&amp; y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#And">And</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_AND</td>
@@ -1986,7 +1989,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Logical</td>
     <td>Logical Or</td>
-    <td><code>f(x, y) = x || y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = x || y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Or">Or</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_OR</td>
@@ -2012,7 +2015,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Logical</td>
     <td>Logical Xor</td>
-    <td><code>f(x, y) = !!x xor !!y</code></td>
+    <td class="detailsColumn"><code>f(x, y) = !!x xor !!y</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Xor">Xor</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOGICAL_XOR</td>
@@ -2038,7 +2041,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Sine</td>
-    <td><code>f(x) = sin(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = sin(x)</code></td>
     <td class="webnnColumn">sin</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sin">Sin</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIN</td>
@@ -2064,7 +2067,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Cosine</td>
-    <td><code>f(x) = cos(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = cos(x)</code></td>
     <td class="webnnColumn">cos</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cos">Cos</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_COS</td>
@@ -2090,7 +2093,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Tangent</td>
-    <td><code>f(x) = tan(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = tan(x)</code></td>
     <td class="webnnColumn">tan</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Tan">Tan</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_TAN</td>
@@ -2116,7 +2119,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Arcsine</td>
-    <td><code>f(x) = asin(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = asin(x)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Asin">Asin</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ASIN</td>
@@ -2142,7 +2145,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Arccosine</td>
-    <td><code>f(x) = acos(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = acos(x)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Acos">Acos</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ACOS</td>
@@ -2168,7 +2171,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Arctangent</td>
-    <td><code>f(x) = atan(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = atan(x)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Atan">Atan</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ATAN</td>
@@ -2194,7 +2197,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Sine</td>
-    <td><code>f(x) = sinh(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = sinh(x)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sinh">Sinh</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SINH</td>
@@ -2220,7 +2223,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Cosine</td>
-    <td><code>f(x) = cosh(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = cosh(x)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Cosh">Cosh</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_COSH</td>
@@ -2246,7 +2249,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Tangent</td>
-    <td><code>f(x) = tanh(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = tanh(x)</code></td>
     <td class="webnnColumn">tanh</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Tanh">Tanh</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_TANH</td>
@@ -2272,7 +2275,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Arccosine</td>
-    <td><code>f(x) = arccosh(x)</code>
+    <td class="detailsColumn"><code>f(x) = arccosh(x)</code>
 <code>f(x) = logₑ(x + sqrt(x * x - 1))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Acosh">Acosh</a></td>
@@ -2299,7 +2302,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Arcsine</td>
-    <td><code>f(x) = arcsinh(x)</code>
+    <td class="detailsColumn"><code>f(x) = arcsinh(x)</code>
 <code>f(x) = logₑ(x + sqrt(x * x + 1))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Asinh">Asinh</a></td>
@@ -2326,7 +2329,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>Hyperbolic Arctangent</td>
-    <td><code>f(x) = arctanh(x)</code>
+    <td class="detailsColumn"><code>f(x) = arctanh(x)</code>
 <code>f(x) = logₑ((1 + x) / (1 - x)) / 2</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Atanh">Atanh</a></td>
@@ -2353,7 +2356,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Trigonometric</td>
     <td>CosineGrad</td>
-    <td><code>f(dx, x) = mul(sin(x), dx)</code></td>
+    <td class="detailsColumn"><code>f(dx, x) = mul(sin(x), dx)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">Composed</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIN &<br/>DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
@@ -2379,7 +2382,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Sum</td>
-    <td><code>f(x, y, z…) = x + y + z…</code></td>
+    <td class="detailsColumn"><code>f(x, y, z…) = x + y + z…</code></td>
     <td class="webnnColumn">add repeated</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sum">Sum</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ADD via repeated inputs</td>
@@ -2405,7 +2408,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Mean</td>
-    <td><code>f(x, y, z…) = (x + y + z…) / n</code></td>
+    <td class="detailsColumn"><code>f(x, y, z…) = (x + y + z…) / n</code></td>
     <td class="webnnColumn">add repeated and div</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mean">Mean</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MEAN via repeated inputs</td>
@@ -2431,7 +2434,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Maximum</td>
-    <td><code>f(x, y, z…) = max(x, y, z…)</code></td>
+    <td class="detailsColumn"><code>f(x, y, z…) = max(x, y, z…)</code></td>
     <td class="webnnColumn">max repeated</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MAX via repeated inputs</td>
@@ -2457,7 +2460,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Threshold</td>
-    <td><code>f(x, minValue) = max(x, minValue)</code>
+    <td class="detailsColumn"><code>f(x, minValue) = max(x, minValue)</code>
       notes: Not equivalent to ThresholdedRelu.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
@@ -2484,7 +2487,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Reduction</td>
     <td>Minimum</td>
-    <td><code>f(x, y, z…) = min(x, y, z…)</code></td>
+    <td class="detailsColumn"><code>f(x, y, z…) = min(x, y, z…)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Min">Min</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MIN via repeated inputs</td>
@@ -2510,7 +2513,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Quantization</td>
     <td>Quantize Linear</td>
-    <td><code>f(input:float32, scale:float32, zero_point:int32)
+    <td class="detailsColumn"><code>f(input:float32, scale:float32, zero_point:int32)
     return output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#QuantizeLinear">QuantizeLinear</a><br/>com.microsoft QuantizeLinear</td>
@@ -2537,7 +2540,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Quantization</td>
     <td>Dequantize Linear</td>
-    <td><code>f(input:uint8, scale:float32, zero_point:float32)
+    <td class="detailsColumn"><code>f(input:uint8, scale:float32, zero_point:float32)
     return output:float32 = (input - zero_point) * scale</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DequantizeLinear">DequantizeLinear</a><br/>com.microsoft DequantizeLinear</td>
@@ -2564,7 +2567,7 @@ endfunction</code></td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Sigmoid</td>
-    <td><code>f(X) = reciprocal(add(1, exp(neg(x))))</code>
+    <td class="detailsColumn"><code>f(X) = reciprocal(add(1, exp(neg(x))))</code>
 <code>f(x) = 1 / (1 + expₑ(-x))</code>
 <code>f(x) = expₑ(x) / (1 + expₑ(x))</code></td>
     <td class="webnnColumn">sigmoid</td>
@@ -2592,7 +2595,7 @@ endfunction</code></td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Hard Sigmoid</td>
-    <td><code>f(X) = clip(add(mul(alpha, X), beta), 0, 1)</code>
+    <td class="detailsColumn"><code>f(X) = clip(add(mul(alpha, X), beta), 0, 1)</code>
 <code>f(x) = max(0, min(alpha * x + beta, 1))</code>
 defaults: alpha = 0.2, beta = 0.5</td>
     <td class="webnnColumn">hardSigmoid</td>
@@ -2620,7 +2623,7 @@ defaults: alpha = 0.2, beta = 0.5</td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Hyperbolic Tangent</td>
-    <td><code>f(X) = div(sub(1, exp(mul(X, -2)), add(1, exp(X, -2)))</code>
+    <td class="detailsColumn"><code>f(X) = div(sub(1, exp(mul(X, -2)), add(1, exp(X, -2)))</code>
 <code>f(x) = (1 - expₑ(-2 * x))/(1 + expₑ(-2 * x))</code>
 <code>f(x) = 2 /(1 + expₑ(-2 * x)) - 1</code>
 <code>f(x) = (expₑ(x) - expₑ(-x)) / (expₑ(x) + expₑ(-x))</code></td>
@@ -2649,7 +2652,7 @@ defaults: alpha = 0.2, beta = 0.5</td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Scaled Hyperbolic Tangent</td>
-    <td><code>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)</code>
+    <td class="detailsColumn"><code>F(X, alpha, beta) = Mul(Tanh(Mul(X, beta)), alpha)</code>
 <code>f(x, alpha, beta) = alpha * tanh(beta * x)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ScaledTanh">ScaledTanh</a></td>
@@ -2676,7 +2679,7 @@ defaults: alpha = 0.2, beta = 0.5</td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Clamp Positive (Rectified Linear Unit)</td>
-    <td><code>F(X) = max(X, 0)</code>
+    <td class="detailsColumn"><code>F(X) = max(X, 0)</code>
 <code>f(x) = max(x, 0)</code>
 <code>if x &gt;= 0 then x else 0</code></td>
     <td class="webnnColumn">relu</td>
@@ -2704,7 +2707,7 @@ defaults: alpha = 0.2, beta = 0.5</td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Leaky Rectified Linear Unit</td>
-    <td><code>F(X) = select(lesser(X, 0), mul(X, alpha), X)</code>
+    <td class="detailsColumn"><code>F(X) = select(lesser(X, 0), mul(X, alpha), X)</code>
 <code>f(x, alpha) = if x &gt;= 0 then x else alpha * x</code></td>
     <td class="webnnColumn">leakyRelu</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LeakyRelu">LeakyRelu</a></td>
@@ -2731,7 +2734,7 @@ defaults: alpha = 0.2, beta = 0.5</td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Parameterized Rectified Linear Unit</td>
-    <td><code>f(X) = select(less(X, 0), mul(X, Slope), X)</code>
+    <td class="detailsColumn"><code>f(X) = select(less(X, 0), mul(X, Slope), X)</code>
 <code>f(x, slope) = if x &gt;= 0 then x else slope * x</code>
 PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
     <td class="webnnColumn">prelu</td>
@@ -2759,7 +2762,7 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Thresholded Rectified Linear Unit</td>
-    <td><code>f(X, alpha = 1) = select(greater(X, alpha), X, 0)</code>
+    <td class="detailsColumn"><code>f(X, alpha = 1) = select(greater(X, alpha), X, 0)</code>
 <code>f(x, alpha = 1) = if x &gt; alpha then x else 0</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ThresholdedRelu">ThresholdedRelu</a></td>
@@ -2786,7 +2789,7 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Exponential Linear Unit</td>
-    <td><code>f(X, alpha = 1) = select(less(X, 0), mul(sub(exp(X), 1), alpha))</code>
+    <td class="detailsColumn"><code>f(X, alpha = 1) = select(less(X, 0), mul(sub(exp(X), 1), alpha))</code>
 <code>f(X, alpha = 1) = add(clip(X, 0, inf), clip(mul(sub(exp(X), 1), alpha), -inf, 0))</code>
 <code>f(x, alpha = 1) = if x &gt;= 0 then x else alpha * (expₑ(x) - 1)</code></td>
     <td class="webnnColumn">elu</td>
@@ -2814,7 +2817,7 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Scaled Exponential Linear Unit</td>
-    <td><code>f(X, alpha = 1.6732, gamma = 1.0507) = mul(elu(X, alpha), gamma)</code>
+    <td class="detailsColumn"><code>f(X, alpha = 1.6732, gamma = 1.0507) = mul(elu(X, alpha), gamma)</code>
 <code>f(x, alpha = 1.6732, gamma = 1.0507) = gamma * iif(x &gt; 0, x, alpha * (expₑ(x) - 1))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Selu">Selu</a></td>
@@ -2841,7 +2844,7 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Gaussian Error Linear Unit (<a href="https://arxiv.org/abs/1606.08415">ref</a>)</td>
-    <td><code>f(x) = x * 0.5 * (1.0 + erf(x / sqrt(2)))</code></td>
+    <td class="detailsColumn"><code>f(x) = x * 0.5 * (1.0 + erf(x / sqrt(2)))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gelu">Gelu</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_GELU</td>
@@ -2867,7 +2870,7 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
   <tr class="activationOperator normalizationOperator">
     <td>Activation, Normalization</td>
     <td>Soft Maximum</td>
-    <td>Raise all elements to e, and divide all the elements in each batch by that batch's sum.
+    <td class="detailsColumn">Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 <code>function SoftMax2D(Input; Output; axis):
   MaxInput = ReduceMax(Input, axes=[1], keepdims=1)
   ExpInput = Exp(Input - MaxInput)
@@ -2909,7 +2912,7 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Log Soft Maximum</td>
-    <td><code>f(Input, axis) = Log(Softmax(Input, axis))</code>
+    <td class="detailsColumn"><code>f(Input, axis) = Log(Softmax(Input, axis))</code>
   or: <code>f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))</code>
   or: <code>f(x) = (x - max(X)) - logₑ(x - max(X))))</code></td>
     <td class="webnnColumn">?</td>
@@ -2937,7 +2940,7 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Hard Maximum</td>
-    <td><code>f(x) = if x_i == max(X) then 1 else 0</code>
+    <td class="detailsColumn"><code>f(x) = if x_i == max(X) then 1 else 0</code>
       *but only for first element along that axis</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Hardmax">Hardmax</a></td>
@@ -2964,7 +2967,7 @@ endfunction
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Soft Sign</td>
-    <td><code>f(X) = div(X, add(abs(X), 1))</code>
+    <td class="detailsColumn"><code>f(X) = div(X, add(abs(X), 1))</code>
       or: <code>f(x) = x / (1 + abs(x))</code></td>
     <td class="webnnColumn">softsign</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softsign">Softsign</a></td>
@@ -2991,7 +2994,7 @@ endfunction
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Softplus</td>
-    <td><code>f(X) = log(add(exp(x), 1))</code>
+    <td class="detailsColumn"><code>f(X) = log(add(exp(x), 1))</code>
       or: <code>f(x) = logₑ(1 + expₑ(x))</code></td>
     <td class="webnnColumn">softplus</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softplus">Softplus</a></td>
@@ -3018,7 +3021,7 @@ endfunction
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Affine</td>
-    <td><code>f(X, alpha, beta) = add(mul(X, alpha), beta)</code>
+    <td class="detailsColumn"><code>f(X, alpha, beta) = add(mul(X, alpha), beta)</code>
   or: <code>f(x, alpha, beta) = alpha * x + beta</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Affine">Affine</a></td>
@@ -3045,7 +3048,7 @@ endfunction
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Symmetric signal shift</td>
-    <td><code>f(x, threshold, bias) = x * greater(x, window) + -bias * sign(x)</code>
+    <td class="detailsColumn"><code>f(x, threshold, bias) = x * greater(x, window) + -bias * sign(x)</code>
   <code>f(x, threshold, bias) = x * abs(sign(x)) + -bias * sign(x)</code>
 
 <code>f(x, lambda, bias):
@@ -3077,7 +3080,7 @@ endfunction
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Parametric Softplus</td>
-    <td><code>f(X, alpha, beta) = mul(alpha, softplus(mul(beta, X)))</code>
+    <td class="detailsColumn"><code>f(X, alpha, beta) = mul(alpha, softplus(mul(beta, X)))</code>
       or: <code>f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ParametricSoftplus">ParametricSoftplus</a></td>
@@ -3104,7 +3107,7 @@ endfunction
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Normal</td>
-    <td><code>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</code></td>
+    <td class="detailsColumn"><code>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormal">RandomNormal</a></td>
     <td class="dmlColumn">---</td>
@@ -3130,7 +3133,7 @@ endfunction
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Normal Like</td>
-    <td><code>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</code></td>
+    <td class="detailsColumn"><code>f(scale, mean) = <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method">MarsagliaPolarTransform</a>(random(), random()) * scale + mean</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomNormalLike">RandomNormalLike</a></td>
     <td class="dmlColumn">---</td>
@@ -3156,7 +3159,7 @@ endfunction
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform</td>
-    <td><code>f(low, high): // see MT19937
+    <td class="detailsColumn"><code>f(low, high): // see MT19937
     range = high - low // note inclusive end
     if integer: return (rand() % (range+1) + low
     if float: (rand() / randmax) * range + low</code></td>
@@ -3185,7 +3188,7 @@ endfunction
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform Normal</td>
-    <td><code>f(low, high): // see MT19937
+    <td class="detailsColumn"><code>f(low, high): // see MT19937
     range = high - low // note inclusive end
     if integer: return (rand() % (range+1) + low
     if float: (rand() / randmax) * range + low</code></td>
@@ -3214,7 +3217,7 @@ endfunction
   <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Multinomial</td>
-    <td>TODO:</td>
+    <td class="detailsColumn">TODO:</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Multinomial">Multinomial</a></td>
     <td class="dmlColumn">---</td>
@@ -3240,7 +3243,7 @@ endfunction
  <tr class="generationOperator matrixMultiplicationOperator">
     <td>Generation, Matrix Multiplication</td>
     <td>Diagonal Matrix</td>
-    <td>Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
+    <td class="detailsColumn">Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
 output.shape = input.shape
 output.type = if exists(dtype) then dtype else input.type
 function EyeLike(input, k=0):
@@ -3273,7 +3276,7 @@ endfunction</code></td>
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Generic Matrix Multiplication</td>
-    <td><code>f(A, B, C; alpha, beta, transA, transB; Y):
+    <td class="detailsColumn"><code>f(A, B, C; alpha, beta, transA, transB; Y):
     A2 = if(transA, Transpose(A), A)
     B2 = if(transB, Transpose(B), B)
     Y = add(mul(alpha, matMul(A2, B2)), mul(beta, C))</code></td>
@@ -3302,7 +3305,7 @@ endfunction</code></td>
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Matrix Multiplication</td>
-    <td><code>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])</code>
+    <td class="detailsColumn"><code>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])</code>
       It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
       notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices.
       A and B can have batch count dimensions, where each 2D matrix is multiplied separately.
@@ -3332,7 +3335,7 @@ endfunction</code></td>
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Convolve</td>
-    <td>Every output element is the convolution of the filter with the corresponding input elements.
+    <td class="detailsColumn">Every output element is the convolution of the filter with the corresponding input elements.
   <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</code>
       notes: 'steps' affects the size of steps over the input.
       'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements.
@@ -3391,7 +3394,7 @@ endfunction
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Convolve Tranposed</td>
-    <td>todo: Here be dragons.
+    <td class="detailsColumn">todo: Here be dragons.
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConvTranspose">ConvTranspose</a></td>
@@ -3420,7 +3423,7 @@ endfunction
  <tr class="elementwiseOperator">
     <td>Data Conversion, Elementwise</td>
     <td>Cast</td>
-    <td><code>f(x) = cast(x)</code></td>
+    <td class="detailsColumn"><code>f(x) = cast(x)</code></td>
     <td class="webnnColumn">cast</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Cast">Cast</a></td>
     <td class="dmlColumn">DML_OPERATOR_CAST</td>
@@ -3446,7 +3449,7 @@ endfunction
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Transpose</td>
-    <td>Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
+    <td class="detailsColumn">Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
 function Transpose(input, perm):
     N = input.rank
@@ -3483,7 +3486,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Broadcast</td>
-    <td>Broadcast any single size dimensions up to the output dimension counts.
+    <td class="detailsColumn">Broadcast any single size dimensions up to the output dimension counts.
 Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
 function Broadcast(input, shape)
@@ -3521,7 +3524,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>BroadcastShape</td>
-    <td>Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
+    <td class="detailsColumn">Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
 Any single size dimensions are stretched to the output dimension size.
 <code>
 function BroadcastShape(shapes...)
@@ -3572,7 +3575,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Reshape</td>
-    <td>Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
+    <td class="detailsColumn">Return tensor with a different view of the data, like a reinterpret cast using new dimensions that are element-count compatible.</td>
     <td class="webnnColumn">reshape</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
     <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
@@ -3598,7 +3601,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Reshape To 2D</td>
-    <td>Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
+    <td class="detailsColumn">Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
 
 <code>
 aggregate Flatten(input, axis)
@@ -3642,7 +3645,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Reshape Removing Ones</td>
-    <td>Reinterpret the view of the tensor, removing 1's for deletable axes.
+    <td class="detailsColumn">Reinterpret the view of the tensor, removing 1's for deletable axes.
 
 <code>
 function ReshapeDeletingOnes(input, axes)
@@ -3688,7 +3691,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Reshape Inserting Ones</td>
-    <td>Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
+    <td class="detailsColumn">Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
 
 <code>
 function ReshapeInsertingOnes(input, axes)
@@ -3726,7 +3729,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Tile</td>
-    <td>Repeat entire tensor along each axis by repeat counts.
+    <td class="detailsColumn">Repeat entire tensor along each axis by repeat counts.
 <code>
 function Tile(input, repeats)
     N = input.rank
@@ -3763,7 +3766,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Split</td>
-    <td>Split input into multiple output tensors.</td>
+    <td class="detailsColumn">Split input into multiple output tensors.</td>
     <td class="webnnColumn">split</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Split">Split</a></td>
     <td class="dmlColumn">DML_OPERATOR_SPLIT</td>
@@ -3789,7 +3792,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Slice</td>
-    <td>Crop the tensor to the given ranges for each axis.
+    <td class="detailsColumn">Crop the tensor to the given ranges for each axis.
 <code>function Slice(input, starts, ends, axes, steps)
     N = input.rank
     if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
@@ -3835,7 +3838,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Concatenate</td>
-    <td>Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
+    <td class="detailsColumn">Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 
 <code>function Concat(inputs, axis)
     sizesAlongAxis = []
@@ -3876,7 +3879,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Gather</td>
-    <td>TODO:</td>
+    <td class="detailsColumn">TODO:</td>
     <td class="webnnColumn">gather</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gather">Gather</a></td>
     <td class="dmlColumn">DML_OPERATOR_GATHER</td>
@@ -3902,7 +3905,7 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Gather Elements</td>
-    <td>Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
+    <td class="detailsColumn">Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
 output = input
 for each coordinate in indices tensor
@@ -3954,7 +3957,7 @@ output = [[1,1], [4,3], [6,6]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Gather Multidimensional</td>
-    <td><code>TODO</code></td>
+    <td class="detailsColumn"><code>TODO</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherND">GatherND</a></td>
     <td class="dmlColumn">DML_OPERATOR_GATHER_ND</td>
@@ -3980,7 +3983,7 @@ output = [[1,1], [4,3], [6,6]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Scatter Elements</td>
-    <td>Opposite of gather. Write values from updates into data at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
+    <td class="detailsColumn">Opposite of gather. Write values from updates into data at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
 <code>
 output = input
 for each coordinate in indices tensor
@@ -4028,7 +4031,7 @@ output = [[1, 11, 3, 21, 5]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Scatter ND</td>
-    <td><code>TODO</code></td>
+    <td class="detailsColumn"><code>TODO</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterND">ScatterND</a></td>
     <td class="dmlColumn">DML_OPERATOR_SCATTER_ND</td>
@@ -4054,7 +4057,7 @@ output = [[1, 11, 3, 21, 5]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Pad</td>
-    <td>Inflate the input with zeroes on the edges</td>
+    <td class="detailsColumn">Inflate the input with zeroes on the edges</td>
     <td class="webnnColumn">pad</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pad">Pad</a></td>
     <td class="dmlColumn">DML_OPERATOR_PADDING</td>
@@ -4080,7 +4083,7 @@ output = [[1, 11, 3, 21, 5]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Space To Depth</td>
-    <td>Rearrange blocks of elements.
+    <td class="detailsColumn">Rearrange blocks of elements.
 <code>
 channelCountDivBlockCount = channelCount / (blockSize * blockSize);
 inputIndices = [
@@ -4116,7 +4119,7 @@ output[outputIndices] = input[inputIndices];</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Depth To Space</td>
-    <td>Rearrange blocks of elements.
+    <td class="detailsColumn">Rearrange blocks of elements.
 <code>
 channelCountDivBlockCount = channelCount / (blockSize * blockSize);
 outputIndices = [
@@ -4166,7 +4169,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Shape</td>
-    <td>Return the dimensions of the tensor as a 1D tensor.
+    <td class="detailsColumn">Return the dimensions of the tensor as a 1D tensor.
       F(input): return input.shape
     </td>
     <td class="webnnColumn">MLOperandDescriptor::dimensions</td>
@@ -4194,7 +4197,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Element Count</td>
-    <td><code>elementCount(X) = reduceProduct(shape(X), keepDimensions=false)</code>.
+    <td class="detailsColumn"><code>elementCount(X) = reduceProduct(shape(X), keepDimensions=false)</code>.
 note: <code>Size</code> is unfortunately named, inconsistently so with <code>Resize-10</code> which accepts separate dimensions. 🙃
 If you want the sizes of the tensor (N C H W) rather than just the total element count, called <code>Shape</code> instead.</td>
     <td class="webnnColumn">product(MLOperandDescriptor::dimensions)</td>
@@ -4222,7 +4225,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
   <tr class="reorganizationOperator">
     <td>Data reorganization mapping</td>
     <td>One Hot Along Axis</td>
-    <td>Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
+    <td class="detailsColumn">Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ONE_HOT</td>
@@ -4248,7 +4251,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Top K Sorted Selection</td>
-    <td><code>topK(X, K, axis) = slice(sortDecreasing(X, axis), starts=0, ends=K, axes=[axis])</code></td>
+    <td class="detailsColumn"><code>topK(X, K, axis) = slice(sortDecreasing(X, axis), starts=0, ends=K, axes=[axis])</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
     <td class="dmlColumn">DML_OPERATOR_TOP_K</td>
@@ -4274,7 +4277,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
   <tr class="reorganizationOperator">
     <td>Data reorganization, Elementwise, Selection</td>
     <td>Select elementwise</br>("where" is a bad name)</td>
-    <td>f(b, x, y) = if b then x else y
+    <td class="detailsColumn">f(b, x, y) = if b then x else y
       notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
     </td>
     <td class="webnnColumn">where</td>
@@ -4302,7 +4305,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
   <tr class="reorganizationOperator">
     <td>Data reorganization, Selection</td>
     <td>Join Selected Slices</td>
-    <td>A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
+    <td class="detailsColumn">A conditional slice/join along a specific axis. Has utterly nothing to do with data compression, despite the confusing name.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Compress">Compress</a></td>
     <td class="dmlColumn">---</td>
@@ -4328,7 +4331,7 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Reverse axes</td>
-    <td>Reverse all the elements along the given axes.
+    <td class="detailsColumn">Reverse all the elements along the given axes.
 <code>
 output.shape = input.shape
 for every inputCoordinate in input tensor
@@ -4366,7 +4369,7 @@ endfor
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Global Average</td>
-    <td>Average all elements in each pool. <code>y = (x1 + x2 + … + xn) / pool_size</code>
+    <td class="detailsColumn">Average all elements in each pool. <code>y = (x1 + x2 + … + xn) / pool_size</code>
 So X[N C H W] reduces to Y[N C 1 1]
 
 GlobalAveragePool(X):
@@ -4399,7 +4402,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Average</td>
-    <td><code>y = (x1 + x2 + … + xn) / pool_size</code>
+    <td class="detailsColumn"><code>y = (x1 + x2 + … + xn) / pool_size</code>
 <code>averagePool(input, ...) = conv(input, filter = ones(filterShape) / filterElementCount, ...)</code></td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
@@ -4426,7 +4429,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Sum</td>
-    <td><code>y = x1 + x2 + … + xn</code></td>
+    <td class="detailsColumn"><code>y = x1 + x2 + … + xn</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">?</td>
     <td class="dmlColumn">?</td>
@@ -4452,7 +4455,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Global Maximum</td>
-    <td><code>y = max(x1, x2, … x_pool_size)</code></td>
+    <td class="detailsColumn"><code>y = max(x1, x2, … x_pool_size)</code></td>
     <td class="webnnColumn">maxPool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_MAX_POOLING with output being 1 element</td>
@@ -4478,7 +4481,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Maximum</td>
-    <td><code>y = max(x1, x2, … x_pool_size)</code></td>
+    <td class="detailsColumn"><code>y = max(x1, x2, … x_pool_size)</code></td>
     <td class="webnnColumn">maxPool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxPool">MaxPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_MAX_POOLING</td>
@@ -4504,7 +4507,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Unpool Maximum</td>
-    <td>Opposite of MaxPool.
+    <td class="detailsColumn">Opposite of MaxPool.
 Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros.
 Then write each value from the input tensor into the output tensor at the element offset from the corresponding indices array.</td>
     <td class="webnnColumn">?</td>
@@ -4532,7 +4535,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Lebesgue</td>
-    <td><code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</code></td>
+    <td class="detailsColumn"><code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel</code></td>
     <td class="webnnColumn">l2Pool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpPool">LpPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_LP_POOLING</td>
@@ -4558,7 +4561,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Global Lebesgue</td>
-    <td><code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p)</code>
+    <td class="detailsColumn"><code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p)</code>
       So X[N C H W] reduces to Y[N C 1 1]
       e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
     <td class="webnnColumn">l2Pool2d</td>
@@ -4586,7 +4589,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Maximum Region of Interest</td>
-    <td>Apply MaxPool to given input within each numbered region:
+    <td class="detailsColumn">Apply MaxPool to given input within each numbered region:
     [batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive].
     Then write the maximal value back to the output.
     questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute?
@@ -4616,7 +4619,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Sum</td>
-    <td>Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
+    <td class="detailsColumn">Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
       <code>y = (x1 + x2 + ... + xn)</code></td>
     <td class="webnnColumn">reduceSum</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSum">ReduceSum</a></td>
@@ -4643,7 +4646,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Mean</td>
-    <td><code>y = (x1 + x2 + ... + xn) / n</code></td>
+    <td class="detailsColumn"><code>y = (x1 + x2 + ... + xn) / n</code></td>
     <td class="webnnColumn">reduceMean</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMean">ReduceMean</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_AVERAGE</td>
@@ -4669,7 +4672,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Product</td>
-    <td><code>y = (x1 * x2 * ... * xn)</code></td>
+    <td class="detailsColumn"><code>y = (x1 * x2 * ... * xn)</code></td>
     <td class="webnnColumn">reduceProduct</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceProd">ReduceProd</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MULTIPLY</td>
@@ -4695,7 +4698,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Logarithm of Sum</td>
-    <td><code>f(X) = log(reduceSum(X, axes, keepdims))</code>
+    <td class="detailsColumn"><code>f(X) = log(reduceSum(X, axes, keepdims))</code>
       or: <code>y = logₑ(x1 + x2 + ... + xn)</code></td>
     <td class="webnnColumn">reduceLogSum</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSum">ReduceLogSum</a></td>
@@ -4722,7 +4725,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Logarithm of Sum of Exponents</td>
-    <td><code>f(X) = Log(ReduceSum(Exp(X), axes, keepdims))</code>
+    <td class="detailsColumn"><code>f(X) = Log(ReduceSum(Exp(X), axes, keepdims))</code>
       or: <code>y = logₑ(expₑ(x1) + expₑ(x2) + ... + expₑ(xn))</code></td>
     <td class="webnnColumn">reduceLogSumExp</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceLogSumExp">ReduceLogSumExp</a></td>
@@ -4749,7 +4752,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Sum of Squares</td>
-    <td><code>f(X) = reduceSum(Pow(X, 2), axes, keepdims)</code>
+    <td class="detailsColumn"><code>f(X) = reduceSum(Pow(X, 2), axes, keepdims)</code>
       or: <code>y = x1^2 + x2^2 + ... + xn^2</code></td>
     <td class="webnnColumn">reduceSumSquare</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSumSquare">ReduceSumSquare</a></td>
@@ -4776,7 +4779,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Sum of Absolute Values</td>
-    <td><code>f(X) = ReduceSum(Abs(X), axes, keepdims)</code>
+    <td class="detailsColumn"><code>f(X) = ReduceSum(Abs(X), axes, keepdims)</code>
       or: <code>y = abs(x1) + abs(x2) + ... + abs(xn)</code></td>
     <td class="webnnColumn">reduceL1</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL1">ReduceL1</a></td>
@@ -4803,7 +4806,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to L2 Distance</td>
-    <td><code>f(X) = Sqrt(ReduceSum(Pow(X, 2), axes, keepdims))</code>
+    <td class="detailsColumn"><code>f(X) = Sqrt(ReduceSum(Pow(X, 2), axes, keepdims))</code>
   or: <code>y = sqrt(x1^2 + x2^2 + ... + xn^2)</code></td>
     <td class="webnnColumn">reduceL2</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceL2">ReduceL2</a></td>
@@ -4830,7 +4833,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Maximum</td>
-    <td><code>x = max(max(max(x1, x2), x3), ..., xn)</code></td>
+    <td class="detailsColumn"><code>x = max(max(max(x1, x2), x3), ..., xn)</code></td>
     <td class="webnnColumn">reduceMax</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMax">ReduceMax</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MAX</td>
@@ -4856,7 +4859,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Minimum</td>
-    <td><code>x = min(min(min(x1, x2), x3), ..., xn)</code></td>
+    <td class="detailsColumn"><code>x = min(min(min(x1, x2), x3), ..., xn)</code></td>
     <td class="webnnColumn">reduceMin</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMin">ReduceMin</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_MIN</td>
@@ -4882,7 +4885,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Find Maximum Index</td>
-    <td><code>int32 {i j k ..} = maxindex(X Y Z …)</code></td>
+    <td class="detailsColumn"><code>int32 {i j k ..} = maxindex(X Y Z …)</code></td>
     <td class="webnnColumn">argMax</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMax">ArgMax</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMAX</td>
@@ -4908,7 +4911,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Find Minimum Index</td>
-    <td><code>int32 {i j k ..} = minindex(X Y Z …)</code></td>
+    <td class="detailsColumn"><code>int32 {i j k ..} = minindex(X Y Z …)</code></td>
     <td class="webnnColumn">argMin</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ArgMin">ArgMin</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_ARGMIN</td>
@@ -4934,7 +4937,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="imagingOperator">
     <td>Imaging Operators</td>
     <td>Resample</td>
-    <td><code>Output.Shape = Floor(Shape(Input) * Scales)
+    <td class="detailsColumn"><code>Output.Shape = Floor(Shape(Input) * Scales)
 Output[output_i] = Input[output_i / Scales]</code></td>
     <td class="webnnColumn">resample</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Resize">Resize</a></td>
@@ -4961,7 +4964,7 @@ Output[output_i] = Input[output_i / Scales]</code></td>
   <tr class="imagingOperator">
     <td>Imaging Operators</td>
     <td>Resample Up</td>
-    <td>Output.Shape = Floor(Shape(Input) * Scales)
+    <td class="detailsColumn">Output.Shape = Floor(Shape(Input) * Scales)
 Output[output_i] = Input[output_i / Scales]</td>
     <td class="webnnColumn">resample</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Upsample">Upsample</a></td>
@@ -4988,7 +4991,7 @@ Output[output_i] = Input[output_i / Scales]</td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>If</td>
-    <td><code>f(cond, then_graph, else_graph, outputs...):
+    <td class="detailsColumn"><code>f(cond, then_graph, else_graph, outputs...):
 subgraph = cond ? then_graph : else_graph
 outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
     <td class="webnnColumn">?</td>
@@ -5016,7 +5019,7 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>Loop</td>
-    <td>TODO:CODE</td>
+    <td class="detailsColumn">TODO:CODE</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Loop">Loop</a></td>
     <td class="dmlColumn">---</td>
@@ -5042,7 +5045,7 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>Scan</td>
-    <td>TODO:CODE</td>
+    <td class="detailsColumn">TODO:CODE</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Scan">Scan</a></td>
     <td class="dmlColumn">---</td>
@@ -5068,7 +5071,7 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Mean Variance Normalization</td>
-    <td>For each output element, subtract the mean, and divide by standard deviation.
+    <td class="detailsColumn">For each output element, subtract the mean, and divide by standard deviation.
 
 MeanVarianceNormalization(input) = (input - mean) / standardDeviation
 MeanVarianceNormalization(input) = (input - mean) / sqrt(variance + epsilon)
@@ -5121,7 +5124,7 @@ output = (input - inputMean) / (standardDeviation + 1e-9)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Spatial Normalization<br/>(independent batch&channel)</td>
-    <td><code>instanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshapedBias</code>
+    <td class="detailsColumn"><code>instanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshapedBias</code>
 <code>instanceNormalization(X, scale, bias) = scale * meanVarianceNormalization(axes = [2...input.rank-1]) + reshapedBias</code>
 <code>reshapedBias = reshape(Bias, [batch size, C axis size, spatial dims...])</code>
 
@@ -5168,7 +5171,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Channel&Spatial Normalization<br/>(independent leading batches) <a href="https://arxiv.org/abs/1803.08494">ref</a></td>
-    <td>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
+    <td class="detailsColumn">LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
 
 Mean and variance are computed across all dimensions from and after axis, independently per leading batches:
 
@@ -5213,7 +5216,7 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Batch&Spatial Normalization<br/>(independent channels)</td>
-    <td><code>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)</code>
+    <td class="detailsColumn"><code>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)</code>
 
 Statistics are precomputed across batch <i>and</i> spatial dimensions NDHW (and not just the batch dimension, as the name would misleadingly lead you believe).
 So each channel C is independent.
@@ -5255,7 +5258,7 @@ variance = np.mean(x, axis=axes, keepdims=True)</td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Local Response Normalization</td>
-    <td><code>windowDimensions = repeat(windowLength, axes.size)
+    <td class="detailsColumn"><code>windowDimensions = repeat(windowLength, axes.size)
 leadingPadding = floor((windowLength - 1) / 2) // Center halfway around sliding window
 trailingPadding = ceil((windowLength - 1) / 2) // Center halfway around sliding window
 padding = repeat(axes.size * 2, [leadingPadding, trailingPadding])
@@ -5300,7 +5303,7 @@ Output = Input / Pow(Biased, Beta)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Lebesgue Length Normalization</td>
-    <td><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
+    <td class="detailsColumn"><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
 <code>function F(X, p)
     // TODO: verify this. mean? variance not / n?
     X_reduced = ReduceLp(X, p, axis, keepdims=1)
@@ -5335,7 +5338,7 @@ endfunction</code></td>
  <tr class="uncategorizedOperator">
     <td>Sparse tensor collation</td>
     <td>Nonzero Indices List</td>
-    <td>Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
+    <td class="detailsColumn">Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
     So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
@@ -5362,7 +5365,7 @@ endfunction</code></td>
  <tr class="uncategorizedOperator">
     <td>NGram</td>
     <td>Term Frequency Inverse<br/>Document Frequency Vectorizer</td>
-    <td>Read input front to back, incrementing output histogram for each occurrence found of desired patterns.
+    <td class="detailsColumn">Read input front to back, incrementing output histogram for each occurrence found of desired patterns.
 It's basically a word count algorithm with the output histogram size equalling the number of words in the dictionary to find.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#tfidfvectorizer">TfldfVectorizer</a></td>
@@ -5389,7 +5392,7 @@ It's basically a word count algorithm with the output histogram size equalling t
  <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Einstein Summation</td>
-    <td><details><summary>reduceSum(multiply(a.reshape(aToProductshape)[aToProductStep], B.reshape(bToProductshape)[bToProductStep]), axes = reductionAxes)</summary>
+    <td class="detailsColumn"><details><summary>reduceSum(multiply(a.reshape(aToProductshape)[aToProductStep], B.reshape(bToProductshape)[bToProductStep]), axes = reductionAxes)</summary>
 
 <b>Links:</b>
 - https://github.com/onnx/onnx/pull/2504
@@ -5540,7 +5543,7 @@ For well known patterns, they can be mapped directly to better known operators: 
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Recurrent Neural Network</td>
-    <td>Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
+    <td class="detailsColumn">Y = Activation(Clip(MatMul(X, Transpose(W)) + MatMul(Initial_h, Transpose(R)) + B), -clip, +clip)</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RNN">RNN</a></td>
     <td class="dmlColumn">DML_OPERATOR_RNN</td>
@@ -5566,7 +5569,7 @@ For well known patterns, they can be mapped directly to better known operators: 
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Gated Recurrent Unit</td>
-    <td>Iteratively apply matrix multiplication. TODO: Need better summary.
+    <td class="detailsColumn">Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
 Z = Activation1(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + b1, -clip, +clip))
 R = Activation1(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + b2, -clip, +clip))
@@ -5603,7 +5606,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Gated Recurrent Unit Unit</td>
-    <td>???</td>
+    <td class="detailsColumn">???</td>
     <td class="webnnColumn">gruCell</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#GRUUnit">GRUUnit</a> (delete)</td>
     <td class="dmlColumn">NA</td>
@@ -5629,7 +5632,7 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Long Short Term Memory</td>
-    <td>Iteratively apply matrix multiplication. TODO: Need better summary.
+    <td class="detailsColumn">Iteratively apply matrix multiplication. TODO: Need better summary.
 <code>
 I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
 F = Activation1f(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + Mul(p, initial_c) + b2), -clip, +clip)
@@ -5668,7 +5671,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Long Short Term Memory Unit</td>
-    <td>One occurence of LSTM</td>
+    <td class="detailsColumn">One occurence of LSTM</td>
     <td class="webnnColumn">lstmCell</td>
     <td class="onnxColumn">NA</td>
     <td class="dmlColumn">DML_OPERATOR_LSTM</td>
@@ -5694,7 +5697,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Multihead Attention</td>
-    <td>TODO:</td>
+    <td class="detailsColumn">TODO:</td>
     <td class="webnnColumn">X</td>
     <td class="onnxColumn">X</td>
     <td class="dmlColumn">DML_OPERATOR_MULTIHEAD_ATTENTION</td>
@@ -5720,7 +5723,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise, Training</td>
     <td>Dropout</td>
-    <td>For each element, randomly zero it or multiply it by 1 / (1 - ratio).
+    <td class="detailsColumn">For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 <code>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
 or f(x) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</code>
 For forward execution, ratio is 0, and so it's equivalent to: <code>F(X) = Identity(X)</code>
@@ -5750,7 +5753,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="uncategorizedOperator">
     <td>Deleted, Code Execution</td>
     <td>A TENsor Kernel</td>
-    <td>???</td>
+    <td class="detailsColumn">???</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#ATen">ATen</a> <i>experimental and deprecated</i></td>
     <td class="dmlColumn">NA</td>
@@ -5776,7 +5779,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Scale Signal</td>
-    <td>F(X) = Mul(X, scale)
+    <td class="detailsColumn">F(X) = Mul(X, scale)
       or: f(x) = x * scale</td>
     <td class="webnnColumn">mul</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#Scale">Scale</a></td>
@@ -5803,7 +5806,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Image Scaler</td>
-    <td>F(X) = Add(Mul(X, scale), Unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]
+    <td class="detailsColumn">F(X) = Add(Mul(X, scale), Unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]
       or: f(x, scale, bias) = x * scale + bias</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ImageScaler">ImageScaler</a></td>
@@ -5830,7 +5833,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="reorganizationOperator">
     <td>Data reorganization (Deleted)</td>
     <td>Crop</td>
-    <td>Crop the tensor to the given ranges for each axis. Crop is confusing and redundant. Just use Slice.</td>
+    <td class="detailsColumn">Crop the tensor to the given ranges for each axis. Crop is confusing and redundant. Just use Slice.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#experimental-crop">Crop</a> (ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Slice">Slice</a> subset)?</td>
     <td class="dmlColumn">DML_OPERATOR_SLICE</td>
