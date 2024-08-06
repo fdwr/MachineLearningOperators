@@ -986,7 +986,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant Of Shape</td>
-    <td><code>ConstantOfShape(scalarTensorValue, inputOfDesiredShape) = Expand(scalarTensorValue, Shape(inputOfDesiredShape))</code></td>
+    <td><code>constantOfShape(scalarValue, newShape) = broadcast(scalarValue, Shape(newShape))</code></td>
     <td class="webnnColumn">constant+expand</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
@@ -3045,10 +3045,13 @@ endfunction
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Symmetric signal shift</td>
-    <td><code>f(x, lambda, bias):
-      if x &lt; -lambda then y = x + bias
-      elif x &gt; lambda then y = x - bias
-      else y = 0</code></td>
+    <td><code>f(x, threshold, bias) = x * greater(x, window) + -bias * sign(x)</code>
+  <code>f(x, threshold, bias) = x * abs(sign(x)) + -bias * sign(x)</code>
+
+<code>f(x, lambda, bias):
+    if x &lt; -lambda then y = x + bias
+    elif x &gt; lambda then y = x - bias
+    else y = 0</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SHRINK</td>
@@ -4396,7 +4399,8 @@ Output = AveragePool(X, kernel_shape=NewShape))</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Average</td>
-    <td><code>y = (x1 + x2 + … + xn) / pool_size</code></td>
+    <td><code>y = (x1 + x2 + … + xn) / pool_size</code>
+<code>averagePool(input, ...) = conv(input, filter = ones(filterShape) / filterElementCount, ...)</code></td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn">ONNX <a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
     <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
@@ -5117,8 +5121,9 @@ output = (input - inputMean) / (standardDeviation + 1e-9)
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Spatial Normalization<br/>(independent batch&channel)</td>
-    <td><code>instanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])</code>
-<code>instanceNormalization(X, scale, bias) = scale * meanVarianceNormalization(axes = [2...input.rank-1]) + reshape(Bias, [batch size, C axis size, spatial dims...])</code>
+    <td><code>instanceNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshapedBias</code>
+<code>instanceNormalization(X, scale, bias) = scale * meanVarianceNormalization(axes = [2...input.rank-1]) + reshapedBias</code>
+<code>reshapedBias = reshape(Bias, [batch size, C axis size, spatial dims...])</code>
 
 Mean and variance are computed across spatial dimensions DHW, independently per batch per channel NC:
 
