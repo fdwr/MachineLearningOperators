@@ -3348,17 +3348,17 @@ notes: 'steps' affects the size of steps over the input.
 A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line.
 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
 <code>
-function Convolve(input, filterWeights, dilations, strides, kernel_shape, pads; output)
+function convolve(input, filterWeights, dilations, strides, kernel_shape, pads; output)
     startPads = pads[0..pads.size/2]
     endPads = pads[pads.size/2..pads.size]
     // todo: compute output size
     // output.shape = (input.shape + startPads + endPads) // todo: consider strides and kernel size
     for each outputCoordinate in output
-        output[outputCoordinate] = ConvolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
+        output[outputCoordinate] = convolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
     endfor
 endfunction
 
-function ConvolveKernel(input, filterWeights, firstInputCoordinate, dilations)
+function convolveKernel(input, filterWeights, firstInputCoordinate, dilations)
     // 2D example only todo:Figure out what 'group' does and what 'M' is?
     result = 0
     // todo: How do 'M' and 'C' factor into this?
@@ -3496,7 +3496,7 @@ endfunction</code></td>
     <td class="detailsColumn">Broadcast any single size dimensions up to the output dimension counts.
 Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
-function Broadcast(input, shape)
+function broadcast(input, shape)
     output.shape = broadcastShape(input.shape, shape)
     N = output.rank
     inputShape = PadLeadingValues(input.shape, N, 1)
@@ -3804,7 +3804,7 @@ endfunction</code></td>
     <td>Slice</td>
     <td class="detailsColumn">Crop the tensor to the given ranges for each axis.
 
-<code>function Slice(input, starts, ends, axes, steps)
+<code>function slice(input, starts, ends, axes, steps)
     N = input.rank
     if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
     if starts.empty then starts = zeroes(N) // [0,0,0,...]
@@ -3851,7 +3851,7 @@ endfunction</code></td>
     <td>Concatenate</td>
     <td class="detailsColumn">Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 
-<code>function Concat(inputs, axis)
+<code>function concat(inputs, axis)
     sizesAlongAxis = []
     for each input in inputs
         sizesAlongAxis.append(input.shape[axis])
@@ -4714,7 +4714,6 @@ endfunction</code></td>
     reducedElementCount = product(gatherElements(input.shape, axes))
     return div(reduceSum(input, axes, keepDimensions), reducedElementCount)
 endfunction</code></td>
-// (x[0] + x[1] + ... + x[n-1]) / n</code></td>
     <td class="webnnColumn">reduceMean</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceMean">ReduceMean</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_AVERAGE</td>
@@ -5401,7 +5400,7 @@ endfunction</code></td>
     <td class="detailsColumn">Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
 So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]].
 
-<code>function NonzeroCoordinatesList(X)
+<code>function nonzeroCoordinatesList(X)
     coordinates = []
     for each (x, coordinate) in X:
         if x != 0 then:
