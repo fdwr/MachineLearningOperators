@@ -1506,11 +1506,12 @@ double f(double x)
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Is Not a Number</td>
-    <td class="detailsColumn"><code>f(x) = isnan(x)</code>
-      where isnan(float32 x): return (reinterpret_cast(x, uint32_t) & 0x7FFFFFFF) &gt; 0x7F800000.
-      Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>. The sign is ignored.
-      e.g. s1111111 10000000 0000000 00000001 - float32
-      e.g. s1111100 00000001 - float16</td>
+    <td class="detailsColumn"><details><summary><code>f(x) = isnan(x)</code>
+<code>isnan(float32 x) = (x.reinterpretAs(uint32) & 0x7FFFFFFF) &gt; 0x7F800000</code>
+</summary>
+Any float32 value with all 1's for exponent and a nonzero mantissa is <a href="https://en.wikipedia.org/wiki/NaN">NaN</a>. The sign is ignored.
+e.g. s1111111 10000000 0000000 00000001 : float32
+e.g. s1111100 00000001 : float16</details></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#IsNaN">IsNan</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IS_NAN</td>
@@ -1536,14 +1537,12 @@ double f(double x)
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Is Infinity</td>
-    <td class="detailsColumn"><code>output.shape = input.shape
-for every coordinate in input tensor
-    hasExpectedSign = iif(input[coordinate] &gt; 0, detect_positive, detect_negative)
-    output[coordinate] = isinf(input[coordinate]) && hasExpectedSign
-    // or test that all exponent bits are one and all mantissa bits are 0:
-    // (input value & 0x7FFFFFFF) == 0x7F800000
-endfor
-</code></td>
+    <td class="detailsColumn"><code>f(x) = isinf(x) && iif(x &gt; 0, detectPositive, detectNegative)
+isinf(x) = (x.reinterpretAs(uint32) & 0x7FFFFFFF) == 0x7F800000</code>
+
+Check for positive or negative infinity.
+For infinity, test that all exponent bits are one, and all mantissa bits are 0:
+</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.5.0/docs/Operators.md#IsInf">IsInf</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IS_INFINITY</td>
@@ -1569,11 +1568,7 @@ endfor
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Sign</td>
-    <td class="detailsColumn"><code>function Sign(x)
-    if x == 0 then 0
-    elif x &gt; 0 then 1
-    elif x &lt; 0 then -1
-endfunction</code></td>
+    <td class="detailsColumn"><code>f(x) = if x &gt; 0 then 1 elif x &lt; 0 then -1 elif x == 0 then 0 else NaN<code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIGN</td>
@@ -2461,7 +2456,8 @@ endfunction</code></td>
     <td>Elementwise Math</td>
     <td>Threshold</td>
     <td class="detailsColumn"><code>f(x, minValue) = max(x, minValue)</code>
-      notes: Not equivalent to ThresholdedRelu.</td>
+
+notes: Not equivalent to ThresholdedRelu.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Max">Max</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_THRESHOLD</td>
@@ -2513,8 +2509,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Quantization</td>
     <td>Quantize Linear</td>
-    <td class="detailsColumn"><code>f(input:float32, scale:float32, zero_point:int32)
-    return output:uint8 = clamp(round(input / scale) + zero_point, 0, 255)</code></td>
+    <td class="detailsColumn"><code>f(input:float32, scale:float32, zeroPoint:int32) = clamp(round(input / scale) + zeroPoint, 0, 255).as(uint8)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#QuantizeLinear">QuantizeLinear</a><br/>com.microsoft QuantizeLinear</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_QUANTIZE_LINEAR</td>
@@ -2540,8 +2535,7 @@ endfunction</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math Quantization</td>
     <td>Dequantize Linear</td>
-    <td class="detailsColumn"><code>f(input:uint8, scale:float32, zero_point:float32)
-    return output:float32 = (input - zero_point) * scale</code></td>
+    <td class="detailsColumn"><code>f(input:uint8, scale:float32, zeroPoint:float32) = (input - zeroPoint).as(float32) * scale</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#DequantizeLinear">DequantizeLinear</a><br/>com.microsoft DequantizeLinear</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_DEQUANTIZE_LINEAR</td>
@@ -2871,22 +2865,23 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
     <td>Activation, Normalization</td>
     <td>Soft Maximum</td>
     <td class="detailsColumn">Raise all elements to e, and divide all the elements in each batch by that batch's sum.
-<code>function SoftMax2D(Input; Output; axis):
-  MaxInput = ReduceMax(Input, axes=[1], keepdims=1)
-  ExpInput = Exp(Input - MaxInput)
-  ReducedExpInput = ReduceSum(ExpInput, axis=[1], keepdims=1)
-  Output = ExpInput / ReducedExpInput
+
+<code>function SoftMax2D(input, axis; output)
+    maxInput = ReduceMax(input, axes=[1], keepdims=1)
+    expInput = Exp(input - maxInput)
+    reducedExpInput = ReduceSum(expInput, axis=[1], keepdims=1)
+    output = expInput / reducedExpInput
 endfunction
 
-function F(Input; Output; axis):
-  FlattenedInput = Flatten(Input, axis) // Flatten to 2D
-  NormalizedInput = SoftMax2D(FlattenedInput)
-  Output = Reshape(NormalizedInput, Shape(X))
+function F(Input, axis; Output)
+    flattenedInput = Flatten(Input, axis) // Flatten to 2D
+    normalizedInput = SoftMax2D(flattenedInput)
+    output = Reshape(normalizedInput, Shape(X))
 endfunction
 </code>
 
-    or per batch: f(x) = expₑ(x) / sum(expₑ(X))
-    or per batch for more numerical stability: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</td>
+or per batch: f(x) = expₑ(x) / sum(expₑ(X))
+or per batch for more numerical stability: expₑ(x - max(X)) / sum(expₑ(x - max(X)))</td>
     <td class="webnnColumn">softmax</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softmax">Softmax</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SOFTMAX</td>
@@ -2913,8 +2908,8 @@ endfunction
     <td>Activation</td>
     <td>Log Soft Maximum</td>
     <td class="detailsColumn"><code>f(Input, axis) = Log(Softmax(Input, axis))</code>
-  or: <code>f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))</code>
-  or: <code>f(x) = (x - max(X)) - logₑ(x - max(X))))</code></td>
+<code>f(x) = logₑ(expₑ(x - max(X)) / sum(expₑ(X - max(X))))</code>
+<code>f(x) = (x - max(X)) - logₑ(x - max(X))))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LogSoftmax">LogSoftmax</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_LOG_SOFTMAX</td>
@@ -2940,7 +2935,7 @@ endfunction
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Hard Maximum</td>
-    <td class="detailsColumn"><code>f(x) = if x_i == max(X) then 1 else 0</code>
+    <td class="detailsColumn"><code>f(x) = if x[i] == max(X) then 1 else 0</code>
       *but only for first element along that axis</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Hardmax">Hardmax</a></td>
@@ -2968,7 +2963,7 @@ endfunction
     <td>Activation, Elementwise</td>
     <td>Soft Sign</td>
     <td class="detailsColumn"><code>f(X) = div(X, add(abs(X), 1))</code>
-      or: <code>f(x) = x / (1 + abs(x))</code></td>
+<code>f(x) = x / (1 + abs(x))</code></td>
     <td class="webnnColumn">softsign</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softsign">Softsign</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SOFTSIGN</td>
@@ -2995,7 +2990,7 @@ endfunction
     <td>Activation, Elementwise</td>
     <td>Softplus</td>
     <td class="detailsColumn"><code>f(X) = log(add(exp(x), 1))</code>
-      or: <code>f(x) = logₑ(1 + expₑ(x))</code></td>
+<code>f(x) = logₑ(1 + expₑ(x))</code></td>
     <td class="webnnColumn">softplus</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Softplus">Softplus</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SOFTPLUS</td>
@@ -3022,7 +3017,7 @@ endfunction
     <td>Activation, Elementwise</td>
     <td>Affine</td>
     <td class="detailsColumn"><code>f(X, alpha, beta) = add(mul(X, alpha), beta)</code>
-  or: <code>f(x, alpha, beta) = alpha * x + beta</code></td>
+<code>f(x, alpha, beta) = alpha * x + beta</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#Affine">Affine</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_LINEAR<br/>DML_OPERATOR_ELEMENT_WISE_IDENTITY<br/>with scale and bias</td>
@@ -3049,12 +3044,13 @@ endfunction
     <td>Activation, Elementwise</td>
     <td>Symmetric signal shift</td>
     <td class="detailsColumn"><code>f(x, threshold, bias) = x * greater(x, window) + -bias * sign(x)</code>
-  <code>f(x, threshold, bias) = x * abs(sign(x)) + -bias * sign(x)</code>
+<code>f(x, threshold, bias) = x * abs(sign(x)) + -bias * sign(x)</code>
 
-<code>f(x, lambda, bias):
+<code>function f(x, lambda, bias)
     if x &lt; -lambda then y = x + bias
     elif x &gt; lambda then y = x - bias
-    else y = 0</code></td>
+    else y = 0
+endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#shrink">Shrink</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SHRINK</td>
@@ -3081,7 +3077,7 @@ endfunction
     <td>Activation, Elementwise</td>
     <td>Parametric Softplus</td>
     <td class="detailsColumn"><code>f(X, alpha, beta) = mul(alpha, softplus(mul(beta, X)))</code>
-      or: <code>f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))</code></td>
+<code>f(x, alpha, beta) = alpha * logₑ(1 + expₑ(beta * x))</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ParametricSoftplus">ParametricSoftplus</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_PARAMETRIC_SOFTPLUS</td>
@@ -3159,10 +3155,11 @@ endfunction
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform</td>
-    <td class="detailsColumn"><code>f(low, high): // see MT19937
+    <td class="detailsColumn"><code>function f(low, high) // see MT19937
     range = high - low // note inclusive end
     if integer: return (rand() % (range+1) + low
-    if float: (rand() / randmax) * range + low</code></td>
+    if float: (rand() / randmax) * range + low
+endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a></td>
     <td class="dmlColumn">---</td>
@@ -3188,10 +3185,11 @@ endfunction
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform Normal</td>
-    <td class="detailsColumn"><code>f(low, high): // see MT19937
+    <td class="detailsColumn"><code>function f(low, high) // see MT19937
     range = high - low // note inclusive end
     if integer: return (rand() % (range+1) + low
-    if float: (rand() / randmax) * range + low</code></td>
+    if float: (rand() / randmax) * range + low
+endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniformLike">RandomUniformLike</a></td>
     <td class="dmlColumn">---</td>
@@ -3244,9 +3242,10 @@ endfunction
     <td>Generation, Matrix Multiplication</td>
     <td>Diagonal Matrix</td>
     <td class="detailsColumn">Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
+
 output.shape = input.shape
 output.type = if exists(dtype) then dtype else input.type
-function EyeLike(input, k=0):
+function EyeLike(input, k=0)
     for each coordinate in output tensor
         output[coordinate] = if coordinate.h + k == coordinate.w then 1 else 0
     endfor
@@ -3276,10 +3275,11 @@ endfunction</code></td>
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Generic Matrix Multiplication</td>
-    <td class="detailsColumn"><code>f(A, B, C; alpha, beta, transA, transB; Y):
+    <td class="detailsColumn"><code>function f(A, B, C, alpha, beta, transA, transB; Y)
     A2 = if(transA, Transpose(A), A)
     B2 = if(transB, Transpose(B), B)
-    Y = add(mul(alpha, matMul(A2, B2)), mul(beta, C))</code></td>
+    Y = add(mul(alpha, matMul(A2, B2)), mul(beta, C))
+endfunction</code></td>
     <td class="webnnColumn">gemm</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Gemm">Gemm</a></td>
     <td class="dmlColumn">DML_OPERATOR_MATRIX_GEMM</td>
@@ -3306,10 +3306,11 @@ endfunction</code></td>
     <td>Matrix Multiplication</td>
     <td>Matrix Multiplication</td>
     <td class="detailsColumn"><code>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])</code>
-      It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
-      notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices.
-      A and B can have batch count dimensions, where each 2D matrix is multiplied separately.
-      The batch count can be broadcast too.</td>
+
+It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
+notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices.
+A and B can have batch count dimensions, where each 2D matrix is multiplied separately.
+The batch count can be broadcast too.</td>
     <td class="webnnColumn">matmul</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MatMul">MatMul</a></td>
     <td class="dmlColumn">DML_OPERATOR_MATRIX_GEMM</td>
@@ -3336,11 +3337,13 @@ endfunction</code></td>
     <td>Matrix Multiplication</td>
     <td>Convolve</td>
     <td class="detailsColumn">Every output element is the convolution of the filter with the corresponding input elements.
-  <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k]*w[k]) + b</code>
-      notes: 'steps' affects the size of steps over the input.
-      'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements.
-      A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line.
-      'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
+
+  <code>out[j] = (x[i]*w[0]) + (x[i+1]*w[1]) + (x[i+2]*w[2]) + ... + (x[i+k-1]*w[k-1]) + b</code>
+
+notes: 'steps' affects the size of steps over the input.
+'dilations' affects the step of the filter, as if the filter had been resized with interceding zeroes between elements.
+A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line.
+'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
 <code>
 function Convolve(input, filterWeights, dilations, strides, kernel_shape, pads; output)
     startPads = pads[0..pads.size/2]
@@ -3451,7 +3454,7 @@ endfunction
     <td>Transpose</td>
     <td class="detailsColumn">Reorder axes, such as X Y -&gt; Y X, or X Y Z -&gt; Z X Y.
 <code>
-function Transpose(input, perm):
+function Transpose(input, perm)
     N = input.rank
     assert(perm.size == input.rank)
     for i=0..&lt;N do output.shape[i] = input.shape[perm[i]]
@@ -3528,11 +3531,11 @@ endfunction</code></td>
 Any single size dimensions are stretched to the output dimension size.
 <code>
 function BroadcastShape(shapes...)
-    N = 0
-    for each shape in shapes do N = max(N, shape.size) // Determine the largest rank in shapes
+    outputRank = 0
+    for each shape in shapes do outputRank = max(outputRank, shape.size) // Determine the largest rank in shapes
     broadcastedShape = ones(N) // [1,1,...]
     for each shape in shapes // Take the max of all shape dimensions.
-        paddedShape = PadLeadingValues(shape, N, 1) // Right align. e.g. N=4 with [H,W] -&gt; [1,1,H,W]
+        paddedShape = PadLeadingValues(shape, N, 1)
         for i=0..&lt;N do
             assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
             broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
@@ -3541,13 +3544,13 @@ function BroadcastShape(shapes...)
     return broadcastedShape
 endfunction
 
+// Resize right-aligned by padding with leading values.
+// e.g. paddingSize=4 with [H,W] -&gt; [1,1,H,W]
 function PadLeadingValues(shape, paddedSize, padValue)
     // Right align. e.g. shape=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
     paddedSize = max(padddedSize, shape.size)
-    padCount = paddedSize - shape.size
-    for i=0..&lt;paddedSize
-        paddedShape[i] = i &lt; padCount ? padValue : shape[i - padCount]
-    endfor
+    paddedShape = shape
+    paddedShape.prepend(paddingSize - shape.size, padValue)
     return paddedShape
 endfunction</code></td>
     <td class="webnnColumn">NA</td>
@@ -3601,16 +3604,17 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Reshape To 2D</td>
-    <td class="detailsColumn">Reinterpret the view of the tensor, reducing the dimensions from N to 2 (e.g. [1,2,3,4,5] with a split at axis 3 -&gt; [1*2*3,4*5] -&gt; [6,20]).
+    <td class="detailsColumn">Reinterpret the view of the tensor, reducing the dimensions from N to 2.
+e.g. [1,2,3,4,5] with a split at axis 3 yields [1*2*3,4*5] -&gt; [6,20])
 
 <code>
-aggregate Flatten(input, axis)
-    InputShape = Shape(input)
-    ShapeFrontHalf = Slice(InputShape; ends=axis)
-    ShapeBackHalf = Slice(InputShape; starts=axis)
-    NewShape = Concat(axis=0, ReduceProd(ShapeFrontHalf), ReduceProd(ShapeBackHalf))
-    Output = Reshape(input, NewShape)
-endaggregate
+function Flatten(input, axis)
+    inputShape = Shape(input)
+    shapeFrontHalf = Slice(inputShape; ends=axis)
+    shapeBackHalf = Slice(inputShape; starts=axis)
+    newShape = Concat(axis=0, ReduceProd(shapeFrontHalf), ReduceProd(shapeBackHalf))
+    output = Reshape(input, newShape)
+endfunction
 </code>
 
 <code>
@@ -3793,6 +3797,7 @@ endfunction</code></td>
     <td>Data reorganization</td>
     <td>Slice</td>
     <td class="detailsColumn">Crop the tensor to the given ranges for each axis.
+
 <code>function Slice(input, starts, ends, axes, steps)
     N = input.rank
     if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
@@ -4131,7 +4136,7 @@ outputIndices = [
 
 output[outputIndices] = input[inputIndices];</code>
 
-NumPy:
+<b>NumPy:</b>
 <code>
 # Using DCR mode (depth/column/row)
 b, c, h, w = x.shape
@@ -4170,8 +4175,8 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
     <td>Data reorganization</td>
     <td>Shape</td>
     <td class="detailsColumn">Return the dimensions of the tensor as a 1D tensor.
-      F(input): return input.shape
-    </td>
+
+<code>f(input) = input.shape</code></td>
     <td class="webnnColumn">MLOperandDescriptor::dimensions</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Shape">Shape</a></td>
     <td class="dmlColumn">NA, just read the TENSOR_DESC dimensions</td>
@@ -4198,6 +4203,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
     <td>Data reorganization</td>
     <td>Element Count</td>
     <td class="detailsColumn"><code>elementCount(X) = reduceProduct(shape(X), keepDimensions=false)</code>.
+
 note: <code>Size</code> is unfortunately named, inconsistently so with <code>Resize-10</code> which accepts separate dimensions. 🙃
 If you want the sizes of the tensor (N C H W) rather than just the total element count, called <code>Shape</code> instead.</td>
     <td class="webnnColumn">product(MLOperandDescriptor::dimensions)</td>
@@ -4277,8 +4283,8 @@ If you want the sizes of the tensor (N C H W) rather than just the total element
   <tr class="reorganizationOperator">
     <td>Data reorganization, Elementwise, Selection</td>
     <td>Select elementwise</br>("where" is a bad name)</td>
-    <td class="detailsColumn">f(b, x, y) = if b then x else y
-      notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
+    <td class="detailsColumn"><code>f(b, x, y) = if b then x else y</code>
+notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
     </td>
     <td class="webnnColumn">where</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
@@ -4372,11 +4378,12 @@ endfor
     <td class="detailsColumn">Average all elements in each pool. <code>y = (x1 + x2 + … + xn) / pool_size</code>
 So X[N C H W] reduces to Y[N C 1 1]
 
-GlobalAveragePool(X):
+<b>ONNX GlobalAveragePool</b>:
+<code>
 InputShape = Shape(X)
 SpatialDimensions = Slice(InputShape; starts=2) // skip leading N and C dimensions.
-NewShape = Unsqueeze(SpatialDimensions, Const([0,1]) // Prepend with [1,1]
-Output = AveragePool(X, kernel_shape=NewShape))</td>
+NewShape = Unsqueeze(SpatialDimensions, Const([0,1]) // Prepend shape with [1,1]
+Output = AveragePool(X, kernel_shape=NewShape))</code></td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalAveragePool">GlobalAveragePool</a></td>
     <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
@@ -4562,8 +4569,9 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td>Pooling</td>
     <td>Pool Global Lebesgue</td>
     <td class="detailsColumn"><code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p)</code>
-      So X[N C H W] reduces to Y[N C 1 1]
-      e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
+
+So X[N C H W] reduces to Y[N C 1 1]
+e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
     <td class="webnnColumn">l2Pool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalLpPool">GlobalLpPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_LP_POOLING with output being 1 element</td>
@@ -4590,10 +4598,12 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td>Pooling</td>
     <td>Pool Maximum Region of Interest</td>
     <td class="detailsColumn">Apply MaxPool to given input within each numbered region:
-    [batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive].
-    Then write the maximal value back to the output.
-    questions: Are x2 and y2 really supposed to be end-inclusive? If so, how can that possibly work correctly with the spatial_scale attribute?
-    What's the point of the pooled_shape when each region has a specific size anyway?</td>
+
+[batch_index, w_offset_start, h_offset_start, w_offset_last_inclusive, h_offset_last_inclusive].
+Then write the maximal value back to the output.
+questions: Are x2 and y2 really supposed to be end-inclusive?
+If so, how can that possibly work correctly with the spatial_scale attribute?
+What's the point of the pooled_shape when each region has a specific size anyway?</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxRoiPool">MaxRoiPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_ROI_POOLING (only POOLING_MAX is supported)</td>
@@ -4619,8 +4629,8 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Sum</td>
-    <td class="detailsColumn">Y.shape = If(keepdims==1, Shape(X), Squeeze(X, axes))
-      <code>y = (x1 + x2 + ... + xn)</code></td>
+    <td class="detailsColumn"><code>Y.shape = if(keepDimensions==1, X.shape, squeeze(X, axes))
+y = (x1 + x2 + ... + xn)</code></td>
     <td class="webnnColumn">reduceSum</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSum">ReduceSum</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM</td>
@@ -4937,8 +4947,8 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="imagingOperator">
     <td>Imaging Operators</td>
     <td>Resample</td>
-    <td class="detailsColumn"><code>Output.Shape = Floor(Shape(Input) * Scales)
-Output[output_i] = Input[output_i / Scales]</code></td>
+    <td class="detailsColumn"><code>Output.shape = floor(Input.shape * Scales)
+Output[coordinate] = Input[coordinate / Scales]</code></td>
     <td class="webnnColumn">resample</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Resize">Resize</a></td>
     <td class="dmlColumn">DML_OPERATOR_RESAMPLE</td>
@@ -4964,8 +4974,8 @@ Output[output_i] = Input[output_i / Scales]</code></td>
   <tr class="imagingOperator">
     <td>Imaging Operators</td>
     <td>Resample Up</td>
-    <td class="detailsColumn">Output.Shape = Floor(Shape(Input) * Scales)
-Output[output_i] = Input[output_i / Scales]</td>
+    <td class="detailsColumn"><code>Output.shape = floor(Input.shape * Scales)
+Output[coordinate] = Input[coordinate / Scales]</code></td>
     <td class="webnnColumn">resample</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Upsample">Upsample</a></td>
     <td class="dmlColumn">DML_OPERATOR_UPSAMPLE_2D</td>
@@ -5073,13 +5083,13 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
     <td>Mean Variance Normalization</td>
     <td class="detailsColumn">For each output element, subtract the mean, and divide by standard deviation.
 
-MeanVarianceNormalization(input) = (input - mean) / standardDeviation
+<code>MeanVarianceNormalization(input) = (input - mean) / standardDeviation
 MeanVarianceNormalization(input) = (input - mean) / sqrt(variance + epsilon)
 MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean((input - mean(input))^2))
-MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean(input^2) - mean(input)^2)
+MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean(input^2) - mean(input)^2)</code>
 
 <b>ONNX:</b>
-exponent = Const(2.0)
+<code>exponent = Const(2.0)
 epsilon = Const(1e-9)
 inputMean = ReduceMean(input)
 inputMeanSquared = Pow(inputMean, exponent)
@@ -5089,15 +5099,15 @@ variance = Sub(inputSquareMeaned, inputMeanSquared)
 standardDeviation = Sqrt(variance)
 inputCentered = Sub(input, inputMean)
 standardDeviationWithEpsilon = Add(standardDeviation, epsilon)
-X_MVN = Div(inputCentered, standardDeviationWithEpsilon)
+X_MVN = Div(inputCentered, standardDeviationWithEpsilon)</code>
 
 <b>NumPy:</b>
-inputMean = np.mean(input, axes, keepdims=1)
+<code>inputMean = np.mean(input, axes, keepdims=1)
 inputMeanSquared = np.power(inputMean, 2)
 inputSquared = np.power(input, 2)
 inputSquareMeaned = np.mean(inputSquared, axes, keepdims=1)
 standardDeviation = np.sqrt(inputSquareMeaned - inputMeanSquared)
-output = (input - inputMean) / (standardDeviation + 1e-9)
+output = (input - inputMean) / (standardDeviation + 1e-9)</code>
 </td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MeanVarianceNormalization">MeanVarianceNormalization</a></td>
@@ -5130,17 +5140,17 @@ output = (input - inputMean) / (standardDeviation + 1e-9)
 
 Mean and variance are computed across spatial dimensions DHW, independently per batch per channel NC:
 
-axes = [2,3, ..., inputRank-1] // Exclude axes {0,1}
+<code>axes = [2,3, ..., inputRank-1] // Exclude axes {0,1}
 mean = (x0 + x1 + …) / xn;
-variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
+variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn</code>
 
-ONNX:
-mean = ReduceAverage(X, axes, keepdims=true)
-variance = ReduceAverage(Pow(Sub(X, mean), 2), axes, keepdims=true)
+<b>ONNX:</b>
+<code>mean = ReduceAverage(X, axes, keepdims=true)
+variance = ReduceAverage(Pow(Sub(X, mean), 2), axes, keepdims=true)</code>
 
-NumPy:
-mean = np.mean(x, axis=axes, keepdims=True)
-variance = np.var(x, axis=axes, keepdims=True)</td>
+<b>NumPy:</b>
+<code>mean = np.mean(x, axis=axes, keepdims=True)
+variance = np.var(x, axis=axes, keepdims=True)</code></td>
     <td class="webnnColumn">instanceNormalization</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#InstanceNormalization">InstanceNormalization</a></td>
     <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
@@ -5171,21 +5181,21 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Channel&Spatial Normalization<br/>(independent leading batches) <a href="https://arxiv.org/abs/1803.08494">ref</a></td>
-    <td class="detailsColumn">LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
+    <td class="detailsColumn"><code>LayerNormalization(X, scale, bias) = scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])</code>
 
 Mean and variance are computed across all dimensions from and after axis, independently per leading batches:
 
-axes = [axis, axis+1, ..., inputRank-1] // Exclude axes {0, ..., axis-1}
+<code>axes = [axis, axis+1, ..., inputRank-1] // Exclude axes {0, ..., axis-1}
 mean = (x0 + x1 + …) / xn;
-variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
+variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn</code>
 
-ONNX:
-mean = ReduceAverage(axes, keepdims=true)
-variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)
+<b>ONNX:</b>
+<code>mean = ReduceAverage(axes, keepdims=true)
+variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)</code>
 
-NumPy:
-mean = np.mean(x, axis=axes, keepdims=True)
-variance = np.var(x, axis=axes, keepdims=True)</td>
+<b>NumPy:</b>
+<code>mean = np.mean(x, axis=axes, keepdims=True)
+variance = np.var(x, axis=axes, keepdims=True)</code></td>
     <td class="webnnColumn">layerNormalization</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/main/docs/Operators.md#LayerNormalization">LayerNormalization</a></td>
     <td class="dmlColumn">DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION1 with
@@ -5222,17 +5232,17 @@ Statistics are precomputed across batch <i>and</i> spatial dimensions NDHW (and 
 So each channel C is independent.
 Then it's reshaped to be broadcast-compatible with the input.
 
-axes = [0,2, ..., inputRank-1] // Exclude axes {1}, and everything except channel
+<code>axes = [0,2, ..., inputRank-1] // Exclude axes {1}, and everything except channel
 mean = (x0 + x1 + …) / xn;
-variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn
+variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn</code>
 
-ONNX:
-mean = ReduceAverage(axes, keepdims=true)
-variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)
+<b>ONNX:</b>
+<code>mean = ReduceAverage(axes, keepdims=true)
+variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)</code>
 
-NumPy:
-mean = np.var(x, axis=axes, keepdims=True)
-variance = np.mean(x, axis=axes, keepdims=True)</td>
+<b>NumPy:</b>
+<code>mean = np.var(x, axis=axes, keepdims=True)
+variance = np.mean(x, axis=axes, keepdims=True)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BatchNormalization">BatchNormalization</a></td>
     <td class="dmlColumn">DML_OPERATOR_BATCH_NORMALIZATION</td>
@@ -5265,19 +5275,19 @@ padding = repeat(axes.size * 2, [leadingPadding, trailingPadding])
 regionAverages = averagePoolND(pow(input, 2), axes, windowDimensions, padding)
 output = input / pow((regionAverages * scale + bias), exponent)</code>
 
-For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias. Implementations support either 1D or 2D (some only support 1D).
+For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
+Implementations support either 1D or 2D (some only support 1D).
 
-LRN(x, localSize, scaleAlpha, powerBeta, bias) = x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta
+<code>LRN(x, localSize, scaleAlpha, powerBeta, bias) = x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta</code>
 defaults: bias = 1
 
 Decomposition:
-Radius = LocalSize / 2
+<code>Radius = LocalSize / 2
 axes = if CrossChannel then {C} else {H,W}
 PoolingWindowSizes = ConstructWindowSizes(axes, Rank, 1 + Radius) // dimension = 1 + Radius along axes, 1's elsewhere
 Summed = PoolSum(Pow(Input, 2), axes, PoolingWindowSizes) * Alpha / LocalSize
 Biased = Summed + Bias
-Output = Input / Pow(Biased, Beta)
-  </td>
+Output = Input / Pow(Biased, Beta)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
     <td class="dmlColumn">DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
@@ -5304,14 +5314,14 @@ Output = Input / Pow(Biased, Beta)
     <td>Normalization</td>
     <td>Lebesgue Length Normalization</td>
     <td class="detailsColumn"><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
-<code>function F(X, p)
+<code>function F(input, axis, exponent)
     // TODO: verify this. mean? variance not / n?
-    X_reduced = ReduceLp(X, p, axis, keepdims=1)
-    // where ReduceLP is ReduceL1 or ReduceL2 based on p
-    X_reduced_broadcast = Expand(X_reduced, Shape(X))
-    X_variance = Pow(X_reduced_broadcast, 2)
-    Epsilon = Const(1e-9)
-    Output = Div(X, Sqrt(Add(X_variance, Epsilon)))
+    xReduced = ReduceLp(input, exponent, axis, keepDimensions=1)
+    // where ReduceLP is ReduceL1 or ReduceL2 based on p (exponent).
+    xReducedBroadcast = broadcast(xReduced, X.shape)
+    xVariance = pow(xReducedBroadcast, 2)
+    epsilon = 1e-9
+    output = div(X, Sqrt(Add(xVariance, epsilon)))
 endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpNormalization">LpNormalization</a></td>
@@ -5337,9 +5347,19 @@ endfunction</code></td>
   </tr>
  <tr class="uncategorizedOperator">
     <td>Sparse tensor collation</td>
-    <td>Nonzero Indices List</td>
+    <td>Nonzero Coordinates List</td>
     <td class="detailsColumn">Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
-    So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]]).</td>
+So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]].
+
+<code>function NonzeroCoordinatesList(X)
+    coordinates = []
+    for each (x, coordinate) in X:
+        if x != 0 then:
+          coordinates.append(coordinate)
+        endif
+    endfor
+endfunction
+</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#NonZero">Nonzero</a></td>
     <td class="dmlColumn">DML_OPERATOR_NONZERO_COORDINATES</td>
@@ -5392,7 +5412,7 @@ It's basically a word count algorithm with the output histogram size equalling t
  <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Einstein Summation</td>
-    <td class="detailsColumn"><details><summary>reduceSum(multiply(a.reshape(aToProductshape)[aToProductStep], B.reshape(bToProductshape)[bToProductStep]), axes = reductionAxes)</summary>
+    <td class="detailsColumn"><details><summary><code>reduceSum(multiply(a.reshape(aToProductshape)[aToProductStep], B.reshape(bToProductshape)[bToProductStep]), axes = reductionAxes)</code></summary>
 
 <b>Links:</b>
 - https://github.com/onnx/onnx/pull/2504
@@ -5724,9 +5744,10 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Elementwise, Training</td>
     <td>Dropout</td>
     <td class="detailsColumn">For each element, randomly zero it or multiply it by 1 / (1 - ratio).
-<code>F(X, ratio) = Where(Less(Random(0, 0.9999), ratio), 0, Mul(X, Recip(Sub(1, ratio)))),
-or f(x) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</code>
-For forward execution, ratio is 0, and so it's equivalent to: <code>F(X) = Identity(X)</code>
+
+<code>f(X, ratio) = select(less(random(0, 0.9999), ratio), 0, mul(X, recip(sub(1, ratio)))),
+f(x, ratio) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</code>
+For forward execution, ratio is 0, and so it's equivalent to: <code>f(X) = identity(X)</code>
 notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Dropout">Dropout</a></td>
@@ -5779,8 +5800,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Scale Signal</td>
-    <td class="detailsColumn">F(X) = Mul(X, scale)
-      or: f(x) = x * scale</td>
+    <td class="detailsColumn"><code>f(X) = mul(X, scale)</code></td>
     <td class="webnnColumn">mul</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.0/docs/Operators.md#Scale">Scale</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
@@ -5806,8 +5826,8 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Image Scaler</td>
-    <td class="detailsColumn">F(X) = Add(Mul(X, scale), Unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]
-      or: f(x, scale, bias) = x * scale + bias</td>
+    <td class="detailsColumn"><code>f(X) = add(mul(X, scale), unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]</code>
+<code>f(x, scale, bias) = x * scale + bias</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ImageScaler">ImageScaler</a></td>
     <td class="dmlColumn">DML_OPERATOR_VALUE_SCALE_2D</td>
