@@ -3048,7 +3048,7 @@ or per batch for more numerical stability: <code>expₑ(x - max(X)) / sum(expₑ
     <td>Symmetric signal shift</td>
     <td class="detailsColumn"><code>f(x, threshold, bias) = x * greater(abs(x), threshold) + -bias * sign(x)</code>
 
-<code>function f(x, threshold /*lambda*/, bias)
+<code>function symmetricSignalShift(x, threshold /*lambda*/, bias)
     if x &lt; -threshold then y = x + bias
     elif x &gt; threshold then y = x - bias
     else y = 0
@@ -3157,7 +3157,7 @@ endfunction</code></td>
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform</td>
-    <td class="detailsColumn"><code>function f(low, high) // see MT19937
+    <td class="detailsColumn"><code>function randomUniform(low, high) // see MT19937
     range = high - low // note inclusive end
     if integer: return (rand() % (range+1) + low
     if float: (rand() / randmax) * range + low
@@ -3187,7 +3187,7 @@ endfunction</code></td>
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform Normal</td>
-    <td class="detailsColumn"><code>function f(low, high) // see MT19937
+    <td class="detailsColumn"><code>function randomUniformNormal(low, high) // see MT19937
     range = high - low // note inclusive end
     if integer: return (rand() % (range+1) + low
     if float: (rand() / randmax) * range + low
@@ -3277,7 +3277,7 @@ endfunction</code></td>
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Generic Matrix Multiplication</td>
-    <td class="detailsColumn"><code>function f(A, B, C, alpha, beta, transA, transB; Y)
+    <td class="detailsColumn"><code>function matrixMultiplication(A, B, C, alpha, beta, transA, transB; Y)
     A2 = if(transA, Transpose(A), A)
     B2 = if(transB, Transpose(B), B)
     Y = add(mul(alpha, matMul(A2, B2)), mul(beta, C))
@@ -5362,7 +5362,7 @@ defaults: bias = 1</code></td>
     <td>Normalization</td>
     <td>Lebesgue Length Normalization</td>
     <td class="detailsColumn"><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
-<code>function F(input, axis, exponent)
+<code>function lpNormalization(input, axis, exponent)
     // TODO: verify this. mean? variance not / n?
     xReduced = ReduceLp(input, exponent, axis, keepDimensions=1)
     // where ReduceLP is ReduceL1 or ReduceL2 based on p (exponent).
