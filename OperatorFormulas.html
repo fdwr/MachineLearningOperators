@@ -3046,12 +3046,11 @@ or per batch for more numerical stability: <code>expₑ(x - max(X)) / sum(expₑ
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Symmetric signal shift</td>
-    <td class="detailsColumn"><code>f(x, threshold, bias) = x * greater(x, window) + -bias * sign(x)</code>
-<code>f(x, threshold, bias) = x * abs(sign(x)) + -bias * sign(x)</code>
+    <td class="detailsColumn"><code>f(x, threshold, bias) = x * greater(abs(x), threshold) + -bias * sign(x)</code>
 
-<code>function f(x, lambda, bias)
-    if x &lt; -lambda then y = x + bias
-    elif x &gt; lambda then y = x - bias
+<code>function f(x, threshold /*lambda*/, bias)
+    if x &lt; -threshold then y = x + bias
+    elif x &gt; threshold then y = x - bias
     else y = 0
 endfunction</code></td>
     <td class="webnnColumn">?</td>
@@ -3550,7 +3549,7 @@ endfunction
 
 // Resize right-aligned by padding with leading values.
 // e.g. paddingSize=4 with [H,W] -&gt; [1,1,H,W]
-function PadLeadingValues(shape, paddedSize, padValue)
+function padLeadingValues(shape, paddedSize, padValue)
     // Right align. e.g. shape=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
     paddedSize = max(padddedSize, shape.size)
     paddedShape = shape
@@ -3851,7 +3850,7 @@ endfunction</code></td>
     <td>Concatenate</td>
     <td class="detailsColumn">Combine multiple tensors into large output tensor. e.g. {1,2,3} with {4,5} -&gt; {1,2,3,4,5}
 
-<code>function concat(inputs, axis)
+<code>function concatenate(inputs, axis)
     sizesAlongAxis = []
     for each input in inputs
         sizesAlongAxis.append(input.shape[axis])
