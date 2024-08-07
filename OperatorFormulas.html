@@ -1223,7 +1223,8 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Root</td>
-    <td class="detailsColumn"><code>f(x, y) = root(x, exponent) // pow(x, 1/2)</code></td>
+    <td class="detailsColumn"><code>f(x, y) = root(x, exponent)
+f(x, y) = pow(x, 1/exponent)</code></td>
     <td class="webnnColumn">reciprocal and pow</td>
     <td class="onnxColumn">ONNX NA</td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_RECIP & POW</td>
@@ -1249,7 +1250,8 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Square root</td>
-    <td class="detailsColumn"><code>f(x) = sqrt(x) // pow(x, 1/2)</code></td>
+    <td class="detailsColumn"><code>f(x) = sqrt(x)
+f(x) = pow(x, 1/2)</code></td>
     <td class="webnnColumn">sqrt</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SQRT</td>
@@ -1275,7 +1277,8 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Exponent</td>
-    <td class="detailsColumn"><code>f(x) = expₑ(x) // pow(2.71828, x)</code></td>
+    <td class="detailsColumn"><code>f(x) = expₑ(x)
+f(x) = pow(2.71828, x)</code></td>
     <td class="webnnColumn">exp</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_EXP</td>
@@ -1301,7 +1304,8 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Logarithm</td>
-    <td class="detailsColumn"><code>f(x) = logₑ(x) // log(x, 2.71828), log(exp(x)) == x</code></td>
+    <td class="detailsColumn"><code>f(x) = logₑ(x)
+f(x) = log(x, 2.71828) // recall log(exp(x)) == x</code></td>
     <td class="webnnColumn">log</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOG</td>
@@ -3242,9 +3246,9 @@ endfunction</code></td>
     <td>Diagonal Matrix</td>
     <td class="detailsColumn">Notes: set 1's all along diagonal. In other words, all output[i, i+k] = 1, and every other element = 0.<code>
 
-output.shape = input.shape
-output.type = if exists(dtype) then dtype else input.type
-function EyeLike(input, k=0)
+function eyeLike(input, k=0)
+    output.shape = input.shape
+    output.type = if exists(dataType) then dataType else input.type
     for each coordinate in output tensor
         output[coordinate] = if coordinate.h + k == coordinate.w then 1 else 0
     endfor
@@ -3493,7 +3497,7 @@ endfunction</code></td>
 Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
 function Broadcast(input, shape)
-    output.shape = BroadcastShape(input.shape, shape)
+    output.shape = broadcastShape(input.shape, shape)
     N = output.rank
     inputShape = PadLeadingValues(input.shape, N, 1)
     for each outputCoordinate in output
@@ -3526,11 +3530,11 @@ endfunction</code></td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
-    <td>BroadcastShape</td>
+    <td>Broadcast Shape</td>
     <td class="detailsColumn">Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
 Any single size dimensions are stretched to the output dimension size.
 <code>
-function BroadcastShape(shapes...)
+function broadcastShape(shapes...)
     outputRank = 0
     for each shape in shapes do outputRank = max(outputRank, shape.size) // Determine the largest rank in shapes
     broadcastedShape = ones(N) // [1,1,...]
@@ -5276,9 +5280,10 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Batch&Spatial Normalization<br/>(independent channels)</td>
-    <td class="detailsColumn"><code>BatchNormalization(X, scale, bias, mean, var, epsilon, momentum) = Scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, C axis)</code>
+    <td class="detailsColumn"><code>BatchNormalization(input, scale, bias, mean, var, epsilon, momentum) = scale * (input - mean) / sqrt(variance + epsilon) + reshape(bias, C axis)</code>
 
-Statistics are precomputed across batch <i>and</i> spatial dimensions NDHW (and not just the batch dimension, as the name would misleadingly lead you believe).
+Statistics are precomputed across batch <i>and</i> spatial dimensions NDHW
+(and not just the batch dimension, as the name would misleadingly lead you believe).
 So each channel C is independent.
 Then it's reshaped to be broadcast-compatible with the input.
 
