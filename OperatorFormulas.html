@@ -935,8 +935,64 @@ th {
   </tr>
   <tr class="elementwiseOperator">
     <td>Elementwise</td>
+    <td>Elementwise Generic</td>
+    <td class="detailsColumn"><code>function elementwiseUnary(input, functor)
+    output = new Tensor(input.dataType, input.dimensions)
+    for each coordinate in input.coordinates
+        output[coordinate] = functor(input[coordinate])
+    endfor
+    return output
+endfunction
+
+function elementwiseBinary(a, b, functor)
+    outputShape = broadcastDimensions(a.dimensions, b. dimensions)
+    output = new Tensor(a.dataType, outputShape)
+    aBroadcast = broadcast(a, outputShape) // some implementations can directly use strides to avoid intermediates
+    bBroadcast = broadcast(b, outputShape)
+    for each coordinate in input.coordinates
+        output[coordinate] = functor(aBroadcast[coordinate], bBroadcast[coordinate])
+    endfor
+    return output
+endfunction
+
+function elementwiseTrinary(a, b, c, functor)
+    outputShape = broadcastDimensions(a.dimensions, b. dimensions, c.dimensions)
+    output = new Tensor(a.dataType, outputShape)
+    aBroadcast = broadcast(a, outputShape) // some implementations can directly use strides to avoid intermediates
+    bBroadcast = broadcast(b, outputShape)
+    cBroadcast = broadcast(c, outputShape)
+    for each coordinate in input.coordinates
+        output[coordinate] = functor(aBroadcast[coordinate], bBroadcast[coordinate], cBroadcast[coordinate])
+    endfor
+    return output
+endfunction
+</code></td>
+    <td class="webnnColumn">NA</td>
+    <td class="onnxColumn">NA</th>
+    <td class="dmlColumn">NA</td>
+    <td class="xnnPackColumn">NA</td>
+    <td class="stableHloColumn">NA</td>
+    <td class="tosaColumn">NA</td>
+    <td class="numpyColumn">NA</td>
+    <td class="tensorFlowColumn">NA</td>
+    <td class="tensorFlowLiteColumn">NA</td>
+    <td class="pytorchColumn">NA</td>
+    <td class="coreMlColumn">NA</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">UnaryOp</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="elementwiseOperator">
+    <td>Elementwise</td>
     <td>Identity</td>
-    <td class="detailsColumn"><code>f(x) = x</code></td>
+    <td class="detailsColumn"><code>function identity(input) = elementwiseUnary(input, x)</code></td>
     <td class="webnnColumn">identity</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></th>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY or
@@ -963,7 +1019,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant</td>
-    <td class="detailsColumn"><code>f() = value</code></td>
+    <td class="detailsColumn"><code>function constant() = value</code></td>
     <td class="webnnColumn">constant</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Constant">Constant</a></td>
     <td class="dmlColumn">NA just provide the tensor data</td>
@@ -989,7 +1045,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="uncategorizedOperator">
     <td>Input</td>
     <td>Constant Of Shape</td>
-    <td class="detailsColumn"><code>constantOfShape(scalarValue, newShape) = broadcast(scalarValue, Shape(newShape))</code></td>
+    <td class="detailsColumn"><code>function constantOfShape(scalarValue, newShape) = broadcast(scalarValue, newShape.dimensions)</code></td>
     <td class="webnnColumn">constant+expand</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#ConstantOfShape">ConstantOfShape</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY with zero strides to broadcast</td>
@@ -1015,7 +1071,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Add</td>
-    <td class="detailsColumn"><code>f(x, y) = x + y</code></td>
+    <td class="detailsColumn"><code>function add(a, b) = elementwiseBinary(a, b, f(x,y) = x + y)</code></td>
     <td class="webnnColumn">add</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Add">Add</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ADD</td>
@@ -1041,7 +1097,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Subtract</td>
-    <td class="detailsColumn"><code>f(x, y) = x - y</code></td>
+    <td class="detailsColumn"><code>function subtract(a, b) = elementwiseBinary(a, b, f(x,y) = x - y)</code></td>
     <td class="webnnColumn">sub</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sub">Sub</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SUBTRACT</td>
@@ -1067,7 +1123,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Multiply</td>
-    <td class="detailsColumn"><code>f(x, y) = x * y</code></td>
+    <td class="detailsColumn"><code>function multiply(a, b) = elementwiseBinary(a, b, f(x,y) = x * y)</code></td>
     <td class="webnnColumn">mul</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mul">Mul</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MULTIPLY</td>
@@ -1093,7 +1149,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Divide</td>
-    <td class="detailsColumn"><code>f(x, y) = x / y</code></td>
+    <td class="detailsColumn"><code>function divide(a, b) = elementwiseBinary(a, b, f(x,y) = x / y)</code></td>
     <td class="webnnColumn">div</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Div">Div</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_DIVIDE</td>
@@ -1119,7 +1175,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Reciprocal</td>
-    <td class="detailsColumn"><code>f(x) = 1 / x</code></td>
+    <td class="detailsColumn"><code>function reciprocal(input) = elementwiseUnary(input, f(x) = 1 / x)</code></td>
     <td class="webnnColumn">reciprocal</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reciprocal">Reciprocal</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_RECIP</td>
@@ -1145,7 +1201,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Truncate</td>
-    <td class="detailsColumn"><code>f(x, y) = x - (y * floor(x / y)) // Result sign follows the divisor sign.</code></td>
+    <td class="detailsColumn"><code>function modulusTruncate(a, b) = elementwiseBinary(a, b, f(x,y) = x - (y * floor(x / y))) // Result sign follows the divisor sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
@@ -1171,7 +1227,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Floor</td>
-    <td class="detailsColumn"><code>f(x, y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
+    <td class="detailsColumn"><code>function modulusFloor(a, b) = elementwiseBinary(a, b, f(x,y) = x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
@@ -1197,7 +1253,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Power</td>
-    <td class="detailsColumn"><code>f(x, exponent) = pow(x, exponent)</code></td>
+    <td class="detailsColumn"><code>function pow(x, exponent) = elementwiseBinary(a, b, f(x, exponent) = scalarPow(x, exponent))</code></td>
     <td class="webnnColumn">pow</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Pow">Pow</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_POW</td>
@@ -1223,7 +1279,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Root</td>
-    <td class="detailsColumn"><code>f(x, y) = root(x, exponent)
+    <td class="detailsColumn"><code>function root(x, exponent) = elementwiseBinary(a, b, f(x, exponent) = scalarRoot(x, exponent))
 f(x, y) = pow(x, 1/exponent)</code></td>
     <td class="webnnColumn">reciprocal and pow</td>
     <td class="onnxColumn">ONNX NA</td>
@@ -1250,8 +1306,8 @@ f(x, y) = pow(x, 1/exponent)</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Square root</td>
-    <td class="detailsColumn"><code>f(x) = sqrt(x)
-f(x) = pow(x, 1/2)</code></td>
+    <td class="detailsColumn"><code>function sqrt(x) = elementwiseUnary(x, f(x) = scalarSqrt(x))
+OR f(x) = pow(x, 1/2)</code></td>
     <td class="webnnColumn">sqrt</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SQRT</td>
@@ -1277,8 +1333,8 @@ f(x) = pow(x, 1/2)</code></td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Exponent</td>
-    <td class="detailsColumn"><code>f(x) = expₑ(x)
-f(x) = pow(2.71828, x)</code></td>
+    <td class="detailsColumn"><code>function exp(input) = elementwiseBinary(input, f(x) = expScalar(x))
+OR f(x) = pow(2.71828, x)</code></td>
     <td class="webnnColumn">exp</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Exp">Exp</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_EXP</td>
@@ -2869,19 +2925,18 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
     <td>Soft Maximum</td>
     <td class="detailsColumn">Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 
-<code>function softMax2D(input, output)
-    maxInput = reduceMax(input, axes=[1], keepdims=1)
+<code>function softMax(input, axes)
+    maxInput = reduceMax(input, axes, keepDimensions=1)
     expInput = exp(input - maxInput)
-    reducedExpInput = reduceSum(expInput, axis=[1], keepdims=1)
-    output = expInput / reducedExpInput
+    reducedExpInput = reduceSum(expInput, axis=axes, keepDimensions=1)
+    return expInput / reducedExpInput
 endfunction
 
-function softmax(input, axis)
+function softmax2D(input, axis)
     flattenedInput = flattenTo2D(input, axis) // Flatten to 2D
-    normalizedInput = softMax2D(flattenedInput)
+    normalizedInput = softMax(flattenedInput, axes=[1])
     return reshape(normalizedInput, X.shape)
-endfunction
-</code>
+endfunction</code>
 
 or per batch: <code>f(x) = expₑ(x) / sum(expₑ(X))</code>
 or per batch for more numerical stability: <code>expₑ(x - max(X)) / sum(expₑ(x - max(X)))</code></td>
@@ -3248,7 +3303,7 @@ endfunction</code></td>
 function eyeLike(input, k=0)
     output.shape = input.shape
     output.type = if exists(dataType) then dataType else input.type
-    for each coordinate in output tensor
+    for each coordinate in output tensor coordinates
         output[coordinate] = if coordinate.h + k == coordinate.w then 1 else 0
     endfor
 endfunction</code></td>
@@ -3352,7 +3407,7 @@ function convolve(input, filterWeights, dilations, strides, kernel_shape, pads; 
     endPads = pads[pads.size/2..pads.size]
     // todo: compute output size
     // output.shape = (input.shape + startPads + endPads) // todo: consider strides and kernel size
-    for each outputCoordinate in output
+    for each outputCoordinate in output coordinates
         output[outputCoordinate] = convolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
     endfor
 endfunction
@@ -3399,7 +3454,7 @@ endfunction
  <tr class="matrixMultiplicationOperator">
     <td>Matrix Multiplication</td>
     <td>Convolve Tranposed</td>
-    <td class="detailsColumn">todo: Here be dragons.
+    <td class="detailsColumn">TODO: Here be dragons.
       questions: What is the difference between CONVOLUTION vs CORRELATION enum, and FORWARD vs BACKWARD?</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ConvTranspose">ConvTranspose</a></td>
@@ -3461,7 +3516,7 @@ function Transpose(input, permutationAxes /*gather semantics*/)
     rank = input.rank
     for i=0..&lt;rank do output.shape[i] = input.shape[permutationAxes[i]]
     outputCoordinate = repeat(rank, 0)
-    for each inputCoordinate in input
+    for each inputCoordinate in input coordinates
         for i=0..&lt;rank do outputCoordinate[i] = inputCoordinate[permutationAxes[i]]
         output[outputCoordinate] = input[inputCoordinate]
     endfor
@@ -3499,7 +3554,7 @@ function broadcast(input, shape)
     output.shape = broadcastShape(input.shape, shape)
     N = output.rank
     inputShape = PadLeadingValues(input.shape, N, 1)
-    for each outputCoordinate in output
+    for each outputCoordinate in output coordinates
         for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
         output[outputCoordinate] = inputData[inputCoordinate]
     endfor
@@ -3529,32 +3584,32 @@ endfunction</code></td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
-    <td>Broadcast Shape</td>
-    <td class="detailsColumn">Helper to compute the broadcasted output shape (1D tensor) from multiple input shapes.
+    <td>Broadcast Dimensions</td>
+    <td class="detailsColumn">Helper to compute the broadcasted output dimensions (1D tensor) from a list of multiple input dimensions.
 Any single size dimensions are stretched to the output dimension size.
 <code>
-function broadcastShape(shapes...)
+function broadcastDimensions(dimensionsList...)
     outputRank = 0
-    for each shape in shapes do outputRank = max(outputRank, shape.size) // Determine the largest rank in shapes
-    broadcastedShape = ones(N) // [1,1,...]
-    for each shape in shapes // Take the max of all shape dimensions.
-        paddedShape = PadLeadingValues(shape, N, 1)
+    for each dimensions in dimensionsList do outputRank = max(outputRank, dimensions.size) // Determine the largest rank
+    broadcastedDimensions = ones(N) // [1,1,...]
+    for each dimension in dimensions // Take the max of all dimensions.
+        paddedDimensions = PadLeadingValues(dimensions, N, 1)
         for i=0..&lt;N do
-            assert(paddedShape[i] == broadcastedShape[i] || paddedShape[i] == 1 || broadcastedShape[i] == 1))
-            broadcastedShape[i] = max(broadcastedShape[i], paddedShape[i])
+            assert(paddedDimensions[i] == broadcastedDimensions[i] || paddedDimensions[i] == 1 || broadcastedDimensions[i] == 1))
+            broadcastedDimensions[i] = max(broadcastedDimensions[i], paddedDimensions[i])
         endfor
     endfor
-    return broadcastedShape
+    return broadcastedDimensions
 endfunction
 
 // Resize right-aligned by padding with leading values.
 // e.g. paddingSize=4 with [H,W] -&gt; [1,1,H,W]
-function padLeadingValues(shape, paddedSize, padValue)
-    // Right align. e.g. shape=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
-    paddedSize = max(padddedSize, shape.size)
-    paddedShape = shape
-    paddedShape.prepend(paddingSize - shape.size, padValue)
-    return paddedShape
+function padLeadingValues(dimensions, paddedSize, padValue)
+    // Right align. e.g. dimensions=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
+    paddedSize = max(padddedSize, dimensions.size)
+    paddedDimensions = dimensions
+    paddedDimensions.prepend(paddingSize - dimensions.size, padValue)
+    return paddedDimensions
 endfunction</code></td>
     <td class="webnnColumn">NA</td>
     <td class="onnxColumn">NA</td>
@@ -3967,7 +4022,7 @@ output = [[1,1], [4,3], [6,6]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Gather Multidimensional</td>
-    <td class="detailsColumn"><code>TODO</code></td>
+    <td class="detailsColumn"><code>TODO:</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GatherND">GatherND</a></td>
     <td class="dmlColumn">DML_OPERATOR_GATHER_ND</td>
@@ -4041,7 +4096,7 @@ output = [[1, 11, 3, 21, 5]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Scatter ND</td>
-    <td class="detailsColumn"><code>TODO</code></td>
+    <td class="detailsColumn"><code>TODO:</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.6.0/docs/Operators.md#ScatterND">ScatterND</a></td>
     <td class="dmlColumn">DML_OPERATOR_SCATTER_ND</td>
@@ -4379,7 +4434,7 @@ endfor
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Pool Global Average</td>
+    <td>Pool Average Global</td>
     <td class="detailsColumn">Average all elements in each pool. <code>y = (x1 + x2 + … + xn) / pool_size</code>
 So X[N C H W] reduces to Y[N C 1 1]
 
@@ -4466,7 +4521,7 @@ Output = AveragePool(X, kernel_shape=NewShape))</code></td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Pool Global Maximum</td>
+    <td>Pool Maximum Global</td>
     <td class="detailsColumn"><code>y = max(x1, x2, … x_pool_size)</code></td>
     <td class="webnnColumn">maxPool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
@@ -4572,7 +4627,7 @@ Then write each value from the input tensor into the output tensor at the elemen
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Pool Global Lebesgue</td>
+    <td>Pool Lebesgue Global</td>
     <td class="detailsColumn"><code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p)</code>
 
 So X[N C H W] reduces to Y[N C 1 1]
@@ -4816,7 +4871,7 @@ endfunction</code></td>
   <tr class="reductionOperator">
     <td>Reduction</td>
     <td>Reduce to Sum of Squares</td>
-    <td class="detailsColumn"><code>reduceSum(Pow(X, 2), axes, keepDimensions) // x[0]^2 + x[1]^2 + ... + x[n-1]^2</code></td>
+    <td class="detailsColumn"><code>reduceSum(pow(X, 2), axes, keepDimensions) // x[0]^2 + x[1]^2 + ... + x[n-1]^2</code></td>
     <td class="webnnColumn">reduceSumSquare</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#ReduceSumSquare">ReduceSumSquare</a></td>
     <td class="dmlColumn">DML_OPERATOR_REDUCE with DML_REDUCE_FUNCTION_SUM_SQUARE</td>
@@ -5081,7 +5136,7 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>Loop</td>
-    <td class="detailsColumn">TODO:CODE</td>
+    <td class="detailsColumn">TODO:</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Loop">Loop</a></td>
     <td class="dmlColumn">---</td>
@@ -5107,7 +5162,7 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
   <tr class="controlFlowOperator">
     <td>Control Flow</td>
     <td>Scan</td>
-    <td class="detailsColumn">TODO:CODE</td>
+    <td class="detailsColumn">TODO:</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Scan">Scan</a></td>
     <td class="dmlColumn">---</td>
@@ -5321,13 +5376,17 @@ variance = np.mean(x, axis=axes, keepdims=True)</code></td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Local Response Normalization</td>
-    <td class="detailsColumn"><code>function localResponseNormalization(input, axes, windowLength, scale, bias, exponent)
+    <td class="detailsColumn"><code>function localResponseNormalization(input, axes, windowDimensions, padding, scale, bias, exponent)
+    regionAverages = averagePoolND(pow(input, 2), axes, windowDimensions, padding)
+    return input / pow((regionAverages * scale + bias), exponent)
+endfunction</code>
+
+<code>function localResponseNormalizationSymmetric(input, axes, windowLength, scale, bias, exponent)
     windowDimensions = repeat(windowLength, axes.size)
     leadingPadding = floor((windowLength - 1) / 2) // Center halfway around sliding window
     trailingPadding = ceil((windowLength - 1) / 2) // Center halfway around sliding window
     padding = repeat(axes.size * 2, [leadingPadding, trailingPadding])
-    regionAverages = averagePoolND(pow(input, 2), axes, windowDimensions, padding)
-    output = input / pow((regionAverages * scale + bias), exponent)
+    return localResponseNormalization(input, axes, windowDimensions, padding, scale, bias, exponent)
 endfunction</code>
 
 For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
@@ -5361,19 +5420,14 @@ defaults: bias = 1</code></td>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Lebesgue Length Normalization</td>
-    <td class="detailsColumn"><code>f(x) = x / sqrt(variance(X) + epsilon)</code> TODO: verify formula
-<code>function lpNormalization(input, axis, exponent)
-    // TODO: verify this. mean? variance not / n?
-    xReduced = ReduceLp(input, exponent, axis, keepDimensions=1)
-    // where ReduceLP is ReduceL1 or ReduceL2 based on p (exponent).
-    xReducedBroadcast = broadcast(xReduced, X.shape)
-    xVariance = pow(xReducedBroadcast, 2)
+    <td class="detailsColumn"><code>function lebesgueLengthNormalization(input, axes, exponent)
+    reduced = reduceLp(input, axes, exponent, keepDimensions=1) // reduceL1 or reduceL2
     epsilon = 1e-9
-    output = div(X, Sqrt(Add(xVariance, epsilon)))
+    return div(X, add(sqrt(reduced), epsilon))
 endfunction</code></td>
     <td class="webnnColumn">?</td>
-    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpNormalization">LpNormalization</a></td>
-    <td class="dmlColumn">DML_OPERATOR_LP_NORMALIZATION</td>
+    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpNormalization">LpNormalization</a> (1D)</td>
+    <td class="dmlColumn">DML_OPERATOR_LP_NORMALIZATION (1D)</td>
     <td class="xnnPackColumn">?</td>
     <td class="stableHloColumn">?</td>
     <td class="tosaColumn">?</td>
@@ -5381,7 +5435,7 @@ endfunction</code></td>
     <td class="tensorFlowColumn">?</td>
     <td class="tensorFlowLiteColumn">?</td>
     <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
+    <td class="coreMlColumn">L2NormalizeLayerParams (3D rightmost)</td>
     <td class="bnnsColumn">?</td>
     <td class="mpsColumn">?</td>
     <td class="mlxColumn">?</td>
@@ -5393,15 +5447,15 @@ endfunction</code></td>
     <td class="futureColumn"></td>
     <td>Precision TBD</td>
   </tr>
- <tr class="uncategorizedOperator">
+  <tr class="uncategorizedOperator">
     <td>Sparse tensor collation</td>
     <td>Nonzero Coordinates List</td>
     <td class="detailsColumn">Append the coordinates of every nonzero input value to a list, with coordinates stored interleaved.
 So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,Z2,…]].
 
-<code>function nonzeroCoordinatesList(X)
+<code>function nonzeroCoordinatesList(input)
     coordinates = []
-    for each (x, coordinate) in X:
+    for each (coordinate, i) in input:
         if x != 0 then:
           coordinates.append(coordinate)
         endif
@@ -5637,7 +5691,8 @@ For well known patterns, they can be mapped directly to better known operators: 
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Gated Recurrent Unit</td>
-    <td class="detailsColumn">Iteratively apply matrix multiplication. TODO: Need better summary.
+    <td class="detailsColumn">TODO: Need better summary.
+Iteratively apply matrix multiplication.
 <code>
 Z = Activation1(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + b1, -clip, +clip))
 R = Activation1(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + b2, -clip, +clip))
@@ -5700,7 +5755,8 @@ b3 = B[2, :] + B[5*hidden_size, :];</code></td>
   <tr class="aggregateOperator">
     <td>Aggregate</td>
     <td>Long Short Term Memory</td>
-    <td class="detailsColumn">Iteratively apply matrix multiplication. TODO: Need better summary.
+    <td class="detailsColumn">TODO: Need better summary.
+Iteratively apply matrix multiplication.
 <code>
 I = Activation1f(Clip(MatMul(X, Transpose(W1)) + MatMul(Initial_h1, Transpose(R1)) + Mul(p, initial_c) + b1), -clip, +clip)
 F = Activation1f(Clip(MatMul(X, Transpose(W2)) + MatMul(Initial_h1, Transpose(R2)) + Mul(p, initial_c) + b2), -clip, +clip)
@@ -6030,7 +6086,7 @@ https://github.com/onnx/onnx/blob/master/docs/Operators.md#BitShift
     8 >> 3 = 2
 
     // transparently apply broadcasting...
-    for each coordinate in output tensor
+    for each coordinate in output tensor coordinates
         if direction == "LEFT"
             output[coordinate] = X[coordinate] << Y[coordinate]
         else if direction == "RIGHT"
@@ -6500,7 +6556,7 @@ CoreML https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html:
         SliceBySizeLayerParams sliceBySize = 1470;
         Convolution3DLayerParams convolution3d = 1471;
 
-
+https://github.com/Tencent/ncnn/blob/master/docs/developer-guide/operators.md
 https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md
 
 AbsVal
