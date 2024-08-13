@@ -3191,7 +3191,16 @@ endfunction</code></td>
     <td>Activation, Elementwise</td>
     <td>Symmetric signal shift</td>
     <td class="detailsColumn"><code>function symmetricSignalShift(input, threshold /*lambda*/, bias)
-    return input * greater(abs(input), threshold) + -bias * sign(input)
+    return add(
+        mul(input, greater(abs(input), threshold)),
+        mul(sign(input), negate(bias))
+    )
+    // OR
+    return select(
+        greater(abs(input), threshold),
+        sub(input, mul(sign(input), bias),
+        0
+    )
     // OR elementwise if x &lt; -threshold then y = x + bias
     //                elif x &gt; threshold then y = x - bias
     //                else y = 0
@@ -3428,6 +3437,7 @@ endfunction</code></td>
     <td>Matrix Multiplication</td>
     <td class="detailsColumn"><code>for i=0..&lt;h do for j=0..&lt;w do y[i,j] = dot(A[i,0..w], B[0..h,j])</code>
 
+TODO: Demonstrate via reduceSum of higher dimensional space.
 It's essentially a ReduceSum(Mul(A.row, B.column)) per output element.
 notes: A and B can be 1D vectors, which are treated as [1,W] and [H,1] matrices.
 A and B can have batch count dimensions, where each 2D matrix is multiplied separately.
