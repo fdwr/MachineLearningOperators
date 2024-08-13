@@ -4610,7 +4610,7 @@ endfunction</code></td>
     return div(poolSum(input, axes, windowDimensions, padding, dilations), windowElementCount)
 endfunction</code>
 
-function poolAverage(input, ...) = conv(input, filter = ones(windowDimensions) / windowElementCount, ...)</code></td>
+<code>function poolAverage(input, ...) = conv(input, filter = ones(windowDimensions) / windowElementCount, ...)</code></td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
     <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
