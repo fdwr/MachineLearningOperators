@@ -141,44 +141,44 @@ summary::after {
 </p>
 
 <noscript>*This checkbox will not work without Javascript enabled:<br/></noscript>
-<input type="checkbox" id="toggleAllOperators" checked="on" onclick="toggleAllOperatorsOfIdSuffix(this, 'Operators')"/><label for="toggleAllOperators">&lt;All operator categories&gt;</label><br/>
-<input type="checkbox" id="toggleElementwiseOperators" checked="on"/><label for="toggleElementwiseOperators">Elementwise operators (pointwise operation, input.shape == output.shape)</label><br/>
-<input type="checkbox" id="toggleActivationOperators" checked="on"/><label for="toggleActivationOperators">Activation operators (signal <a href="https://en.wikipedia.org/wiki/Activation_function">remapping function</a>)</label><br/>
-<input type="checkbox" id="toggleReorganizationOperators" checked="on"/><label for="toggleReorganizationOperators">Reorganization operators (data movement, no value calculations)</label><br/>
-<input type="checkbox" id="toggleReductionOperators" checked="on"/><label for="toggleReductionOperators">Reduction operators (reduce multiple inputs to output via a formula)</label><br/>
-<input type="checkbox" id="togglePoolingOperators" checked="on"/><label for="togglePoolingOperators">Pooling operators (overlapping reduction)</label><br/>
-<input type="checkbox" id="toggleNormalizationOperators" checked="on"/><label for="toggleNormalizationOperators">Normalization operators (normalize values based on neighbors)</label><br/>
-<input type="checkbox" id="toggleControlFlowOperators" checked="on"/><label for="toggleControlFlowOperators">Control flow operators (graph level branches and loops)</label><br/>
-<input type="checkbox" id="toggleGenerationOperators" checked="on"/><label for="toggleGenerationOperators">Generation operators (generate data)</label><br/>
-<input type="checkbox" id="toggleRandomOperators" checked="on"/><label for="toggleRandomOperators">Random operators (random number values)</label><br/>
-<input type="checkbox" id="toggleMatrixMultiplicationOperators" checked="on"/><label for="toggleMatrixMultiplicationOperators">Matrix multiplication (multiply and sum)</label><br/>
-<input type="checkbox" id="toggleImagingOperators" checked="on"/><label for="toggleImagingOperators">Imaging operators (for image manipulation)</label><br/>
-<input type="checkbox" id="toggleAggregateOperators" checked="on"/><label for="toggleAggregateOperators">Aggregate operators (multiple combined operators in tiny graph)</label><br/>
-<input type="checkbox" id="toggleUncategorizedOperators" checked="on"/><label for="toggleUncategorizedOperators">Uncategorized operators (no clear category to assign)</label><br/>
+<input type="checkbox" id="toggleAllOperators" checked="checked" onclick="toggleAllOperatorsOfIdSuffix(this, 'Operators')"/><label for="toggleAllOperators">&lt;All operator categories&gt;</label><br/>
+<input type="checkbox" id="toggleElementwiseOperators" checked="checked"/><label for="toggleElementwiseOperators">Elementwise operators (pointwise operation, input.shape == output.shape)</label><br/>
+<input type="checkbox" id="toggleActivationOperators" checked="checked"/><label for="toggleActivationOperators">Activation operators (signal <a href="https://en.wikipedia.org/wiki/Activation_function">remapping function</a>)</label><br/>
+<input type="checkbox" id="toggleReorganizationOperators" checked="checked"/><label for="toggleReorganizationOperators">Reorganization operators (data movement, no value calculations)</label><br/>
+<input type="checkbox" id="toggleReductionOperators" checked="checked"/><label for="toggleReductionOperators">Reduction operators (reduce multiple inputs to output via a formula)</label><br/>
+<input type="checkbox" id="togglePoolingOperators" checked="checked"/><label for="togglePoolingOperators">Pooling operators (overlapping reduction)</label><br/>
+<input type="checkbox" id="toggleNormalizationOperators" checked="checked"/><label for="toggleNormalizationOperators">Normalization operators (normalize values based on neighbors)</label><br/>
+<input type="checkbox" id="toggleControlFlowOperators" checked="checked"/><label for="toggleControlFlowOperators">Control flow operators (graph level branches and loops)</label><br/>
+<input type="checkbox" id="toggleGenerationOperators" checked="checked"/><label for="toggleGenerationOperators">Generation operators (generate data)</label><br/>
+<input type="checkbox" id="toggleRandomOperators" checked="checked"/><label for="toggleRandomOperators">Random operators (random number values)</label><br/>
+<input type="checkbox" id="toggleMatrixMultiplicationOperators" checked="checked"/><label for="toggleMatrixMultiplicationOperators">Matrix multiplication (multiply and sum)</label><br/>
+<input type="checkbox" id="toggleImagingOperators" checked="checked"/><label for="toggleImagingOperators">Imaging operators (for image manipulation)</label><br/>
+<input type="checkbox" id="toggleAggregateOperators" checked="checked"/><label for="toggleAggregateOperators">Aggregate operators (multiple combined operators in tiny graph)</label><br/>
+<input type="checkbox" id="toggleUncategorizedOperators" checked="checked"/><label for="toggleUncategorizedOperators">Uncategorized operators (no clear category to assign)</label><br/>
 <br/>
 
 <noscript>*This checkbox will not work without Javascript enabled:<br/></noscript>
-<input type="checkbox" id="toggleAllColumns" checked="on" onclick="toggleAllOperatorsOfIdSuffix(this, 'Column')"/><label for="toggleAllColumns">All library columns</label><br/>
-<input type="checkbox" id="toggleDetailsColumn" checked="on"/><label for="toggleDetailsColumn">Details</label><br/>
-<input type="checkbox" id="toggleWebnnColumn" checked="on"/><label for="toggleWebnnColumn">WebNN (W3C <b>Web</b> <b>N</b>eural <b>N</b>etwork) <a href="https://www.w3.org/TR/webnn/">(info)</a></label><br/>
-<input type="checkbox" id="toggleOnnxColumn" checked="on"/><label for="toggleOnnxColumn">ONNX (<b>O</b>pen <b>N</b>eural <b>N</b>etwork E<b>x</b>change) <a href="https://onnx.ai/">(info)</a> <a href="https://onnx.ai/onnx/operators/index.html">(ops)</a></label><br/>
-<input type="checkbox" id="toggleDmlColumn" checked="on"/><label for="toggleDmlColumn">DirectML (Microsoft <b>Direct</b> <b>M</b>achine <b>L</b>earning) <a href="https://learn.microsoft.com/en-us/windows/ai/directml/dml-intro">(info)</a> <a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_operator_type">(ops)</a></label><br/>
-<input type="checkbox" id="toggleXnnPackColumn" checked="on"/><label for="toggleXnnPackColumn">XNNPACK (Google <b>X</b> <b>N</b>eural <b>N</b>etwork <b>Pack</b>age) <a href="https://github.com/google/XNNPACK">(info)</a></label><br/>
-<input type="checkbox" id="toggleStableHloColumn" checked="on"/><label for="toggleStableHloColumn">StableHLO (OpenXLA <b>Stable</b> <b>H</b>igh <b>L</b>evel <b>O</b>ptimizer) <a href="https://github.com/openxla/stablehlo/blob/main/docs/spec.md">(info)</a></label><br/>
-<input type="checkbox" id="toggleTosaColumn" checked="on"/><label for="toggleTosaColumn">TOSA (ARM <b>T</b>ensor <b>O</b>perator <b>S</b>et <b>A</b>rchitecture) <a href="https://mlir.llvm.org/docs/Dialects/TOSA/">(info)</a></label><br/>
-<input type="checkbox" id="toggleNumpyColumn" checked="on"/><label for="toggleNumpyColumn">NumPy (<b>Num</b>erical <b>Py</b>thon) <a href="https://numpy.org/">(info)</a> <a href="https://numpy.org/doc/stable/reference/routines.html">(ops)</a></label><br/>
-<input type="checkbox" id="toggleTensorFlowColumn" checked="on"/><label for="toggleTensorFlowColumn">TensorFlow (Google's TensorFlow) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
-<input type="checkbox" id="toggleTensorFlowLiteColumn" checked="on"/><label for="toggleTensorFlowLiteColumn">TensorFlow Lite (Google's TensorFlowLite) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
-<input type="checkbox" id="togglePytorchColumn" checked="on"/><label for="togglePytorchColumn">PyTorch (<b>Py</b>thon <b>Torch</b>, originally by Meta) <a href="https://pytorch.org/">(info)</a> <a href="https://pytorch.org/docs/stable/torch.html">(ops)</a> <a href="https://pytorch.org/docs/stable/nn.html">NN ops</a></label><br/>
-<input type="checkbox" id="toggleCoreMlColumn" checked="on"/><label for="toggleCoreMlColumn">CoreML (Apple <b>Core</b> <b>M</b>achine <b>L</b>earning) <a href="https://developer.apple.com/machine-learning/core-ml/">(info)</a> <a href="https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html">(ops)</a></label><br/>
-<input type="checkbox" id="toggleBnnsColumn" checked="on"/><label for="toggleBnnsColumn">BNNS (Apple <b>B</b>asic <b>N</b>eural <b>N</b>etwork <b>S</b>ubroutines) <a href="https://developer.apple.com/documentation/accelerate/bnns">(info)</a></label><br/>
-<input type="checkbox" id="toggleMpsColumn" checked="on"/><label for="toggleMpsColumn">MPS (Apple <b>M</b>etal <b>P</b>erformance <b>S</b>haders) <a href="https://developer.apple.com/documentation/metalperformanceshaders">(info)</a></label><br/>
-<input type="checkbox" id="toggleMlxColumn" checked="on"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
-<input type="checkbox" id="toggleNcnnColumn" checked="on"/><label for="toggleNcnnColumn">NCNN (Tencent <b>N</b>eon <b>C</b>onvolutional <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/">(info)</a> <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(ops)</a></label><br/>
-<input type="checkbox" id="toggleCntkColumn" checked="on"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
-<input type="checkbox" id="toggleOpenVinoColumn" checked="on"/><label for="toggleOpenVinoColumn">OpenVINO (Intel <b>V</b>isual <b>I</b>nference and <b>N</b>eural Network <b>O</b>ptimization) <a href="https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html">(info)</a> <a href="https://docs.openvino.ai/2023.0/api/ie_python_api/_autosummary/openvino.runtime.opset1.html">(ops)</a></label><br/>
-<input type="checkbox" id="toggleOneDnnColumn" checked="on"/><label for="toggleOneDnnColumn">OneDNN (Intel <b>D</b>eep <b>N</b>eural <b>N</b>etwork Library <a href="https://oneapi-src.github.io/oneDNN/group_dnnl_api_primitives.html">(ops)</a></label><br/>
-<input type="checkbox" id="toggleAnnColumn" checked="on"/><label for="toggleAnnColumn">Android NDK (Google <b>N</b>neural Network <b>D</b>evelopment <b>K</b>it) <a href="https://developer.android.com/ndk/guides">(info)</a> <a href="https://developer.android.com/ndk/reference/group/neural-networks">(ops)</a></label><br/>
+<input type="checkbox" id="toggleAllColumns" checked="checked" onclick="toggleAllOperatorsOfIdSuffix(this, 'Column')"/><label for="toggleAllColumns">All library columns</label><br/>
+<input type="checkbox" id="toggleDetailsColumn" checked="checked"/><label for="toggleDetailsColumn">Details</label><br/>
+<input type="checkbox" id="toggleWebnnColumn" checked="checked"/><label for="toggleWebnnColumn">WebNN (W3C <b>Web</b> <b>N</b>eural <b>N</b>etwork) <a href="https://www.w3.org/TR/webnn/">(info)</a></label><br/>
+<input type="checkbox" id="toggleOnnxColumn" checked="checked"/><label for="toggleOnnxColumn">ONNX (<b>O</b>pen <b>N</b>eural <b>N</b>etwork E<b>x</b>change) <a href="https://onnx.ai/">(info)</a> <a href="https://onnx.ai/onnx/operators/index.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleDmlColumn" checked="checked"/><label for="toggleDmlColumn">DirectML (Microsoft <b>Direct</b> <b>M</b>achine <b>L</b>earning) <a href="https://learn.microsoft.com/en-us/windows/ai/directml/dml-intro">(info)</a> <a href="https://learn.microsoft.com/en-us/windows/win32/api/directml/ne-directml-dml_operator_type">(ops)</a></label><br/>
+<input type="checkbox" id="toggleXnnPackColumn" checked="checked"/><label for="toggleXnnPackColumn">XNNPACK (Google <b>X</b> <b>N</b>eural <b>N</b>etwork <b>Pack</b>age) <a href="https://github.com/google/XNNPACK">(info)</a></label><br/>
+<input type="checkbox" id="toggleStableHloColumn" checked="checked"/><label for="toggleStableHloColumn">StableHLO (OpenXLA <b>Stable</b> <b>H</b>igh <b>L</b>evel <b>O</b>ptimizer) <a href="https://github.com/openxla/stablehlo/blob/main/docs/spec.md">(info)</a></label><br/>
+<input type="checkbox" id="toggleTosaColumn" checked="checked"/><label for="toggleTosaColumn">TOSA (ARM <b>T</b>ensor <b>O</b>perator <b>S</b>et <b>A</b>rchitecture) <a href="https://mlir.llvm.org/docs/Dialects/TOSA/">(info)</a></label><br/>
+<input type="checkbox" id="toggleNumpyColumn" checked="checked"/><label for="toggleNumpyColumn">NumPy (<b>Num</b>erical <b>Py</b>thon) <a href="https://numpy.org/">(info)</a> <a href="https://numpy.org/doc/stable/reference/routines.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleTensorFlowColumn" checked="checked"/><label for="toggleTensorFlowColumn">TensorFlow (Google's TensorFlow) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
+<input type="checkbox" id="toggleTensorFlowLiteColumn" checked="checked"/><label for="toggleTensorFlowLiteColumn">TensorFlow Lite (Google's TensorFlowLite) <a href="https://www.tensorflow.org/">(info)</a></label><br/>
+<input type="checkbox" id="togglePytorchColumn" checked="checked"/><label for="togglePytorchColumn">PyTorch (<b>Py</b>thon <b>Torch</b>, originally by Meta) <a href="https://pytorch.org/">(info)</a> <a href="https://pytorch.org/docs/stable/torch.html">(ops)</a> <a href="https://pytorch.org/docs/stable/nn.html">NN ops</a></label><br/>
+<input type="checkbox" id="toggleCoreMlColumn" checked="checked"/><label for="toggleCoreMlColumn">CoreML (Apple <b>Core</b> <b>M</b>achine <b>L</b>earning) <a href="https://developer.apple.com/machine-learning/core-ml/">(info)</a> <a href="https://apple.github.io/coremltools/mlmodel/Format/NeuralNetwork.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleBnnsColumn" checked="checked"/><label for="toggleBnnsColumn">BNNS (Apple <b>B</b>asic <b>N</b>eural <b>N</b>etwork <b>S</b>ubroutines) <a href="https://developer.apple.com/documentation/accelerate/bnns">(info)</a></label><br/>
+<input type="checkbox" id="toggleMpsColumn" checked="checked"/><label for="toggleMpsColumn">MPS (Apple <b>M</b>etal <b>P</b>erformance <b>S</b>haders) <a href="https://developer.apple.com/documentation/metalperformanceshaders">(info)</a></label><br/>
+<input type="checkbox" id="toggleMlxColumn" checked="checked"/><label for="toggleMlxColumn">MLX (Apple <b>M</b>achine <b>L</b>earning E<b>x</b>plore) <a href="https://ml-explore.github.io/mlx/build/html/python/ops.html">(info)</a></label><br/>
+<input type="checkbox" id="toggleNcnnColumn" checked="checked"/><label for="toggleNcnnColumn">NCNN (Tencent <b>N</b>eon <b>C</b>onvolutional <b>N</b>eural <b>N</b>etwork) <a href="https://github.com/Tencent/ncnn/">(info)</a> <a href="https://github.com/Tencent/ncnn/blob/54a9a563e9913d3142782dac0e497f2be50075b5/docs/developer-guide/operators.md">(ops)</a></label><br/>
+<input type="checkbox" id="toggleCntkColumn" checked="checked"/><label for="toggleCntkColumn">CNTK (Microsoft <b>C</b>og<b>n</b>itive <b>T</b>ool<b>k</b>it) <a href="https://github.com/microsoft/CNTK">(info)</a> <a href="https://microsoft.github.io/CNTK-R/reference/index.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleOpenVinoColumn" checked="checked"/><label for="toggleOpenVinoColumn">OpenVINO (Intel <b>V</b>isual <b>I</b>nference and <b>N</b>eural Network <b>O</b>ptimization) <a href="https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html">(info)</a> <a href="https://docs.openvino.ai/2023.0/api/ie_python_api/_autosummary/openvino.runtime.opset1.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleOneDnnColumn" checked="checked"/><label for="toggleOneDnnColumn">OneDNN (Intel <b>D</b>eep <b>N</b>eural <b>N</b>etwork Library <a href="https://oneapi-src.github.io/oneDNN/group_dnnl_api_primitives.html">(ops)</a></label><br/>
+<input type="checkbox" id="toggleAnnColumn" checked="checked"/><label for="toggleAnnColumn">Android NDK (Google <b>N</b>neural Network <b>D</b>evelopment <b>K</b>it) <a href="https://developer.android.com/ndk/guides">(info)</a> <a href="https://developer.android.com/ndk/reference/group/neural-networks">(ops)</a></label><br/>
 <br/>
 
 <br/><br/>
@@ -314,7 +314,7 @@ summary::after {
     <tr>
       <td>Integer Unsigned</td>
       <td>uint32</td>
-      <td class="detailsColumn""></td>
+      <td class="detailsColumn"></td>
       <td class="webnnColumn">uint32</td>
       <td class="onnxColumn">ONNX.TensorProto.DataType.UINT32</td>
       <td class="dmlColumn">DML_TENSOR_DATA_TYPE_UINT32</td>
@@ -990,10 +990,9 @@ endfunction
         output[coordinate] = functor(aBroadcast[coordinate], bBroadcast[coordinate], cBroadcast[coordinate])
     endfor
     return output
-endfunction</details>
-</code></td>
+endfunction</details></code></td>
     <td class="webnnColumn">NA</td>
-    <td class="onnxColumn">NA</th>
+    <td class="onnxColumn">NA</td>
     <td class="dmlColumn">NA</td>
     <td class="xnnPackColumn">NA</td>
     <td class="stableHloColumn">NA</td>
@@ -1019,7 +1018,7 @@ endfunction</details>
     <td>Identity</td>
     <td class="detailsColumn"><code>function identity(input) = elementwiseUnary(input, (x) => x)</code></td>
     <td class="webnnColumn">identity</td>
-    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></th>
+    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Identity">Identity</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IDENTITY or
 DML_ACTIVATION_IDENTITY</td>
     <td class="xnnPackColumn">?</td>
@@ -1565,7 +1564,7 @@ double f(double x)
     double t = 1.0/(1.0 + p*x);
     double y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t*expₑ(-x*x);
     return sign * y;
-}</code></td>
+}</code></details></td>
     <td class="webnnColumn">erf</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Erf">Erf</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ERF</td>
@@ -1653,7 +1652,7 @@ For infinity, test that all exponent bits are one, and all mantissa bits are 0:
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Sign</td>
-    <td class="detailsColumn"><code>function sign(input) = elementwiseUnary(input, (x) => if x &gt; 0 then 1 elif x &lt; 0 then -1 elif x == 0 then 0 else NaN)<code></td>
+    <td class="detailsColumn"><code>function sign(input) = elementwiseUnary(input, (x) => if x &gt; 0 then 1 elif x &lt; 0 then -1 elif x == 0 then 0 else NaN)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Sign">Sign</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SIGN</td>
@@ -2683,7 +2682,7 @@ endfunction</code></td>
     <td>Sigmoid</td>
     <td class="detailsColumn"><code>function sigmoid(input) = reciprocal(add(1, exp(negate(x)))))
 // OR                     elementwiseUnary(input, x => 1 / (1 + expₑ(-x)))
-// OR                     elementwiseUnary(input, x => expₑ(x) / (1 + expₑ(x)))</td>
+// OR                     elementwiseUnary(input, x => expₑ(x) / (1 + expₑ(x)))</code></td>
     <td class="webnnColumn">sigmoid</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sigmoid">Sigmoid</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_SIGMOID</td>
@@ -2906,7 +2905,7 @@ endfunction</code></td>
     <td>Scaled Exponential Linear Unit</td>
     <td class="detailsColumn"><code>function scaledExponentialLinearUnit(input, alpha = 1.6732, gamma = 1.0507)
     return mul(elu(input, alpha), gamma)
-    // OR  elementwise gamma * iif(x &gt; 0, x, alpha * (expₑ(x) - 1))</code>
+    // OR  elementwise gamma * iif(x &gt; 0, x, alpha * (expₑ(x) - 1))
 endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Selu">Selu</a></td>
@@ -3371,7 +3370,7 @@ endfunction</code></td>
   <tr class="generationOperator matrixMultiplicationOperator">
     <td>Generation, Matrix Multiplication</td>
     <td>Diagonal Matrix</td>
-    <td class="detailsColumn">TODO:</code></td>
+    <td class="detailsColumn"><code>TODO:</code></td>
     <td class="webnnColumn">triangular</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.9.0/docs/Operators.md#Trilu">Trilu</a></td>
     <td class="dmlColumn">DML_OPERATOR_DIAGONAL_MATRIX1</td>
@@ -3707,8 +3706,7 @@ endfunction</code></td>
     output = input
     output.dimensions = newDimensions
     return output
-endfunction
-    </td>
+endfunction</code></td>
     <td class="webnnColumn">reshape</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a></td>
     <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
@@ -5592,9 +5590,8 @@ endfunction</code>
 For each output element, sum all the corresponding inputs in a local window, considering scale, power, and bias.
 Implementations support either 1D or 2D (some only support 1D).
 
-<code>LRN(x, localSize, scaleAlpha, powerBeta, bias) =
-    x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta</code>
-defaults: bias = 1</code></td>
+<code>LRN(x, localSize, scaleAlpha, powerBeta, bias = 1) =
+    x / (bias + (scaleAlpha / localSize) * sum(xi^2 for every xi in the local region)) ^ powerBeta</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LRN">LRN</a></td>
     <td class="dmlColumn">DML_OPERATOR_LOCAL_RESPONSE_NORMALIZATION</td>
@@ -5765,7 +5762,7 @@ Any of these steps may be a nop, which is how the generic form can represent any
 <b>Parsing notation</b>
 The difficult part isn't the execution (these fundamentals are already supported in DirectML) but rather parsing the input/output axes from the string and mapping them into actionable operations:
 
-- Concatenate all the unique input axes in alphabetic order (ignore the output on the right of the arrow) to yield the intermediate product tensor's axes. "j,i" yields "ij". "ik,kj" yields "ijk". "cx,by,az" yields "abcxyz". Note the axes in the final output may only include axes found in the original inputs (else error), an axis name may not be reused more than once in the output (axes can be repeated in input assuming both uses have the same dimension size), and the output rank will be equal to or less than the product tensor rank. Note case matters, where aZ is reordered Za (since ASCII Z < a).
+- Concatenate all the unique input axes in alphabetic order (ignore the output on the right of the arrow) to yield the intermediate product tensor's axes. "j,i" yields "ij". "ik,kj" yields "ijk". "cx,by,az" yields "abcxyz". Note the axes in the final output may only include axes found in the original inputs (else error), an axis name may not be reused more than once in the output (axes can be repeated in input assuming both uses have the same dimension size), and the output rank will be equal to or less than the product tensor rank. Note case matters, where aZ is reordered Za (since ASCII Z &lt; a).
 - Extract the output axes after the arrow (e.g. the ij from i,j->ij). Mentally you can reorder things, putting the right side of the arrow on the left like normal assignment. So i,j->ij becomes ij = i,j.
 - If there is no arrow output specified (e.g. "i,j", which differs from "i,j->" where an arrow explicitly yields a 0D scalar) then the output tensor shape defaults to the product tensor ("i,j" becomes "i,j->ij"). If any axis appears more than once in the input terms (either within the same input term or different terms), remove the axis from the output shape ("ik,ij" yields "jk", "iji" yields "j", "i,ik" yields "k", "i,i" yields scalar "").
 - Multiply all comma delimited terms for the intermediate product. ij = i,j (originally i,j->ij) becomes ij = i * j, which means product[i][j] = input0[i] * input1[j].
@@ -6050,7 +6047,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td class="detailsColumn">For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 
 <code>f(X, ratio) = select(less(random(0, 0.9999), ratio), 0, mul(X, recip(sub(1, ratio)))),
-f(x, ratio) = iif(random(0, 0.9999) &lt ratio, 0, 1 / (1 - ratio) * x);</code>
+f(x, ratio) = iif(random(0, 0.9999) &lt; ratio, 0, 1 / (1 - ratio) * x);</code>
 For forward execution, ratio is 0, and so it's equivalent to: <code>f(X) = identity(X)</code>
 notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
     <td class="webnnColumn">?</td>
