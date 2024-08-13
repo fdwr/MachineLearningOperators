@@ -950,7 +950,16 @@ summary::after {
   <tr class="elementwiseOperator">
     <td>Elementwise</td>
     <td>Elementwise Generic</td>
-    <td class="detailsColumn"><code><details><summary>function elementwiseUnary(input, functor)</summary>
+    <td class="detailsColumn"><code><details><summary>function elementwiseNullary(functor, dataType, dimensions)</summary>
+    output = new Tensor(dataType, dimensions)
+    for each coordinate in output.coordinates
+        output[coordinate] = functor()
+    endfor
+    return output
+endfunction
+
+</details>
+<details><summary>function elementwiseUnary(input, functor)</summary>
     output = new Tensor(input.dataType, input.dimensions)
     for each coordinate in input.coordinates
         output[coordinate] = functor(input[coordinate])
@@ -1322,8 +1331,8 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Square root</td>
-    <td class="detailsColumn"><code>function sqrt(input) = elementwiseUnary(input, (x) => sqrtScalar(x))
-// OR                                                pow(x, 1/2)</code></td>
+    <td class="detailsColumn"><code>function sqrt(input) = elementwiseUnary(input, (x) => sqrt(x))
+// OR                                                 pow(x, 1/2)</code></td>
     <td class="webnnColumn">sqrt</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Sqrt">Sqrt</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_SQRT</td>
@@ -2728,7 +2737,9 @@ endfunction</code></td>
     <td>Activation, Elementwise</td>
     <td>Hard Swish</td>
     <td class="detailsColumn"><code>function hardSwish(input, scale = 1/6, offset = 0.5) = mul(input, hardSigmoid(input, scale, offset))</code>
-<code>// OR using limit=6 instead, elementwise x * max(0, min(limit, (x + (limit/2)))) / limit</code></td>
+<code>// OR using limit=6 instead, elementwise x * max(0, min(limit, (x + (limit/2)))) / limit</code>
+
+<code>function hardSwishAlways6(input) = hardSwish(input, 1/6, 0.5)</code></td>
     <td class="webnnColumn">hardSigmoid</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#HardSwish">HardSigmoid</a></td>
     <td class="dmlColumn">DML_OPERATOR_ACTIVATION_HARD_SWISH</td>
@@ -2809,7 +2820,7 @@ endfunction</code></td>
     <td>Activation, Elementwise</td>
     <td>Parameterized Rectified Linear Unit</td>
     <td class="detailsColumn"><code>function parameterizedRectifiedLinearUnit(input, slope) = select(less(input, 0), mul(input, slope), input)</code>
-<code>// OR elementwise if x &gt;= 0 then x else slope * x</code>
+<code>// OR elementwise if x &lt; 0 then slope * x else x</code>
 PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
     <td class="webnnColumn">prelu</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
@@ -2952,20 +2963,37 @@ endfunction</code></td>
     <td class="detailsColumn">Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 
 <code>function softMax(input, axes)
-    maxInput = reduceMax(input, axes, keepDimensions=1)
-    expInput = exp(input - maxInput)
+    // DML_OPERATOR_ACTIVATION_SOFTMAX1
+    expInput = exp(input)
     reducedExpInput = reduceSum(expInput, axis=axes, keepDimensions=1)
     return div(expInput, reducedExpInput)
+
+    // Or for more numerical stability:
+    // maxInput = reduceMax(input, axes, keepDimensions=1)
+    // expInput = exp(input - maxInput)
+    // reducedExpInput = reduceSum(expInput, axis=axes, keepDimensions=1)
+    // return div(expInput, reducedExpInput)
 endfunction
 
-function softMax1D(input, axis)
-    // Only handle a single axis, explicitly given.
+function softMax(input, axes)
+endfunction
+
+function softMax1D(input, axis) // Only handle a single axis, explicitly given.
+    // ONNX Softmax-13
+    // torch.nn.Softmtax
+    // tf.nn.softmax
+    // NCNN Softmax
     return softMax(input, axes=[axis])
 endfunction
 
-function softmax1DRightmost(input, axis)
-    // Only handles a single axis, implictly hard-coded to the last dimension.
-    flattenedInput = flattenTo2D(input, axis) // Flatten to 2D
+function softMax1DRightmostAxis(input) // Only handle a single axis, implicitly rightmost dimension.
+    // DML_OPERATOR_ACTIVATION_SOFTMAX(0)
+    return softMax(input, axes=[1])
+endfunction
+
+function softmaxRightmostRange(input, firstAxis) // Only handles rightmost dimensions.
+    // ONNX Softmax-11
+    flattenedInput = flattenTo2D(input, firstAxis) // Flatten to 2D
     normalizedInput = softMax(flattenedInput, axes=[1])
     return reshape(normalizedInput, input.shape)
 endfunction</code>
@@ -2997,10 +3025,14 @@ or per batch for more numerical stability: <code>expₑ(x - max(X)) / sum(expₑ
   <tr class="activationOperator">
     <td>Activation</td>
     <td>Log Soft Maximum</td>
-    <td class="detailsColumn"><code>function logSoftMaximum(input, axis)
+    <td class="detailsColumn"><code>function logSoftMaximum(input, axes)
     return log(softmax(input, axis))
     // OR  logₑ(expₑ(x - max(input)) / sum(expₑ(input - max(input))))
     // OR  (x - max(input)) - logₑ(x - max(input))))
+endfunction
+
+function logSoftMaximum1D(input, axis) // Only handle a single axis, explicitly given.
+    return logSoftMaximum1D(input, [axis])
 endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LogSoftmax">LogSoftmax</a></td>
@@ -3242,43 +3274,16 @@ endfunction</code></td>
  <tr class="generationOperator randomOperator">
     <td>Generation, Random</td>
     <td>Random Uniform</td>
-    <td class="detailsColumn"><code>function randomUniform(low, high, dataType)  // see MT19937
-    range = high - low  // note inclusive end
-    if dataType is integer then return (rand() % (range+1) + low
-    if dataType is float then (rand() / randmax) * range + low
+    <td class="detailsColumn"><code>function randomUniform(low, high, dataType, dimensions)  // see MT19937
+    function f()
+        range = high - low  // note inclusive end
+        if dataType is integer then return (rand() % (range+1) + low
+        if dataType is float then (rand() / randmax) * range + low
+    endif
+    return elementwiseNullary(f, dataType, dimensions)
 endfunction</code></td>
     <td class="webnnColumn">?</td>
-    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a></td>
-    <td class="dmlColumn">---</td>
-    <td class="xnnPackColumn">?</td>
-    <td class="stableHloColumn">?</td>
-    <td class="tosaColumn">?</td>
-    <td class="numpyColumn">?</td>
-    <td class="tensorFlowColumn">?</td>
-    <td class="tensorFlowLiteColumn">?</td>
-    <td class="pytorchColumn">?</td>
-    <td class="coreMlColumn">?</td>
-    <td class="bnnsColumn">?</td>
-    <td class="mpsColumn">?</td>
-    <td class="mlxColumn">?</td>
-    <td class="ncnnColumn">?</td>
-    <td class="cntkColumn">?</td>
-    <td class="openVinoColumn">?</td>
-    <td class="oneDnnColumn">?</td>
-    <td class="annColumn">?</td>
-    <td class="futureColumn"></td>
-    <td>Unpredictable</td>
-  </tr>
- <tr class="generationOperator randomOperator">
-    <td>Generation, Random</td>
-    <td>Random Uniform Normal</td>
-    <td class="detailsColumn"><code>function randomUniformNormal(low, high, dataType)  // see MT19937
-    range = high - low  // note inclusive end
-    if dataType is integer then return (rand() % (range+1) + low
-    if dataType is float then (rand() / randmax) * range + low
-endfunction</code></td>
-    <td class="webnnColumn">?</td>
-    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniformLike">RandomUniformLike</a></td>
+    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniform">RandomUniform</a><br/><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#RandomUniformLike">RandomUniformLike</a></td>
     <td class="dmlColumn">---</td>
     <td class="xnnPackColumn">?</td>
     <td class="stableHloColumn">?</td>
@@ -4441,8 +4446,8 @@ endfunction</code></td>
     <td class="detailsColumn"><code>function select(condition, trueValue, falseValue)
     elementwiseTrinary(condition, trueValue, falseValue, (c, t, f) => if c then t else f)
 endfunction</code>
-notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).
-    </td>
+
+notes: A conditional per-element if statement. Can be used to implement composites that use logical operators (e.g. PRelu).</td>
     <td class="webnnColumn">where</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#Where">Where</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_IF</td>
@@ -4496,16 +4501,18 @@ notes: A conditional per-element if statement. Can be used to implement composit
     <td>Reverse axes</td>
     <td class="detailsColumn">Reverse all the elements along the given axes.
 <code>
-output = newTensor(input.dimensions, input.dataType)
-for every inputCoordinate in input tensor
-    // Flip the coordinate along all applicable axes
-    outputCoordinates = inputCoordinates
-    for each axis in axes
-        outputCoordinates[axis] = output.dimensions[axis] - outputCoordinates[axis] - 1
-    endfor
+function reverseAxes(input, axes)
+  output = newTensor(input.dimensions, input.dataType)
+  for each inputCoordinate in input tensor
+      // Flip the coordinate along all applicable axes
+      outputCoordinates = inputCoordinates
+      for each axis in axes
+          outputCoordinates[axis] = output.dimensions[axis] - outputCoordinates[axis] - 1
+      endfor
 
-    output[outputCoordinate] = input[inputCoordinate]
-endfor
+      output[outputCoordinate] = input[inputCoordinate]
+  endfor
+endfunction
 </code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/pull/1804">Reverse</a> <a href="https://github.com/onnx/onnx/pull/1882">(Reverted)</a></td>
@@ -4542,9 +4549,9 @@ endfor
         // TODO: for each input in the window, apply the reduction function
     endfor
     return output
-endfunction
+endfunction</code>
 
-TODO: Express pooling as higher dimension strided reduction.</code></td>
+TODO: Express pooling as higher dimension strided reduction.</td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">?</td>
     <td class="dmlColumn">?</td>
@@ -4628,8 +4635,8 @@ function poolAverage(input, ...) = conv(input, filter = ones(windowDimensions) /
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Pool Average Spatial Dimensions</td>
-    <td class="detailsColumn"><code>function poolAverageSpatialDimensions(input)
+    <td>Pool Average Spatial Dimensions Global</td>
+    <td class="detailsColumn"><code>function poolAverageSpatialDimensionsGlobal(input)
     axes = increasingSequence(2, input.rank) // Skip N and C dimensions.
     return reduceAverage(input, axes, keepDimensions=true)
     // Alternately poolAverage with windowDimensions equal to the input sizes after N,C.
@@ -4695,8 +4702,8 @@ endfunction</code></td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Pool Maximum Spatial Dimensions</td>
-    <td class="detailsColumn"><code><code>function poolMaximumSpatialDimensions(input)
+    <td>Pool Maximum Spatial Dimensions Global</td>
+    <td class="detailsColumn"><code><code>function poolMaximumSpatialDimensionsGlobal(input)
     axes = increasingSequence(2, input.rank) // Skip N and C dimensions.
     return reduceMax(input, axes, keepDimensions=true)
     // Alternately poolMaximum with windowDimensions equal to the input sizes after N,C.
@@ -4756,7 +4763,7 @@ Then write each value from the input tensor into the output tensor at the elemen
     <td>Pool Lebesgue</td>
     <td class="detailsColumn"><code>function poolLebesgue(input, axes, windowDimensions, padding, dilations, exponent)
     return root(poolSum(pow(input, exponent), axes, windowDimensions, padding, dilations), exponent)
-    // y = (x1^p + x2^p + ... + xn^p) ^ (1/p); y is reduced for each kernel
+    // y = (x1^p + x2^p + ... + xn^p) ^ (1/p)
 endfunction</code></td>
     <td class="webnnColumn">l2Pool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#LpPool">LpPool</a></td>
@@ -4782,14 +4789,12 @@ endfunction</code></td>
   </tr>
   <tr class="poolingOperator">
     <td>Pooling</td>
-    <td>Pool Lebesgue Spatial Dimensions</td>
-    <td class="detailsColumn"><code>function poolLebesgueSpatialDimensions(input, exponent)
+    <td>Pool Lebesgue Spatial Dimensions Global</td>
+    <td class="detailsColumn"><code>function poolLebesgueSpatialDimensionsGlobal(input, exponent)
     axes = increasingSequence(2, input.rank) // Skip N and C dimensions.
     return reduceLebesgue(input, axes, exponent, keepDimensions=true)
-    // TODO: Add this reduction function
+    // TODO: Add the above reduction function
 endfunction</code>
-
-<code>y = (x1^p + x2^p + ... + xn^p) ^ (1/p)</code>
 
 So X[N C H W] reduces to Y[N C 1 1]
 e.g. (3^2 + 4^2) ^ (1/2) = 5</td>
@@ -6238,7 +6243,7 @@ Resample elements from the source to destination tensor, using the scale factors
     samplesToInterpolate = 1 << rank
     samples.resize(samplesToInterpolate)
 
-    for every outputCoordinate in output tensor
+    for each outputCoordinate in output tensor
         // Offset the fractional component by the pixel center offsets.
         inputCoordinateFloat = (outputCoordinate + outputPixelOrigin) / scales
         inputCoordinateFractions = frac(inputCoordinateFloat) - inputPixelOrigin
