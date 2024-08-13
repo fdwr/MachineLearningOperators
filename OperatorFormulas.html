@@ -4399,7 +4399,18 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization mapping</td>
     <td>One Hot Along Axis</td>
-    <td class="detailsColumn">Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.</td>
+    <td class="detailsColumn">Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.
+
+<code>function oneHot(indices, axis, axisLength, values)
+    outputDimensions = indices.dimensions
+    outputDimensions[axis] = axisLength
+    output = broadcast(values[0], outputDimensions)
+    TODO: scatter(output, indices, values[1])
+endfunction
+
+function oneHotExpandedOutput(indices, axis, values)
+    // output is 1 dimension bigger than input, inserted at the axis.
+endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_ONE_HOT</td>
@@ -4557,6 +4568,19 @@ endfunction
         // TODO: for each input in the window, apply the reduction function
     endfor
     return output
+endfunction
+
+function poolGenericWithIndices(input, axes, windowDimensions, padding, dilations, indicesDataType, reductionFunction, initialValue)
+    // TODO:
+    // Determine output tensor dimensions.
+    // output = new Tensor(input.type, outputDimensions)
+    // indices = new Tensor(indicesDataType, outputDimensions)
+
+    // Reduce input along active axes.
+    for each (outputCoordinate, value) in output
+        // TODO: for each input in the window, apply the reduction function
+    endfor
+    return (output, indices)
 endfunction</code>
 
 TODO: Express pooling as higher dimension strided reduction.</td>
