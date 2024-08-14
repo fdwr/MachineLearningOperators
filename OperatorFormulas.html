@@ -4724,7 +4724,7 @@ TODO: Express pooling as higher dimension strided reduction.</td>
     <td>Pool Sum</td>
     <td class="detailsColumn"><code>function poolSum(input, axes, windowDimensions, padding, strides, dilations)
     return poolGeneric(input, axes, windowDimensions, padding, strides, dilations, add, 0)
-    // OR  conv(input, filter = ones(windowDimensions), axes, windowDimensions, padding, strides, dilations)
+    // OR  convolve(input, filter = ones(windowDimensions), axes, windowDimensions, padding, strides, dilations)
 endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">?</td>
