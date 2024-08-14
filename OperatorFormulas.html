@@ -3476,10 +3476,10 @@ notes: 'steps' affects the size of steps over the input.
 A dilation of 1 means no change (1:1 with filter), whereas dilation of 2 inserts lines of zeros between every filter line.
 'pads' are not actually added to the input, just virtually treated as if zeros. <a href="https://github.com/vdumoulin/conv_arithmetic">vdumoulin convolution diagrams</a>
 <code>
-function convolve(input, filterWeights, dilations, strides, kernel_shape, pads; output)
+function convolve(input, filterWeights, windowDimensions, padding, dilations, strides)
     startPads = pads[0..pads.size/2]
     endPads = pads[pads.size/2..pads.size]
-    // todo: compute output size
+    // TODO: compute output size
     // output.dimensions = (input.dimensions + startPads + endPads) // todo: consider strides and kernel size
     for each outputCoordinate in output coordinates
         output[outputCoordinate] = convolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
@@ -3487,7 +3487,8 @@ function convolve(input, filterWeights, dilations, strides, kernel_shape, pads; 
 endfunction
 
 function convolveKernel(input, filterWeights, firstInputCoordinate, dilations)
-    // 2D example only todo:Figure out what 'group' does and what 'M' is?
+    // 2D example only
+    // TODO:Figure out what 'group' does and what 'M' is?
     result = 0
     // todo: How do 'M' and 'C' factor into this?
     for y=0..&lt;filterWeights.dimensions[2]
