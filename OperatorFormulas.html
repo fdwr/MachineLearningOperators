@@ -142,7 +142,7 @@ summary::after {
 
 <noscript>*This checkbox will not work without Javascript enabled:<br/></noscript>
 <input type="checkbox" id="toggleAllOperators" checked="checked" onclick="toggleAllOperatorsOfIdSuffix(this, 'Operators')"/><label for="toggleAllOperators">&lt;All operator categories&gt;</label><br/>
-<input type="checkbox" id="toggleElementwiseOperators" checked="checked"/><label for="toggleElementwiseOperators">Elementwise operators (pointwise operation, input.shape == output.shape)</label><br/>
+<input type="checkbox" id="toggleElementwiseOperators" checked="checked"/><label for="toggleElementwiseOperators">Elementwise operators (pointwise operation, input.dimensions == output.dimensions)</label><br/>
 <input type="checkbox" id="toggleActivationOperators" checked="checked"/><label for="toggleActivationOperators">Activation operators (signal <a href="https://en.wikipedia.org/wiki/Activation_function">remapping function</a>)</label><br/>
 <input type="checkbox" id="toggleReorganizationOperators" checked="checked"/><label for="toggleReorganizationOperators">Reorganization operators (data movement, no value calculations)</label><br/>
 <input type="checkbox" id="toggleReductionOperators" checked="checked"/><label for="toggleReductionOperators">Reduction operators (reduce multiple inputs to output via a formula)</label><br/>
@@ -969,10 +969,10 @@ endfunction
 
 </details>
 <details><summary>function elementwiseBinary(a, b, functor)</summary>
-    outputShape = broadcastDimensions(a.dimensions, b.dimensions)
-    output = new Tensor(a.dataType, outputShape)
-    aBroadcast = broadcast(a, outputShape) // Some implementations can directly use strides to avoid intermediates.
-    bBroadcast = broadcast(b, outputShape)
+    outputDimensions = broadcastDimensions(a.dimensions, b.dimensions)
+    output = new Tensor(a.dataType, outputDimensions)
+    aBroadcast = broadcast(a, outputDimensions) // Some implementations can directly use strides to avoid intermediates.
+    bBroadcast = broadcast(b, outputDimensions)
     for each coordinate in input.coordinates
         output[coordinate] = functor(aBroadcast[coordinate], bBroadcast[coordinate])
     endfor
@@ -981,11 +981,11 @@ endfunction
 
 </details>
 <details><summary>function elementwiseTrinary(a, b, c, functor)</summary>
-    outputShape = broadcastDimensions(a.dimensions, b.dimensions, c.dimensions)
-    output = new Tensor(a.dataType, outputShape)
-    aBroadcast = broadcast(a, outputShape) // Some implementations can directly use strides to avoid intermediates.
-    bBroadcast = broadcast(b, outputShape)
-    cBroadcast = broadcast(c, outputShape)
+    outputDimensions = broadcastDimensions(a.dimensions, b.dimensions, c.dimensions)
+    output = new Tensor(a.dataType, outputDimensions)
+    aBroadcast = broadcast(a, outputDimensions) // Some implementations can directly use strides to avoid intermediates.
+    bBroadcast = broadcast(b, outputDimensions)
+    cBroadcast = broadcast(c, outputDimensions)
     for each coordinate in input.coordinates
         output[coordinate] = functor(aBroadcast[coordinate], bBroadcast[coordinate], cBroadcast[coordinate])
     endfor
@@ -2994,7 +2994,7 @@ function softmaxRightmostRange(input, firstAxis) // Only handles rightmost dimen
     // ONNX Softmax-11
     flattenedInput = flattenTo2D(input, firstAxis) // Flatten to 2D
     normalizedInput = softMax(flattenedInput, axes=[1])
-    return reshape(normalizedInput, input.shape)
+    return reshape(normalizedInput, input.dimensions)
 endfunction</code>
 
 or per batch: <code>f(x) = expₑ(x) / sum(expₑ(X))</code>
@@ -3480,7 +3480,7 @@ function convolve(input, filterWeights, dilations, strides, kernel_shape, pads; 
     startPads = pads[0..pads.size/2]
     endPads = pads[pads.size/2..pads.size]
     // todo: compute output size
-    // output.shape = (input.shape + startPads + endPads) // todo: consider strides and kernel size
+    // output.dimensions = (input.dimensions + startPads + endPads) // todo: consider strides and kernel size
     for each outputCoordinate in output coordinates
         output[outputCoordinate] = convolveKernel(input, filterWeights, outputCoordinate * strides - startPads, dilations)
     endfor
@@ -3490,8 +3490,8 @@ function convolveKernel(input, filterWeights, firstInputCoordinate, dilations)
     // 2D example only todo:Figure out what 'group' does and what 'M' is?
     result = 0
     // todo: How do 'M' and 'C' factor into this?
-    for y=0..&lt;filterWeights.shape[2]
-        for x=0..&lt;filterWeights.shape[3]
+    for y=0..&lt;filterWeights.dimensions[2]
+        for x=0..&lt;filterWeights.dimensions[3]
             inputCoordinate = firstInputCoordinate + ([y,x] * dilations)
             if (input.contains(inputCoordinate)) // check coordinates within tensor
                 result += filterWeights[y,x] * input[inputCoordinate]
@@ -3588,7 +3588,7 @@ endfunction
 function transpose(input, permutationAxes /*gather semantics*/)
     assert(permutationAxes.size == input.rank)
     rank = input.rank
-    for i=0..&lt;rank do output.shape[i] = input.shape[permutationAxes[i]]
+    for i=0..&lt;rank do output.dimensions[i] = input.dimensions[permutationAxes[i]]
     outputCoordinate = repeat(rank, 0)
     for each inputCoordinate in input coordinates
         for i=0..&lt;rank do outputCoordinate[i] = inputCoordinate[permutationAxes[i]]
@@ -3624,12 +3624,11 @@ endfunction</code></td>
     <td class="detailsColumn">Broadcast any single size dimensions up to the output dimension counts.
 Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.broadcast_to.html">NumPy broadcast_to</a>.
 <code>
-function broadcast(input, shape)
-    output.shape = broadcastShape(input.shape, shape)
-    N = output.rank
-    inputShape = PadLeadingValues(input.shape, N, 1)
+function broadcast(input, targetDimensions)
+    output.dimensions = broadcastDimensions(input.dimensions, targetDimensions)
+    inputShape = padLeadingValues(input.dimensions, output.rank, 1)
     for each outputCoordinate in output coordinates
-        for i=0..&lt;N do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
+        for i=0..&lt;output.rank do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
         output[outputCoordinate] = inputData[inputCoordinate]
     endfor
 endfunction</code></td>
@@ -3680,9 +3679,9 @@ endfunction
 // e.g. paddingSize=4 with [H,W] -&gt; [1,1,H,W]
 function padLeadingValues(values, paddedSize, padValue)
     // Right align. e.g. original dimensions=[H,W], paddedSize=4, padValue=1 -&gt; [1,1,H,W]
-    paddedSize = max(padddedSize, values.size)
+    paddingCount = max(paddedSize, values.size) - values.size
     paddedValues = values
-    paddedValues.prepend(paddingSize - values.size, padValue)
+    paddedValues.prepend(paddingCount, padValue)
     return paddedValues
 endfunction</code></td>
     <td class="webnnColumn">NA</td>
@@ -3749,7 +3748,7 @@ e.g. [1,2,3,4,5] with a split at axis 3 yields [1*2*3,4*5] -&gt; [6,20])
 function flattenTo2D(input, axis)
     output = input
     oldDimensions = input.dimensions
-    output.shape = join(reduceProduct(oldDimensions[0..axis]), reduceProduct(oldDimensions[axis..oldDimensions.size]))
+    output.dimensions = join(reduceProduct(oldDimensions[0..axis]), reduceProduct(oldDimensions[axis..oldDimensions.size]))
     return output
 endfunction
 
@@ -3788,27 +3787,27 @@ endfunction</code></td>
     <td>Reshape Removing Ones</td>
     <td class="detailsColumn">Reinterpret the view of the tensor, removing 1's for deletable axes.
 
-<code>function removeOnesFromShape(shape, axes)
-    if axes is undefined
-        axes = arange(0, shape.size)
-    else // !axes.empty
-        for i in axes do assert(shape[i] == 1)
-        axes = removeDupes(sortDescending(axes))
-    endif
-    newShape = shape
-    for i in axes // work from back to front
-        if newShape[i] == 1
-            newShape.deleteAt(i)
-        endif
-    endfor
-    return newShape
+<code>function reshapeDeletingOnes(input, axes)
+    output = input
+    output.dimensions = deleteOnesInDimensions(input.dimensions, axes)
+    return output
 endfunction
 
-function reshapeDeletingOnes(input, axes)
-    outputShape = removeOnesFromShape(input.shape, axes)
-    output = input
-    output.shape = outputShape
-    return output
+function deleteOnesInDimensions(dimensions, axes)
+    if axes is undefined
+        axes = increasingSequence(0, dimensions.size) // Remove all 1's.
+    else
+        assert(allOf(dimensions, (d) => (d == 1)))
+        axes = removeDuplicates(sortDescending(axes))
+    endif
+
+    newDimensions = dimensions
+    for i in axes // work from back to front
+        if newDimensions[i] == 1
+            newDimensions.deleteAt(i)
+        endif
+    endfor
+    return newDimensions
 endfunction</code></td>
     <td class="webnnColumn">reshape (plus caller logic)</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Squeeze">Squeeze</a></td>
@@ -3837,19 +3836,110 @@ endfunction</code></td>
     <td>Reshape Inserting Ones</td>
     <td class="detailsColumn">Reinterpret the view of the tensor, filling in 1's for newly inserted axes.
 
-<code>
-function reshapeInsertingOnes(input, axes)
+<code>function reshapeInsertingOnes(input, axes)
     output = input
-    outputShape = input.shape
-    axes = removeDupes(sort(axes))
-    for i in axes
-        outputShape.insertAt(i, 1)
-    endfor
-    output.shape = outputShape
+    output.dimensions = insertOnesInDimensions(input.dimensions, axes)
     return output
-endfunction</code></td>
+endfunction
+
+function insertOnesInDimensions(dimensions, axes)
+    // Note the axes are relative to their *final* index.
+    // So dimensions = [3,4] with axes = [0,2] yields new dimensions = [1,3,1,4].
+    newDimensions = dimensions
+    axes = removeDuplicates(sort(axes))
+    for i in axes
+        newDimensions.insertAt(i, 1)
+    endfor
+    return newDimensions
+endfunction
+
+</code></td>
     <td class="webnnColumn">reshape (plus caller logic)</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Unsqueeze">Unsqueeze</a></td>
+    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data reorganization</td>
+    <td>Reshape From Axes</td>
+    <td class="detailsColumn">Reinterpret the view of the tensor, gathering dimensions from axes,
+filling in 1's for filler dimensions.
+
+<code>function reshapeFromAxes(input, newRank, axes)
+    assert(input.rank == axes.size)
+    assert(containsUniqueValues(axes))
+    output = input
+    output.dimensions = gatherValues(input.dimensions, axes, newRank, 1)
+    return output
+endfunction
+
+function gatherValues(values, indices, newValuesSize, fillerValue)
+    newValues = repeat(newValuesSize, fillerValue)
+    for (i, gatherIndex) in indices
+        newValues[i] = values[gatherIndex]
+    endfor
+endfunction</code></td>
+    <td class="webnnColumn">reshape (plus caller logic)</td>
+    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a> plus caller logic</td>
+    <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data reorganization</td>
+    <td>Reshape To Axes</td>
+    <td class="detailsColumn">Reinterpret the view of the tensor, scattering dimensions to axes,
+filling in 1's for filler dimensions.
+
+<code>function reshapeToAxes(input, newRank, axes)
+    assert(input.rank == axes.size)
+    assert(containsUniqueValues(axes))
+    output = input
+    output.dimensions = scatterValues(input.dimensions, axes, newRank, 1)
+    return output
+endfunction
+
+function scatterValues(values, indices, newValuesSize, fillerValue)
+    newValues = repeat(newValuesSize, fillerValue)
+    for (i, scatterIndex) in indices
+        newValues[scatterIndex] = values[i]
+    endfor
+endfunction</code></td>
+    <td class="webnnColumn">reshape (plus caller logic)</td>
+    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Reshape">Reshape</a> plus caller logic</td>
     <td class="dmlColumn">NA, just rearrange the TENSOR_DESC</td>
     <td class="xnnPackColumn">?</td>
     <td class="stableHloColumn">?</td>
@@ -3942,17 +4032,17 @@ endfunction</code></td>
     N = input.rank
     if axes.empty then axes = arange(0, N-1) // [0,1,2,...]
     if starts.empty then starts = zeroes(N) // [0,0,0,...]
-    if ends.empty then ends = input.shape
+    if ends.empty then ends = input.dimensions
     if steps.empty then steps = ones(N) // [1,1,1,...]
     assert(axes.size == input.rank || axes.size == 0)
     assert(starts.size == axes.size)
     assert(ends.size == axes.size)
     assert(steps.size == axes.size)
     starts = max(starts, zeroes(N))
-    ends = min(ends, input.shape)
+    ends = min(ends, input.dimensions)
     ends = max(ends, starts)
 
-    for i=0..&lt;N do output.shape[i] = ceil((ends[i] - starts[i]) / steps[i]) // negative steps unhandled!
+    for i=0..&lt;N do output.dimensions[i] = ceil((ends[i] - starts[i]) / steps[i]) // negative steps unhandled!
     for each outputCoordinate in output
         for i=0..&lt;N do inputCoordinate[i] = outputCoordinate[i] * steps[i] + starts[i]
         output[outputCoordinate] = inputData[inputCoordinate]
@@ -3988,7 +4078,7 @@ endfunction</code></td>
 <code>function concatenate(inputs, axis)
     sizesAlongAxis = []
     for each input in inputs
-        sizesAlongAxis.append(input.shape[axis])
+        sizesAlongAxis.append(input.dimensions[axis])
     endfor
     outputOffsets = cumulativeSum(axisSizes)
     for each inputIndex from 0 up to inputs.count
@@ -4052,12 +4142,14 @@ endfunction</code></td>
     <td>Gather Elements</td>
     <td class="detailsColumn">Return output tensor the same size as indices, filling with values from input indexed along the axis by indices.
 <code>
-output = input
-for each coordinate in indices tensor
-    inputCoordinate = coordinate
-    inputCoordinate[axis] = indices[coordinate]
-    output[coordinate] = input[inputCoordinate]
-endfor
+function gatherElements(input, indices, axis)
+  output = new Tensor(input.dataType, indices.dimensions)
+  for each coordinate in indices tensor
+      inputCoordinate = coordinate
+      inputCoordinate[axis] = indices[coordinate]
+      output[coordinate] = input[inputCoordinate]
+  endfor
+endfunction
 
 output[i][j][k] = input[ index[i][j][k] ][j][k]  # if dim == 0
 output[i][j][k] = input[i][ index[i][j][k] ][k]  # if dim == 1
@@ -4130,12 +4222,14 @@ output = [[1,1], [4,3], [6,6]]
     <td>Scatter Elements</td>
     <td class="detailsColumn">Opposite of gather. Write values from updates into data at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
 <code>
-output = input
-for each coordinate in indices tensor
-    outputCoordinate = coordinate
-    outputCoordinate[axis] = indices[coordinate]
-    output[outputCoordinate] = updates[coordinate]
-endfor
+function scatterElements(input, indices, updates, axis)
+    output = input
+    for each coordinate in indices tensor
+        outputCoordinate = coordinate
+        outputCoordinate[axis] = indices[coordinate]
+        output[outputCoordinate] = updates[coordinate]
+    endfor
+endfunction
 
 output[ index[i][j][k] ][j][k] = input[i][j][k]  # if dim == 0
 output[i][ index[i][j][k] ][k] = input[i][j][k]  # if dim == 1
@@ -4147,7 +4241,7 @@ e.g.
 data = [[1, 2, 3, 4, 5]] // data == input
 indices = [[1, 3]]
 updates = [[11, 21]]
-axis = 0
+axis = 1
 output = [[1, 11, 3, 21, 5]]
 </code>
   </td>
@@ -4313,7 +4407,7 @@ y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])</c
   </tr>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
-    <td>Dimensions (Shape / Sizes)</td>
+    <td>Dimensions (aka Shape, Sizes)</td>
     <td class="detailsColumn">Return the dimensions of the tensor as a 1D tensor.
 
 <code>function dimensions(input) = input.dimensions</code></td>
@@ -4402,14 +4496,22 @@ endfunction</code></td>
     <td class="detailsColumn">Set all elements to 'off' values, then set one element to 'on' value along specified axis using index offset.
 
 <code>function oneHot(indices, axis, axisLength, values)
+    // Indices and output are broadcast compatible.
+    // Indices has a dimension of size 1 at axis.
+    // Output has a dimension of size axisLength at axis (opposite of reduction).
+    // 1D values[2] contains {offValue, oneValue}.
+    assert(indices.dimensions[axis] == 1)
     outputDimensions = indices.dimensions
     outputDimensions[axis] = axisLength
-    output = broadcast(values[0], outputDimensions)
-    TODO: scatter(output, indices, values[1])
+    defaultValues = broadcast(values[0], outputDimensions)
+    return scatterElements(defaultValues, indices, values[1], axis)
 endfunction
 
-function oneHotExpandedOutput(indices, axis, values)
-    // output is 1 dimension bigger than input, inserted at the axis.
+function oneHotExpandedOutput(indices, axis, axisLength, values)
+    // Output is 1 dimension bigger than input, inserted at the axis.
+    broadcastCompatibleDimensions = reshapeInsertingOnes(indices, [axis])
+    broadcastCompatibleIndices = reshape(indices, broadcastCompatibleDimensions)
+    return oneHot(broadcastCompatibleIndices, axis, axisLength, values)
 endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#OneHot">OneHot</a></td>
@@ -4436,7 +4538,10 @@ endfunction</code></td>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Top K Sorted Selection</td>
-    <td class="detailsColumn"><code>function topK(input, K, axis) = slice(sortDecreasing(input, axis), starts=0, ends=K, axes=[axis])</code></td>
+    <td class="detailsColumn"><code>function topK(input, axis, axisLength)
+    // Order the entries along an axis, keeping a length of the top K.
+    return slice(sortDecreasing(input, axis), starts=[0], ends=[axisLength], axes=[axis])
+endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#TopK">TopK</a></td>
     <td class="dmlColumn">DML_OPERATOR_TOP_K</td>
@@ -4523,7 +4628,7 @@ notes: A conditional per-element if statement. Can be used to implement composit
 function reverseAxes(input, axes)
   output = newTensor(input.dimensions, input.dataType)
   for each inputCoordinate in input tensor
-      // Flip the coordinate along all applicable axes
+      // Flip the coordinate along all applicable axes.
       outputCoordinates = inputCoordinates
       for each axis in axes
           outputCoordinates[axis] = output.dimensions[axis] - outputCoordinates[axis] - 1
@@ -4558,28 +4663,36 @@ endfunction
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Generic</td>
-    <td class="detailsColumn"><code>function poolGeneric(input, axes, windowDimensions, padding, dilations, reductionFunction, initialValue)
-    // TODO:
-    // Determine output tensor dimensions.
-    // output = new Tensor(input.type, outputDimensions)
+    <td class="detailsColumn"><code>function poolGeneric(input, axes, windowDimensions, padding, strides, dilations, reductionFunction, initialValue)
+    // Massage all axes-relative parameters to be directly compatible with input/output rank.
+    expandedWindowDimensions = gatherValues(windowDimensions, axes, input.rank, 1)
+    expandedPadding = gatherValues(padding, axes, input.rank, 0)
+    expandedStrides = gatherValues(strides, axes, input.rank, 1)
+    expandedDilations = gatherValues(dilations, axes, input.rank, 1)
+
+    // Compute the output tensor size based on window size/padding/strides/dilations.
+    filterExtents = ((expandedWindowDimensions - 1) * expandedDilations) + 1
+    paddedDimensions = input.dimensions + expandedPadding.leading + expandedPadding.trailing
+    outputDimensions = (paddedDimensions - filterExtents + 1) / expandedStrides
+    output = new Tensor(input.type, outputDimensions)
 
     // Reduce input along active axes.
-    for each (outputCoordinate, value) in output
-        // TODO: for each input in the window, apply the reduction function
+    for each outputCoordinate in output coordinates
+        // For each input in the window, apply the reduction function
+        outputValue = initialValue
+        for each (inputCoordinate, inputValue) in local input window
+            outputValue = reductionFunction(outputValue, input[inputCoordinate])
+        endfor
+        output[outputCoordinate] = outputValue
     endfor
     return output
 endfunction
 
-function poolGenericWithIndices(input, axes, windowDimensions, padding, dilations, indicesDataType, reductionFunction, initialValue)
-    // TODO:
-    // Determine output tensor dimensions.
+function poolGenericWithIndices(input, axes, windowDimensions, padding, strides, dilations, indicesDataType, reductionFunction, initialValue)
+    // TODO: Complete...
     // output = new Tensor(input.type, outputDimensions)
     // indices = new Tensor(indicesDataType, outputDimensions)
 
-    // Reduce input along active axes.
-    for each (outputCoordinate, value) in output
-        // TODO: for each input in the window, apply the reduction function
-    endfor
     return (output, indices)
 endfunction</code>
 
@@ -4609,8 +4722,9 @@ TODO: Express pooling as higher dimension strided reduction.</td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Sum</td>
-    <td class="detailsColumn"><code>function poolSum(input, axes, windowDimensions, padding, dilations)
-    return poolGeneric(input, axes, windowDimensions, padding, dilations, add, 0)
+    <td class="detailsColumn"><code>function poolSum(input, axes, windowDimensions, padding, strides, dilations)
+    return poolGeneric(input, axes, windowDimensions, padding, strides, dilations, add, 0)
+    // OR  conv(input, filter = ones(windowDimensions), axes, windowDimensions, padding, strides, dilations)
 endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn">?</td>
@@ -4637,12 +4751,10 @@ endfunction</code></td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Average</td>
-    <td class="detailsColumn"><code>function poolAverage(input, axes, windowDimensions, padding, dilations)
+    <td class="detailsColumn"><code>function poolAverage(input, axes, windowDimensions, padding, strides, dilations)
     windowElementCount = elementCountAlongAxes(input.dimensions, axes)
-    return div(poolSum(input, axes, windowDimensions, padding, dilations), windowElementCount)
-endfunction</code>
-
-<code>function poolAverage(input, ...) = conv(input, filter = ones(windowDimensions) / windowElementCount, ...)</code></td>
+    return div(poolSum(input, axes, windowDimensions, padding, strides, dilations), windowElementCount)
+endfunction</code></td>
     <td class="webnnColumn">averagePool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#AveragePool">AveragePool</a></td>
     <td class="dmlColumn">DML_OPERATOR_AVERAGE_POOLING</td>
@@ -4707,8 +4819,8 @@ Output = AveragePool(X, kernel_shape=SpatialDimensions))</code></td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Maximum</td>
-    <td class="detailsColumn"><code>function poolMaximum(input, axes, windowDimensions, padding, dilations)
-    return poolGeneric(input, axes, windowDimensions, padding, dilations, max, -infinity)
+    <td class="detailsColumn"><code>function poolMaximum(input, axes, windowDimensions, padding, strides, dilations)
+    return poolGeneric(input, axes, windowDimensions, padding, strides, dilations, max, -infinity)
 endfunction</code></td>
     <td class="webnnColumn">maxPool2d</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#MaxPool">MaxPool</a></td>
@@ -4793,8 +4905,8 @@ Then write each value from the input tensor into the output tensor at the elemen
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Lebesgue</td>
-    <td class="detailsColumn"><code>function poolLebesgue(input, axes, windowDimensions, padding, dilations, exponent)
-    return root(poolSum(pow(input, exponent), axes, windowDimensions, padding, dilations), exponent)
+    <td class="detailsColumn"><code>function poolLebesgue(input, axes, windowDimensions, padding, strides, dilations, exponent)
+    return root(poolSum(pow(input, exponent), axes, windowDimensions, padding, strides, dilations), exponent)
     // y = (x1^p + x2^p + ... + xn^p) ^ (1/p)
 endfunction</code></td>
     <td class="webnnColumn">l2Pool2d</td>
@@ -4906,7 +5018,7 @@ What's the point of the pooled_shape when each region has a specific size anyway
 
     // Remove reduced dimensions (size 1) from output tensor if desired.
     if keepDimensions == false
-        outputDimensions = removeOnesFromShape(outputDimensions, axes)
+        outputDimensions = deleteOnesInDimensions(outputDimensions, axes)
     endif
     output.dimensions = outputDimensions
     return output
@@ -5410,10 +5522,19 @@ outputs = subgraph(implictly_named_inputs_from_outer_graph)</code></td>
     <td>Mean Variance Normalization</td>
     <td class="detailsColumn">For each output element, subtract the mean, and divide by standard deviation.
 
-<code>MeanVarianceNormalization(input) = (input - mean) / standardDeviation
-MeanVarianceNormalization(input) = (input - mean) / sqrt(variance + epsilon)
-MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean((input - mean(input))^2))
-MeanVarianceNormalization(input) = (input - mean(X)) / sqrt(mean(input^2) - mean(input)^2)</code>
+<code>function meanVarianceNormalization(input, axes)
+    // = (input - mean) / standardDeviation
+    // = (input - mean) / sqrt(variance + epsilon)
+    // = (input - mean(X)) / sqrt(mean((input - mean(input))^2))
+    // = (input - mean(X)) / sqrt(mean(input^2) - mean(input)^2)
+    centeredInput = sub(input, mean)
+    mean = reduceAverage(input, axes, keepDimensions=true)
+    meanSquared = pow(mean, 2)
+    squareMeaned = reduceAverage(pow(input, 2), axes, keepDimensions=true)
+    variance = sub(squareMeaned, meanSquared)
+    standardDeviation = sqrt(add(varianceEpsilon, epsilon))
+    return div(centeredInput, standardDeviation)
+endfunction</code>
 
 <details><summary>ONNX and NumPy</summary>
 
@@ -5463,16 +5584,27 @@ output = (input - inputMean) / (standardDeviation + 1e-9)</code>
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Spatial Normalization<br/>(independent batch&channel)</td>
-    <td class="detailsColumn"><code>function instanceNormalization(input, scale, bias)
-    reshapedBias = reshape(bias, [batch size, C axis size, spatial dims...])
-    axes = [2...input.rank-1] // Exclude axes {0,1} for N and C.
-    mean = reduceAverage(input, axes, keepDimensions=true)
-    variance = reduceAverage(pow(sub(input, mean), 2), axes, keepDimensions=true)
-    return add(mul(scale, meanVarianceNormalization(axes)), reshapedBias)
+    <td class="detailsColumn"><code>function instanceNormalization(input, scale, bias, axes)
+    // Generic version
+    // Applies: DirectML
+    assert(isBroadcastCompatible(reshapedScale.dimensions, input.dimensions))
+    assert(isBroadcastCompatible(reshapedBias.dimensions, input.dimensions))
+
     // scale * (input - mean) / sqrt(variance + epsilon) + reshapedBias
+    return add(mul(scale, meanVarianceNormalization(input, axes)), bias)
+endfunction
+
+function instanceNormalizationSpatialDimensions(input, scale, bias)
+    // Applies: ONNX
+    axes = [2...input.rank-1] // Exclude axes {0,1} for N and C.
+    // 1D scale is coerced to [batch size, C axis size, spatial dims...]
+    // 1D bias is coerced to [batch size, C axis size, spatial dims...]
+    reshapedScale = reshapeToAxes(scale, input.rank, [1])
+    reshapedBias = reshapeToAxes(bias, input.rank, [1])
+    return instanceNormalization(input, scale, bias, axes)
 endfunction</code>
 
-Mean and variance are computed across spatial dimensions DHW, independently per batch per channel NC:
+Mean and variance are computed across spatial dimensions DHW, independently per batch & channel (NC):
 
 <code>axes = [2,3, ..., inputRank-1] // Exclude axes {0,1}
 mean = (x0 + x1 + …) / xn;
@@ -5515,9 +5647,12 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Channel&Spatial Normalization<br/>(independent leading batches) <a href="https://arxiv.org/abs/1803.08494">ref</a></td>
-    <td class="detailsColumn"><code>function LayerNormalization(X, scale, bias)
-    return scale * (X - mean) / sqrt(Variance + epsilon) + reshape(Bias, [batch size, C axis size, spatial dims...])
-endfunction</code>
+    <td class="detailsColumn"><code>function layerNormalization(input, scale, bias, firstAxis)
+    axes = [firstAxis...input.rank - 1]
+    // Scale and bias are expected to already be broadcast-compatible with input.
+    return add(mul(scale, meanVarianceNormalization(input, axes)), bias)
+    // scale * (input - mean) / sqrt(variance + epsilon) + bias
+endfunction
 
 Mean and variance are computed across all dimensions from and after axis, independently per leading batches:
 
@@ -5614,10 +5749,11 @@ endfunction</code>
 
 <code>function localResponseNormalizationSquare(input, axes, windowLength, scale, bias, exponent)
     // Only handles square reduction windows.
-    windowDimensions = repeat(windowLength, axes.size)
+    windowDimensions = repeat(axes.size, [windowLength])
     leadingPadding = floor((windowLength - 1) / 2) // Center halfway around sliding window
     trailingPadding = ceil((windowLength - 1) / 2) // Center halfway around sliding window
     padding = repeat(axes.size * 2, [leadingPadding, trailingPadding])
+
     return localResponseNormalization(input, axes, windowDimensions, padding, scale, bias, exponent)
 endfunction</code>
 
@@ -6161,7 +6297,7 @@ notes: If probability = 1, then all zeroes. If 0, then identity. Selected random
   <tr class="elementwiseOperator">
     <td>Elementwise Math (Deleted)</td>
     <td>Image Scaler</td>
-    <td class="detailsColumn"><code>f(X) = add(mul(X, scale), unsqueeze(biasTensor, [0, 2, 3])) // reshape bias to [1,C,1,1]</code>
+    <td class="detailsColumn"><code>f(X) = add(mul(X, scale), reshapeToAxes(biasTensor, X.rank, [1])) // reshape bias to [1,C,1,1]</code>
 <code>f(x, scale, bias) = x * scale + bias</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.3.0/docs/Operators.md#ImageScaler">ImageScaler</a></td>
@@ -6286,7 +6422,7 @@ Resample elements from the source to destination tensor, using the scale factors
 
         // Read the surrounding samples from around the interpolated point.
         for sampleIndex = 0..<samplesToInterpolate
-            inputCoordinate = clamp(SampleIndexToCoordinate(sampleIndex), zeroes(rank), input.shape - ones(rank))
+            inputCoordinate = clamp(SampleIndexToCoordinate(sampleIndex), zeroes(rank), input.dimensions - ones(rank))
             samples[sampleIndex] = input[inputCoordinate];
         endfor
 
@@ -6415,7 +6551,7 @@ Generate a 1D increasing/decreasing sequence of numbers.
 
 ``` c
     numberOfElements = max(ceil((limit - start) / delta ), 0)
-    output.shape = [numberOfElements]
+    output.dimensions = [numberOfElements]
 
     for i = 0..<numberOfElements
         output[i] = start + (i * delta);
