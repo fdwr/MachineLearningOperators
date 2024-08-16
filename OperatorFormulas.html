@@ -1225,7 +1225,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Truncate</td>
-    <td class="detailsColumn"><code>function modulusTruncate(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * floor(x / y))) // Result sign follows the divisor sign.</code></td>
+    <td class="detailsColumn"><code>function modulusTruncate(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * floor(x / y)))  // Result sign follows the divisor sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
@@ -1251,7 +1251,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Floor</td>
-    <td class="detailsColumn"><code>function modulusFloor(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * trunc(x / y)) // Result sign follows the dividend sign.</code></td>
+    <td class="detailsColumn"><code>function modulusFloor(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * trunc(x / y))  // Result sign follows the dividend sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
@@ -2962,7 +2962,8 @@ endfunction</code></td>
     <td class="detailsColumn">Raise all elements to e, and divide all the elements in each batch by that batch's sum.
 
 <code>function softMax(input, axes)
-    // DML_OPERATOR_ACTIVATION_SOFTMAX1
+    // Applies:
+    // - DML_OPERATOR_ACTIVATION_SOFTMAX1
     expInput = exp(input)
     reducedExpInput = reduceSum(expInput, axis=axes, keepDimensions=1)
     return div(expInput, reducedExpInput)
@@ -2974,19 +2975,20 @@ endfunction</code></td>
     // return div(expInput, reducedExpInput)
 endfunction
 
-function softMax(input, axes)
-endfunction
-
 function softMax1D(input, axis) // Only handle a single axis, explicitly given.
-    // ONNX Softmax-13
-    // torch.nn.Softmtax
-    // tf.nn.softmax
-    // NCNN Softmax
+    // Applies:
+    // - ONNX Softmax-13
+    // - torch.nn.Softmtax
+    // - tf.nn.softmax
+    // - NCNN Softmax
+    // - MPS softMax
+    // - mil.ops.defs.iOS15.activation.softmax
     return softMax(input, axes=[axis])
 endfunction
 
 function softMax1DRightmostAxis(input) // Only handle a single axis, implicitly rightmost dimension.
-    // DML_OPERATOR_ACTIVATION_SOFTMAX(0)
+    // Applies:
+    // - DML_OPERATOR_ACTIVATION_SOFTMAX(0)
     return softMax(input, axes=[1])
 endfunction
 

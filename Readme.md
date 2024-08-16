@@ -2,7 +2,7 @@
 title: Machine Learning Operators
 author: Dwayne Robinson
 published-on: 2019-04-19
-date: 2024-01-25
+date: 2025-08-15
 ---
 
 - http://fdwr.github.io/MachineLearningOperators/OperatorFormulas.html
