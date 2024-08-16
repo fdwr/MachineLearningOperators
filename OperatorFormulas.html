@@ -1225,7 +1225,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Truncate</td>
-    <td class="detailsColumn"><code>function modulusTruncate(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * floor(x / y)))  // Result sign follows the divisor sign.</code></td>
+    <td class="detailsColumn"><code>function modulusTruncate(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * floor(x / y)))  // Result sign follows divisor sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=0</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_TRUNCATE</td>
@@ -1251,7 +1251,7 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Modulus Floor</td>
-    <td class="detailsColumn"><code>function modulusFloor(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * trunc(x / y))  // Result sign follows the dividend sign.</code></td>
+    <td class="detailsColumn"><code>function modulusFloor(a, b) = elementwiseBinary(a, b, (x,y) => x - (y * trunc(x / y))  // Result sign follows dividend sign.</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Mod">Mod fmod=1</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_MODULUS_FLOOR</td>
@@ -1384,8 +1384,11 @@ DML_ACTIVATION_IDENTITY</td>
   <tr class="elementwiseOperator">
     <td>Elementwise Math</td>
     <td>Logarithm Natural</td>
-    <td class="detailsColumn"><code>function logarithmNatural(x) = elementwiseUnary(x, (x) => logScalar(x, 2.71828))
-// recall log(exp(x)) == x</code></td>
+    <td class="detailsColumn"><code>function logarithm(x, base) = elementwiseUnary(x, (x) => log(x, base))
+function logarithmNatural(x) = logarithm(x, 2.71828)
+function logarithmBase10(x) = logarithm(x, 10)
+// OR                         elementwiseUnary(x, (x) => logNatural(x) / logNatural(2))
+// Notes: recall log(exp(x)) == x, and log(x, b) == ln(x) / ln(b)</code></td>
     <td class="webnnColumn">log</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Log">Log</a></td>
     <td class="dmlColumn">DML_OPERATOR_ELEMENT_WISE_LOG</td>
@@ -4223,7 +4226,7 @@ output = [[1,1], [4,3], [6,6]]
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
     <td>Scatter Elements</td>
-    <td class="detailsColumn">Opposite of gather. Write values from updates into data at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
+    <td class="detailsColumn">Opposite of gather elements. Overwrites input values with updates into along the axis at the given indices.<br/>If two output element indices overlap, the last write wins in practice.
 <code>
 function scatterElements(input, indices, updates, axis)
     output = input
