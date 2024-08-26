@@ -2821,8 +2821,8 @@ endfunction</code></td>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
     <td>Parameterized Rectified Linear Unit</td>
-    <td class="detailsColumn"><code>function parameterizedRectifiedLinearUnit(input, slope) = select(less(input, 0), mul(input, slope), input)</code>
-<code>// OR elementwise if x &lt; 0 then slope * x else x</code>
+    <td class="detailsColumn"><code>function parameterizedRectifiedLinearUnit(input, slope) = select(greaterOrEqual(input, 0), input, mul(input, slope))</code>
+<code>// OR elementwise if x &gt;= 0 then x else slope * x</code>
 PRelu and LeakyRelu are identical, except one slope is an input tensor and one slope is a constant.</td>
     <td class="webnnColumn">prelu</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#PRelu">PRelu</a></td>
@@ -2877,8 +2877,8 @@ PRelu and LeakyRelu are identical, except one slope is an input tensor and one s
     <td>Activation, Elementwise</td>
     <td>Exponential Linear Unit</td>
     <td class="detailsColumn"><code>function exponentialLinearUnit(input, alpha = 1)
-    return select(less(input, 0), mul(sub(exp(input), 1), alpha))
-    // OR  add(clip(input, 0, inf), clip(mul(sub(exp(input), 1), alpha), -inf, 0))
+    return select(greaterOrEqual(input, 0), input, mul(sub(exp(input), 1), alpha))
+    // OR  add(clamp(input, 0, inf), clamp(mul(sub(exp(input), 1), alpha), -inf, 0))
     // OR  elementwiseUnary(input, (x) => if x &gt;= 0 then x else alpha * (expₑ(x) - 1))
 endfunction</code></td>
     <td class="webnnColumn">elu</td>
@@ -6222,7 +6222,7 @@ b4 = B[3, :] + B[7*hidden_size, :];</code></td>
     <td>Dropout</td>
     <td class="detailsColumn">For each element, randomly zero it or multiply it by 1 / (1 - ratio).
 
-<code>f(X, ratio) = select(less(random(0, 0.9999), ratio), 0, mul(X, recip(sub(1, ratio)))),
+<code>f(X, ratio) = select(lesser(random(0, 0.9999), ratio), 0, mul(X, recip(sub(1, ratio)))),
 f(x, ratio) = iif(random(0, 0.9999) &lt; ratio, 0, 1 / (1 - ratio) * x);</code>
 For forward execution, ratio is 0, and so it's equivalent to: <code>f(X) = identity(X)</code>
 notes: If probability = 1, then all zeroes. If 0, then identity. Selected randomly per element.</td>
