@@ -5600,14 +5600,15 @@ output = (input - inputMean) / (standardDeviation + 1e-9)</code>
     return add(mul(scale, meanVarianceNormalization(input, axes)), bias)
 endfunction
 
-function instanceNormalizationSpatialDimensions(input, scale, bias)
-    // Applies: ONNX
-    axes = [2...input.rank-1] // Exclude axes {0,1} for N and C.
+function instanceNormalizationSpatialDimensions(input, scale1D, bias1D)
+    // Applies: ONNX, WebNN
+    spatialAxes = [2 ... input.rank-1] // Exclude axes {0,1} for N and C.
+    channelAxes = [1]
     // 1D scale is coerced to [batch size, C axis size, spatial dims...]
     // 1D bias is coerced to [batch size, C axis size, spatial dims...]
-    reshapedScale = reshapeToAxes(scale, input.rank, [1])
-    reshapedBias = reshapeToAxes(bias, input.rank, [1])
-    return instanceNormalization(input, scale, bias, axes)
+    reshapedScale = reshapeToAxes(scale1D, input.rank, channelAxes)
+    reshapedBias = reshapeToAxes(bias1D, input.rank, channelAxes)
+    return instanceNormalization(input, reshapedScale, reshapedBias, spatialAxes)
 endfunction</code>
 
 Mean and variance are computed across spatial dimensions DHW, independently per batch & channel (NC):
