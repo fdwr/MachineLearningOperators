@@ -5705,13 +5705,18 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td>Normalization</td>
     <td>Batch&Spatial Normalization<br/>(independent channels)</td>
     <td class="detailsColumn"><code>function batchAndSpatialNormalization(input, scale, bias, mean, var, epsilon, momentum)
-    return scale * (input - mean) / sqrt(variance + epsilon) + reshape(bias, C axis)
+    return scale * (input - mean) / sqrt(variance + epsilon) + bias
 endfunction</code>
 
-Statistics are precomputed across batch <i>and</i> spatial dimensions NDHW
+<code>function batchAndSpatialNormalization1DBias(input, scale, bias, mean, var, epsilon, momentum)
+    // Assuming C == axis 1.
+    return batchAndSpatialNormalization(input, scale, reshapeToAxes(bias, [1]), mean, var, epsilon, momentum)
+endfunction</code>
+
+Typically statistics are precomputed across batch <i>and</i> spatial dimensions NDHW
 (and not just the batch dimension, as the name would misleadingly lead you believe).
 So each channel C is independent.
-Then it's reshaped to be broadcast-compatible with the input.
+Then they are reshaped to be broadcast-compatible with the input.
 
 <code>axes = [0,2, ..., inputRank-1] // Exclude axes {1}, and everything except channel
 mean = (x0 + x1 + …) / xn;
@@ -5722,7 +5727,8 @@ variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn</code>
 variance = ReduceAverage(Pow(Sub(x, mean), 2), axes, keepdims=true)</code>
 
 <b>NumPy:</b>
-<code>mean = np.var(x, axis=axes, keepdims=True)
+<code>axes = allAxesExceptChannelAxes
+mean = np.var(x, axis=axes, keepdims=True)
 variance = np.mean(x, axis=axes, keepdims=True)</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#BatchNormalization">BatchNormalization</a></td>
