@@ -5705,11 +5705,14 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
     <td>Normalization</td>
     <td>Batch&Spatial Normalization<br/>(independent channels)</td>
     <td class="detailsColumn"><code>function batchAndSpatialNormalization(input, scale, bias, mean, var, epsilon, momentum)
+    // Generic version.
+    // Applies to: DML
     return scale * (input - mean) / sqrt(variance + epsilon) + bias
 endfunction</code>
 
 <code>function batchAndSpatialNormalization1DBias(input, scale, bias, mean, var, epsilon, momentum)
     // Assuming C == axis 1.
+    // Applies to: ONNX
     return batchAndSpatialNormalization(input, scale, reshapeToAxes(bias, [1]), mean, var, epsilon, momentum)
 endfunction</code>
 
