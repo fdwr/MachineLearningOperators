@@ -7877,6 +7877,7 @@ TFLite dialect https://www.tensorflow.org/mlir/tfl_ops
 
 Add all PyTorch Prims: https://pytorch.org/docs/main/torch.compiler_ir.html#prims-ir
 
+TFJS - https://js.tensorflow.org/api/latest/#tensor
 -->
 
 
@@ -7927,4 +7928,15 @@ ANEURALNETWORKS_TENSOR_QUANT8_ASYMM (uint8)
 ANEURALNETWORKS_TENSOR_QUANT8_ASYMM_SIGNED (int8, scale and zp)
 ANEURALNETWORKS_TENSOR_QUANT8_SYMM (int8, scale, no zp)
 ANEURALNETWORKS_TENSOR_QUANT8_SYMM_PER_CHANNEL (int8) a channel axis and float scaleArray[channelDimensionLength]. realValue[..., C, ...] = integerValue[..., C, ...] * scales[C].
+
+-->
+
+<!--
+
+Add bitwise mappings (since CoreML surprisingly lacks them).
+
+~a  ==>  -1 - a
+a << 4  ==>  a * 16
+a >> 4  ==>  a / 16
+
 -->
