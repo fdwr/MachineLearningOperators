@@ -23,7 +23,7 @@ flowchart-elk TB
     subgraph Model_Formats
         TF2_Saved_Model_File
         TF1_Hub_Format_File
-        TFLite_File
+        TensorFlowLiteRT_File
         PyTorch_PTH_File
         ONNX_File[<a href='https://onnx.ai/onnx/operators/index.html'><abbr title='Open Neural Network Exchange'>ONNX</abbr> File</a>]
         ORT_File[<a href='https://onnxruntime.ai/docs/performance/model-optimizations/ort-format-models.html'>Microsoft <abbr title='Open Neural Network Exchange Runtime'>ORT</abbr> File</a>]
@@ -124,7 +124,7 @@ flowchart-elk TB
     ONNX_File --> Microsoft_WinML
     ORT_File --> Microsoft_ONNX_Runtime
     PyTorch_PTH_File --> PyTorch
-    TFLite_File --> Google_TensorFlow
+    TensorFlowLiteRT_File --> Google_TensorFlow
     TF1_Hub_Format_File --> Google_TensorFlow
     TF2_Saved_Model_File --> Google_TensorFlow
 
@@ -220,7 +220,7 @@ TODO: Add links:
         PyTorch -> IREE
         JAX -> IREE
         TensorFlow -> IREE
-        TensorFlowLite -> IREE
+        TensorFlowLiteRT -> IREE
         IREE -> LLVM
         IREE -> SPIR-V
         IREE -> VMVX (op dialect) Virtual Machine Vector Extensions https://iree.dev/reference/mlir-dialects/VMVX/
