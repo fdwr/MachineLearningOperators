@@ -5704,16 +5704,16 @@ DML_OPERATOR_MEAN_VARIANCE_NORMALIZATION with
   <tr class="normalizationOperator">
     <td>Normalization</td>
     <td>Batch&Spatial Normalization<br/>(independent channels)</td>
-    <td class="detailsColumn"><code>function batchAndSpatialNormalization(input, scale, bias, mean, var, epsilon, momentum)
+    <td class="detailsColumn"><code>function batchAndSpatialNormalization(input, scale, bias, mean, variance, epsilon, momentum)
     // Generic version.
     // Applies to: DML
     return scale * (input - mean) / sqrt(variance + epsilon) + bias
 endfunction</code>
 
-<code>function batchAndSpatialNormalization1DBias(input, scale, bias, mean, var, epsilon, momentum)
+<code>function batchAndSpatialNormalization1DBias(input, scale, bias, mean, variance, epsilon, momentum)
     // Assuming C == axis 1.
     // Applies to: ONNX
-    return batchAndSpatialNormalization(input, scale, reshapeToAxes(bias, [1]), mean, var, epsilon, momentum)
+    return batchAndSpatialNormalization(input, scale, reshapeToAxes(bias, [1]), mean, variance, epsilon, momentum)
 endfunction</code>
 
 Typically statistics are precomputed across batch <i>and</i> spatial dimensions NDHW
@@ -5838,7 +5838,7 @@ So, not [[X1,Y1,Z1], [X2,Y2,Z2], …] but rather [[X1,X2,…], [Y1,Y1,…], [Z1,
 
 <code>function nonzeroCoordinatesList(input)
     coordinates = []
-    for each (coordinate, i) in input:
+    for each (coordinate, x) in input:
         if x != 0 then:
           coordinates.append(coordinate)
         endif
