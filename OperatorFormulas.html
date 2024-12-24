@@ -5618,8 +5618,8 @@ mean = (x0 + x1 + …) / xn;
 variance = ((x0 - xmean)^2 + (x1 - xmean)^2 + …) / xn</code>
 
 <b>ONNX:</b>
-<code>mean = ReduceAverage(X, axes, keepdims=true)
-variance = ReduceAverage(Pow(Sub(X, mean), 2), axes, keepdims=true)</code>
+<code>mean = ReduceMean(X, axes, keepdims=true)
+variance = ReduceMean(Pow(Sub(X, mean), 2), axes, keepdims=true)</code>
 
 <b>NumPy:</b>
 <code>mean = np.mean(x, axis=axes, keepdims=True)
@@ -8096,5 +8096,22 @@ Add bitwise mappings (since CoreML surprisingly lacks them).
 ~a  ==>  -1 - a
 a << 4  ==>  a * 16
 a >> 4  ==>  a / 16
+
+-->
+
+<!--
+      WebNN doesn't support SimplifiedLayerNormalization. So decompose it into a series of ops:
+      X -> Pow -> ReduceMean -> Add -> Sqrt -> Div -> Mul
+            ^          ^           ^                ^      ^
+            |          |           |                |      |
+           Y:2        axis     B:epsilon           A:X  A:scale
+      WebNN doesn't support SimplifiedLayerNormalization or SkipSimplifiedLayerNormalization.
+      So decompose it into a series of ops:
+          X -> Pow -> ReduceMean -> Add -> Sqrt -> Div -> Mul -> Add (optional)
+                ^          ^          ^             ^      ^       ^
+                |          |          |             |      |       |
+               Y:2        axis    B:epsilon        A:X  A:scale  B:bias
+      If it is SkipSimplifiedLayerNormalization and its output input_skip_bias_sum exists,
+      input_skip_bias_sum = X + skip + bias (if it exists)
 
 -->
