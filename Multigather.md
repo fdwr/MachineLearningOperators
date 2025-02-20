@@ -12,11 +12,12 @@ date: 2025-02-19
 ML libraries have a confusing mess of various gather/scatter operators, and it always takes me a few minutes to recall the little differences between every `gather*` variant out there, even just in ONNX ([Gather](https://onnx.ai/onnx/operators/onnx__Gather.html), [GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html), [GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)) let alone all the other ML libraries. Many are woefully underdocumentated on behavior too (e.g. [TOSA gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop) and [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)). I had an epiphany that most of these are really just the same operator with annoyingly minor differences of rank and implicit axis that could be generalized by passing explicit parameters for `axes` and coordinate size (1 for 1D indices, 3 for 3D indices...). Then you don't need to remember all the little differences nor need hacks like a `batch_dims` parameter.
 
 ```javascript
-dictionary MLGatherMultiaxisOptions : MLOperatorOptions {
-  sequence<unsigned long> axes; // 3D coordinates in indices would hold 3 axes.
+partial interface MLGraphBuilder
+{
+    MLOperand gather(MLOperand input, MLOperand indices, sequence<unsigned long> axes);
 };
 
-const result = graphBuilder.gatherMultiaxis(input, indices, options);
+const output = graphBuilder.gatherMultiaxis(input, indices, axes);
 ```
 
 The `input`, `indices`, and `output` tensors all have the same rank. The `indices` shape must be broadcastable to the `input` shape for all dimensions that aren't active `axes`. The output tensor shape matches the `indices` tensor shape along any corresponding `axes`, and it matches the `input` shape for other axes.
@@ -49,15 +50,18 @@ function gatherMultiaxis(input, indices, axes)
 
     // Create output tensor, taking the dimensions from indices that are in axes
     // and the dimension in input that are not in axes.
+    // Create coordinate masks upfront to avoid needing to broadcast tensors.
     outputShape = input.shape
     logicalIndicesShape = indices.shape
     logicalIndicesShape.at(-1) /= coordinateSize
+    inputCoordinateMask = new array(indices.rank, 1)
+    indicesCoordinateMask = new array(indices.rank, 0)
     for i in range(axes.length)
         axis = axes[i]
+        indicesCoordinateMask[i] = 1
+        indicesCoordinateMask[i] = 0
         outputShape[axis] = logicalIndicesShape[i]
     endfor
-    outputShapeTimesCoordinateSize = outputShape
-    outputShapeTimesCoordinateSize.at(-1) *= coordinateSize
     output = new tensor(input.dataType, outputShape)
 
     // Broadcast the indices for any non-gather dimensions like leading batches.
@@ -66,10 +70,12 @@ function gatherMultiaxis(input, indices, axes)
     broadcastIndices = broadcast(indices, outputShapeTimesCoordinateSize)
 
     for each outputCoordinate in output.coordinates
-        // Determine corresponding input coordinate given the current
-        // coordinate and indices tensor.
-        inputCoordinate = outputCoordinate
-        indexCoordinate = outputCoordinate
+        // Determine the corresponding input coordinate to read from given the
+        // current out coordinate and indices tensor coordinate. Use the dot
+        // product of the output coordinate and precomputed masks to achieve
+        // broadcasting.
+        inputCoordinate = outputCoordinate * inputCoordinateMask
+        indexCoordinate = outputCoordinate * indicesCoordinateMask
         indexCoordinate.at(-1) *= coordinateSize
         elementIndices = broadcastIndices[indexCoordinate .. indexCoordinate + coordinateSize]
         for i in range(axes.length)
@@ -81,9 +87,9 @@ function gatherMultiaxis(input, indices, axes)
 endfunction
 ```
 
-# Equivalents
+# Operators
 
-## Single-axis gather
+## Single-axis same rank for all tensors
 - [ONNX GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html),
 - [PyTorch gather](https://pytorch.org/docs/stable/generated/torch.gather.html),
 - [PyTorch take_along_dim](https://pytorch.org/docs/stable/generated/torch.take_along_dim.html),
@@ -97,7 +103,7 @@ function gatherSingleAxis(input, indices, axis)
 endfunction
 ```
 
-## Single-axis 1D gather
+## Single-axis coerced to 1D
 - [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html)
 
 1D only, reinterpreting the input as 1D.
@@ -111,7 +117,7 @@ function gatherForced1D(input, indices)
 endfunction
 ```
 
-## Gather
+## Single-axis blocks
 - [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)
 - [numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)
 - [TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)
@@ -251,7 +257,7 @@ output shape  = [___]
 axes          = [___]
 ```
 
-## ND gather
+## Multiple axes blocks
 - [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)
 - [ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)
 - [CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd)
@@ -330,14 +336,14 @@ output shape  = [2,1,2]
 axes          = [1]
 ```
 
-## Unknown
+## Unknown behavior
 - [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)
 - [TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)
 - [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)
 
 The documentation does not enlighten. 🤷‍♂️
 
-## Reference
+# Reference
 
 Test code
 
