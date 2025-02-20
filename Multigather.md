@@ -64,11 +64,6 @@ function gatherMultiaxis(input, indices, axes)
     endfor
     output = new tensor(input.dataType, outputShape)
 
-    // Broadcast the indices for any non-gather dimensions like leading batches.
-    // (note an efficient implementation would avoid the memory copy and just
-    // use broadcasted zero strides)
-    broadcastIndices = broadcast(indices, outputShapeTimesCoordinateSize)
-
     for each outputCoordinate in output.coordinates
         // Determine the corresponding input coordinate to read from given the
         // current out coordinate and indices tensor coordinate. Use the dot
