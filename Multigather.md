@@ -5,6 +5,8 @@ published-on: 2025-02-19
 date: 2025-02-19
 ---
 
+🚧 ROUGH DRAFT 🚧
+
 # Multaxis Gather Operator
 
 ML libraries have a confusing mess of various gather/scatter operators, and it always takes me a few minutes to recall the little differences between every `gather*` variant out there, even just in ONNX ([Gather](https://onnx.ai/onnx/operators/onnx__Gather.html), [GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html), [GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)) let alone all the other ML libraries. Many are woefully underdocumentated on behavior too (e.g. [TOSA gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop) and [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)). I had an epiphany that most of these are really just the same operator with annoyingly minor differences of rank and implicit axis that could be generalized by passing explicit parameters for `axes` and coordinate size (1 for 1D indices, 3 for 3D indices...). Then you don't need to remember all the little differences nor need hacks like a `batch_dims` parameter.
@@ -40,7 +42,8 @@ function gatherMultiaxis(input, indices, axes)
     assert(input.rank == indices.rank)
     assert(allValuesLess(axes, input.rank))
     assert(areUnique(axes))
-    assert(axes.empty || indices.shape.at(-1) % axes.length == 0)
+    assert(!axes.empty)
+    assert(indices.shape.at(-1) % axes.length == 0)
 
     coordinateSize = axes.length
 
@@ -104,7 +107,7 @@ endfunction
 function gatherForced1D(input, indices)
     inputReshaped = reshape(input, [input.elementCount])
     indicesReshaped = reshape(indices, [indices.elementCount])
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [0], coordinateSize: 1)
+    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [0])
 endfunction
 ```
 
@@ -121,9 +124,11 @@ function gatherBlocks(input, indices, axis)
     //       Determine whether input or indices is bigger.
     inputReshaped = reshape(input, ...)
     indicesReshaped = reshape(indices, ...)
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [axis], coordinateSize: 1)
+    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [axis])
 endfunction
 ```
+
+TODO: Set the intermediate processing values for each of these:
 
 ```
 input of shape [4,3]:
@@ -152,21 +157,19 @@ input of shape [4,3]:
    [20, 21, 22],
    [30, 31, 32]]
 axis = 1
-indices of shape [3]:
-  [2,1,1]
-output of shape [4,3]:
-  [[ 2,  1,  1],
-   [12, 11, 11],
-   [22, 21, 21],
-   [32, 31, 31]]
-
-TODO: Verify correctness of this example
+indices of shape [5]:
+  [2,1,0,1,2]
+output of shape [4,5]:
+  [[ 2,  1,  0,  1,  2],
+   [12, 11, 10, 11, 12],
+   [22, 21, 20, 21, 22],
+   [32, 31, 30, 31, 32]]
 
 intermediate processing values:
 input shape   = [4,3]
-indices shape = [3]
-output shape  = [4,3]
-axes          = [...]
+indices shape = [1,5]
+output shape  = [4,5]
+axes          = [1]
 ```
 
 ```
@@ -186,10 +189,66 @@ output of shape [4,2,2]:
    [[30, 31], [31, 32]]]
 
 intermediate processing values:
-input shape   = [4,3]
-indices shape = [2,2]
+input shape   = [4,1,3]
+indices shape = [1,2,2]
 output shape  = [4,2,2]
-axes          = [...]
+axes          = [2]
+```
+
+```
+input:
+  [[1 2]
+   [3 4]]
+indices:
+  1
+axis = 0
+output:
+  [3 4]
+
+intermediate processing values:
+input shape   = [___]
+indices shape = [___]
+output shape  = [___]
+axes          = [___]
+```
+
+```
+input:
+  [[1 2]
+   [3 4]]
+indices:
+  [1 0]
+axis = 0
+output:
+  [[3 4]
+   [1 2]]
+
+intermediate processing values:
+input shape   = [___]
+indices shape = [___]
+output shape  = [___]
+axes          = [___]
+```
+
+```
+input:
+  [[1 2]
+   [3 4]]
+indices:
+  [[1 0]
+   [0 1]]
+axis = 0
+output:
+  [[[3 4]
+    [1 2]]
+   [[1 2]
+    [3 4]]]
+
+intermediate processing values:
+input shape   = [___]
+indices shape = [___]
+output shape  = [___]
+axes          = [___]
 ```
 
 ## ND gather
@@ -206,7 +265,7 @@ function gatherND(input, indices, batchDimensions)
     //       Determine whether input or indices is bigger.
     inputReshaped = reshape(input, ...)
     indicesReshaped = reshape(indices, ...)
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes, coordinateSize)
+    return gatherMultiaxis(inputReshaped, indicesReshaped, axes)
 endfunction
 ```
 
@@ -277,3 +336,53 @@ axes          = [1]
 - [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)
 
 The documentation does not enlighten. 🤷‍♂️
+
+## Reference
+
+Test code
+
+numpy==1.24.3
+
+```python
+import numpy as np
+
+def gather(data, indices, axis=0, mode='gather'):
+    print("gather", mode)
+    print("data:\n", data)
+    print("indices:\n", indices)
+    print("output:")
+    if mode == 'gather':
+        return np.take(data, indices, axis=axis)
+    elif mode == 'gather_elements':
+        result = np.zeros_like(indices)
+        for idx, val in np.ndenumerate(indices):
+            result[idx] = data[tuple(idx[:axis] + (val,) + idx[axis+1:])]
+        return result
+    elif mode == 'gather_nd':
+        return data[tuple(indices.T)]
+    else:
+        raise ValueError("Unsupported mode. Use 'gather', 'gather_elements', or 'gather_nd'.")
+
+# Example usage:
+data = np.array([[1, 2], [3, 4]])
+indices = np.array(1)
+print(gather(data, indices, axis=0, mode='gather'), '\n')  # Output: [3 4]
+
+data = np.array([[1, 2], [3, 4]])
+indices = np.array([1, 0])
+print(gather(data, indices, axis=0, mode='gather'), '\n')  # Output: [[[3 4], [1 2]], [[1 2], [3 4]]]
+
+data = np.array([[1, 2], [3, 4]])
+indices = np.array([[1, 0], [0, 1]])
+print(gather(data, indices, axis=0, mode='gather'), '\n')
+
+data = np.array([[ 0,  1,  2], [10, 11, 12], [20, 21, 22], [30, 31, 32]])
+indices = np.array([2,1,0,1,2])
+print(gather(data, indices, axis=1, mode='gather'), '\n')
+
+indices = np.array([[0, 1], [1, 0]])
+print(gather(data, indices, axis=1, mode='gather_elements'), '\n')  # Output: [[1, 2], [4, 3]]
+
+indices = np.array([[0, 0], [1, 1]])
+print(gather(data, indices, mode='gather_nd'), '\n')  # Output: [1, 4]
+```
