@@ -1,21 +1,20 @@
 ---
-title: Multigather Operator
+title: Gather Multiaxis Operator
 author: Dwayne Robinson
 published-on: 2025-02-19
 date: 2025-02-19
 ---
 
-# Multigather Operator
+# Multaxis Gather Operator
 
 ML libraries have a confusing mess of various gather/scatter operators, and it always takes me a few minutes to recall the little differences between every `gather*` variant out there, even just in ONNX ([Gather](https://onnx.ai/onnx/operators/onnx__Gather.html), [GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html), [GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)) let alone all the other ML libraries. Many are woefully underdocumentated on behavior too (e.g. [TOSA gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop) and [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)). I had an epiphany that most of these are really just the same operator with annoyingly minor differences of rank and implicit axis that could be generalized by passing explicit parameters for `axes` and coordinate size (1 for 1D indices, 3 for 3D indices...). Then you don't need to remember all the little differences nor need hacks like a `batch_dims` parameter.
 
 ```javascript
-dictionary MLMultigatherOptions : MLOperatorOptions {
-  [EnforceRange] sequence<[EnforceRange] unsigned long> axes;
-  unsigned long coordinateSize = 1;
+dictionary MLGatherMultiaxisOptions : MLOperatorOptions {
+  sequence<unsigned long> axes; // 3D coordinates in indices would hold 3 axes.
 };
 
-const result = graphBuilder.multiGather(input, indices, options);
+const result = graphBuilder.gatherMultiaxis(input, indices, options);
 ```
 
 The `input`, `indices`, and `output` tensors all have the same rank. The `indices` shape must be broadcastable to the `input` shape for all dimensions that aren't active `axes`. The output tensor shape matches the `indices` tensor shape along any corresponding `axes`, and it matches the `input` shape for other axes.
@@ -37,11 +36,13 @@ For multiple axes, the shape computation becomes more complicated since every co
 ## Pseudocode implementation
 
 ```javascript // not actually python, but closest match
-function gatherMultiaxis(input, indices, axes, coordinateSize)
+function gatherMultiaxis(input, indices, axes)
     assert(input.rank == indices.rank)
     assert(allValuesLess(axes, input.rank))
     assert(areUnique(axes))
-    assert(indices.shape.at(-1) % coordinateSize == 0)
+    assert(axes.empty || indices.shape.at(-1) % axes.length == 0)
+
+    coordinateSize = axes.length
 
     // Create output tensor, taking the dimensions from indices that are in axes
     // and the dimension in input that are not in axes.
