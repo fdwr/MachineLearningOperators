@@ -22,10 +22,10 @@ Gather operators can be grouped so:
 | Category                                                             | Library Names | Notes        |
 |----------------------------------------------------------------------|---------------|--------------|
 | Single axis element gather             | [ONNX GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html)<br/>[PyTorch gather](https://pytorch.org/docs/stable/generated/torch.gather.html)<br/>[PyTorch take_along_dim](https://pytorch.org/docs/stable/generated/torch.take_along_dim.html)<br/>[numpy.take_along_axis](https://numpy.org/doc/stable/reference/generated/numpy.take_along_axis.html)<br/>[CoreML gather_along_axis](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_along_axis) | All tensors have the same rank. All dimensions in input and indices have the same size except the active axis.
-| Single axis element gather 1D          | [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html) | Aame as above, but tensors are flattened to 1D first.
-| Single axis block gather               | [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)<br/>[numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)<br/>[TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)<br/>[CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather) | Higher level dimensions are selected and trailing dimensions copy entire blocks (as if those dimensions in indices were broadcast to the input shape).
-| Multiple axes block gather             | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes and the last dimension of indices.
-| Indeterminate from documentation 🤷‍♂️    | [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)<br/>[TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)<br/>[StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md) | TOSA's gather is probably equivalent to one of the above, but there are no useful examples. StableHLO's gather looks monstrous, like some hybrid slice/gather chimera. 😯 It's out of scope.
+| Single axis element gather 1D          | [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html) | Same as above, but tensors are flattened to 1D first.
+| Single axis block gather               | [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)<br/>[numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)<br/>[TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)<br/>[CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather) | Dimensions are selected at a given axis and any trailing dimensions copy entire blocks to the output (as if those dimensions in indices were broadcast to the input shape).
+| Multiple axes block gather             | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes and the last dimension of indices. Axes start at 0 in the input or after the batch dimension count if provided.
+| Indeterminate from documentation 🤷‍♂️    | [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)<br/>[TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)<br/>[StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md) | TOSA's gather is probably equivalent to one of the above, but there are no useful examples. StableHLO's gather looks monstrous, like some hybrid slice/gather chimera 😯 - it's out of scope.
 
 ## API
 
@@ -144,12 +144,15 @@ function getMaskedCoordinate(/*Array*/ coordinate, /*Array*/ mask)
 - [numpy.take_along_axis](https://numpy.org/doc/stable/reference/generated/numpy.take_along_axis.html),
 - [CoreML gather_along_axis](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_along_axis)
 
+### Mapping
 ```javascript
 // GatherElements is basically directly compatible with multiaxis gather.
 function gatherSingleAxisElements(input, indices, axis)
-    return gatherMultiaxis(input, indices, axes: [axis])
-endfunction
+{
+    return gatherMultiaxis(input, indices, axes: [axis]);
+}
 ```
+
 ### Examples
 ```
 input of shape [4,3]:
@@ -209,12 +212,14 @@ output of shape [1,2,2]:
 
 1D only, reinterpreting the input as 1D.
 
+### Mapping
 ```javascript
 function gatherForced1D(input, indices)
-    inputReshaped = reshape(input, [input.elementCount])
-    indicesReshaped = reshape(indices, [indices.elementCount])
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [0])
-endfunction
+{
+    const inputReshaped = reshape(input, [input.elementCount]);
+    const indicesReshaped = reshape(indices, [indices.elementCount]);
+    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [0]);
+}
 ```
 
 ## Single-axis blocks
@@ -223,14 +228,16 @@ endfunction
 - [TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)
 - [CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather)
 
+### Mapping
 ```javascript
 function gatherSingleAxisBlocks(input, indices, axis)
+{
     // TODO: Reshape input and indices to be output compatible.
     //       Determine whether input or indices is bigger.
-    inputReshaped = reshape(input, ...)
-    indicesReshaped = reshape(indices, ...)
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [axis])
-endfunction
+    let inputReshaped = reshape(input, ...);
+    let indicesReshaped = reshape(indices, ...);
+    return gatherMultiaxis(inputReshaped, indicesReshaped, axes: [axis]);
+}
 ```
 
 ### Examples
@@ -361,16 +368,18 @@ axes          = [0]
 - [CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd)
 - PyTorch gather_nd missing, see [here](https://discuss.pytorch.org/t/implement-tf-gather-nd-in-pytorch/37502) and [here](https://discuss.pytorch.org/t/how-to-do-the-tf-gather-nd-in-pytorch/6445/13)
 
+### Mapping
 ```javascript
-function gatherNdBlocks(input, indices, batchDimensions)
-    coordinateSize = indices.shape.at(-1)
-    axes = iota(batchDimensions, batchDimensions + coordinateSize) // So 3D would yield axes [0,1,2].
+function gatherNdBlocks(input, indices, batchDimensionCount)
+{
+    const coordinateSize = indices.shape.at(-1);
+    const axes = iota(batchDimensionCount, batchDimensionCount + coordinateSize); // So 3D would yield axes [0,1,2].
     // TODO: Reshape input and indices to be output compatible.
     //       Determine whether input or indices is bigger.
-    inputReshaped = reshape(input, ...)
-    indicesReshaped = reshape(indices, ...)
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes)
-endfunction
+    const inputReshaped = reshape(input, ...);
+    const indicesReshaped = reshape(indices, ...);
+    return gatherMultiaxis(inputReshaped, indicesReshaped, axes);
+}
 ```
 
 ### Examples
@@ -463,7 +472,7 @@ The documentation does not enlighten. 🤷‍♂️
 
 # Reference
 
-Test code
+Test code:
 
 ```python
 # numpy==1.24.3
