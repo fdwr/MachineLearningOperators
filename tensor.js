@@ -106,7 +106,7 @@ class Tensor
      * @param {Array} shape
      * @param {Array} [data]
      */
-    constructor(shape, data = undefined)
+    constructor(shape, data = undefined, shouldCopy = true)
     {
         const size = sizeOfShape(shape);
         if (data !== undefined)
@@ -115,8 +115,15 @@ class Tensor
             {
                 throw new Error(`The length of data ${data.length} is invalid. Expected ${size}.`);
             }
-            // Copy the data.
-            this.data = data.slice();
+
+            if (shouldCopy)
+            {
+                this.data = data.slice();
+            }
+            else
+            {
+                this.data = data;
+            }
         }
         else
         {
@@ -128,10 +135,12 @@ class Tensor
         this.strides = new Array(this.rank);
 
         // TODO: Improve.
-        this.strides[this.rank - 1] = 1;
-        for (let i = this.rank - 2; i >= 0; --i)
+        let stride = 1;
+        //this.strides[this.rank - 1] = 1;
+        for (let i = this.rank; i > 0; )
         {
-            this.strides[i] = this.strides[i + 1] * this.shape[i + 1];
+            this.strides[--i] = stride;
+            stride *= this.shape[i];
         }
     }
 
@@ -249,6 +258,13 @@ class Tensor
     /*TensorCoordinateIterator*/ get coordinates()
     {
         return new TensorCoordinateIterator(this.shape);
+    }
+
+    // Return new tensor view of existing data.
+    /*Tensor*/ asShape(/*Array*/ shape)
+    {
+        // Create a new view of the data, but do not copy the data.
+        return new Tensor(shape, this.data, false);
     }
 }
 

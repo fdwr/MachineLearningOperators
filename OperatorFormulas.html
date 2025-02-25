@@ -3888,7 +3888,8 @@ endfunction
     <td class="detailsColumn">Reinterpret the view of the tensor, gathering dimensions from axes,
 filling in 1's for filler dimensions.
 
-<code>function reshapeFromAxes(input, newRank, axes)
+<code>// e.g. input shape [5,6,7,8] with rank 4 and axes [1,3] yields [6,8,1,1]
+function reshapeFromAxes(input, newRank, axes)
     assert(input.rank == axes.size)
     assert(containsUniqueValues(axes))
     output = input
@@ -3898,8 +3899,8 @@ endfunction
 
 function gatherValues(values, indices, newValuesSize, fillerValue)
     newValues = repeat(newValuesSize, fillerValue)
-    for (i, gatherIndex) in indices
-        newValues[i] = values[gatherIndex]
+    for (loopIndex, gatherIndex) in indices
+        newValues[loopIndex] = values[gatherIndex]
     endfor
 endfunction</code></td>
     <td class="webnnColumn">reshape (plus caller logic)</td>
@@ -3930,7 +3931,8 @@ endfunction</code></td>
     <td class="detailsColumn">Reinterpret the view of the tensor, scattering dimensions to axes,
 filling in 1's for filler dimensions.
 
-<code>function reshapeToAxes(input, newRank, axes)
+<code>// e.g. input shape [5,6] with rank 4 and axes [1,3] yields [1,5,1,6]
+function reshapeToAxes(input, newRank, axes)
     assert(input.rank == axes.size)
     assert(containsUniqueValues(axes))
     output = input
@@ -3940,8 +3942,8 @@ endfunction
 
 function scatterValues(values, indices, newValuesSize, fillerValue)
     newValues = repeat(newValuesSize, fillerValue)
-    for (i, scatterIndex) in indices
-        newValues[scatterIndex] = values[i]
+    for (loopIndex, scatterIndex) in indices
+        newValues[scatterIndex] = values[loopIndex]
     endfor
 endfunction</code></td>
     <td class="webnnColumn">reshape (plus caller logic)</td>
@@ -4671,10 +4673,11 @@ endfunction
     <td>Pool Generic</td>
     <td class="detailsColumn"><code>function poolGeneric(input, axes, windowDimensions, padding, strides, dilations, reductionFunction, initialValue)
     // Massage all axes-relative parameters to be directly compatible with input/output rank.
-    expandedWindowDimensions = gatherValues(windowDimensions, axes, input.rank, 1)
-    expandedPadding = gatherValues(padding, axes, input.rank, 0)
-    expandedStrides = gatherValues(strides, axes, input.rank, 1)
-    expandedDilations = gatherValues(dilations, axes, input.rank, 1)
+    // e.g. strides of [4,5] with axes [2,3] and a 4D input become expanded to [1,1,4,5].
+    expandedWindowDimensions = scatterValues(windowDimensions, axes, input.rank, 1)
+    expandedPadding = scatterValues(padding, axes, input.rank, 0)
+    expandedStrides = scatterValues(strides, axes, input.rank, 1)
+    expandedDilations = scatterValues(dilations, axes, input.rank, 1)
 
     // Compute the output tensor size based on window size/padding/strides/dilations.
     filterExtents = ((expandedWindowDimensions - 1) * expandedDilations) + 1
@@ -5713,7 +5716,7 @@ endfunction</code>
 <code>function batchAndSpatialNormalization1DBias(input, scale, bias, mean, variance, epsilon, momentum)
     // Assuming C == axis 1.
     // Applies to: ONNX
-    return batchAndSpatialNormalization(input, scale, reshapeToAxes(bias, [1]), mean, variance, epsilon, momentum)
+    return batchAndSpatialNormalization(input, scale, reshapeToAxes(bias, input.rank, [1]), mean, variance, epsilon, momentum)
 endfunction</code>
 
 Typically statistics are precomputed across batch <i>and</i> spatial dimensions NDHW
