@@ -459,11 +459,24 @@ function gatherNdBlocks(input, indices, batchDimensionCount)
     console.assert(batchDimensionCount <= indices.rank);
 
     const coordinateSize = indices.shape.at(-1);
-    const axes = iota(batchDimensionCount, batchDimensionCount + coordinateSize); // So 3D would yield axes [0,1,2].
+    const leadingIndicesSize = indices.shape.length - 1; // Including the batch dimension.
+    const leadingInputSize = batchDimensionCount + coordinateSize;
+    const trailingInputSize = input.shape.length - leadingInputSize;
     // TODO: Reshape input and indices to be output compatible.
     //       Determine whether input or indices is bigger.
-    const inputReshaped = reshape(input, ...);
-    const indicesReshaped = reshape(indices, ...);
+    const newLeadingLength = Math.max(leadingInputSize, leadingIndicesSize);
+    const newTotalLength = newLeadingLength + trailingInputSize;
+    const inputShapeLeading = input.shape.slice(0, leadingInputSize);
+    const inputShapeFiller = new Array(newLeadingLength - leadingInputSize).fill(1);
+    const inputShapeTrailing = input.shape.slice(leadingInputSize);
+    const newInputShape = [...inputShapeLeading, ...inputShapeFiller, ...inputShapeTrailing];
+    const indicesShapeLeading = indices.shape.slice(0, leadingIndicesSize);
+    const indicesShapeFiller = new Array(newTotalLength - leadingIndicesSize)
+    const newIndicesShape = [...indicesShapeLeading, ...indicesShapeFiller];
+
+    const inputReshaped = input.asShape(newInputShape);
+    const indicesReshaped = indices.asShape(newIndicesShape);
+    const axes = iota(batchDimensionCount, leadingInputSize); // So 3D would yield axes [0,1,2].
     return gatherMultiaxis(inputReshaped, indicesReshaped, axes);
 }
 ```
