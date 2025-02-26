@@ -134,9 +134,7 @@ class Tensor
         this.shape = shape.slice();
         this.strides = new Array(this.rank);
 
-        // TODO: Improve.
         let stride = 1;
-        //this.strides[this.rank - 1] = 1;
         for (let i = this.rank; i > 0; )
         {
             this.strides[--i] = stride;

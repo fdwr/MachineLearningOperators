@@ -254,30 +254,44 @@ function gatherForced1D(input, indices)
 // (P, Q)     | (R, S)         | 0    | (R, S, Q)    | output[r, s, q] = data[[indices[r, s], q]   | (P, 1, 1, Q) (1, R, S, 1) (1, R, S, Q)
 // (P, Q)     | (R, S)         | 1    | (P, R, S)    | output[p, r, s] = data[p, indices[r, s]]    | (P, Q, 1, 1) (1, 1, R, S) (P, 1, R, S)
 //
-function gatherSingleAxisBlocks(input, indices, axis)
+function gatherBlocks(input, indices, axis)
 {
-
     console.assert(input.rank > 0);
     console.assert(axis >= 0);
     console.assert(axis < input.rank);
 
-    // The output shape removes the current axis from input and substitutes it with the indices shape
+    // Split the shapes for input and output into leading/trailing parts.
+    //
+    // input shape [ leading input dimensions..., axis dimension, trailing non-indexed input dimensions...]
+    //             <---------------leading part---------------->  <------------ trailing part ----------->
+    //                                                          |
+    //                                            alignment filler inserted here
+    //
+    // indices shape [ index dimensions... ]
+    //                |                   |
+    //  leading filler inserted here      trailing filler inserted here
+    //
+    const leadingInputShape     = input.shape.slice(0, axis + 1);
+    const trailingInputShape    = input.shape.slice(axis + 1);
+    const leadingOutputShape    = input.shape.slice(0, axis);
+    const trailingOutputShape   = trailingInputShape;
+    const inputShapeFiller      = new Array(indices.rank).fill(1);
+    const leadingIndicesFiller  = new Array(axis + 1).fill(1);
+    const trailingIndicesFiller = new Array(input.rank - axis - 1).fill(1);
+
+    // Compute normalized shapes for input and indices, then the output shape, which starts with the input shape,
+    // removes the dimension of the active axis from input, and substitutes it with the indices shape.
+    //
     //      output.shape = input.shape[0..axis] ~ indices.shape ~ input.shape[axis + 1..input.rank]
-    const leadingInputShape   = input.shape.slice(0, axis + 1);
-    const trailingInputShape  = input.shape.slice(axis + 1);
-    const leadingOutputShape  = input.shape.slice(0, axis);
-    const trailingOutputShape = trailingInputShape;
-    const leadingFiller       = new Array(axis + 1).fill(1);
-    const middleFiller        = new Array(indices.rank).fill(1);
-    const trailingFiller      = new Array(input.rank - axis - 1).fill(1);
+    //
+    const newInputShape   = [...leadingInputShape,    ...inputShapeFiller, ...trailingInputShape   ];
+    const newIndicesShape = [...leadingIndicesFiller, ...indices.shape,    ...trailingIndicesFiller];
+    const outputShape     = [...leadingOutputShape,   ...indices.shape,    ...trailingOutputShape  ];
 
-    const inputNewShape   = [...leadingInputShape,  ...middleFiller,  ...trailingInputShape ];
-    const indicesNewShape = [...leadingFiller,      ...indices.shape, ...trailingFiller     ];
-    const outputShape     = [...leadingOutputShape, ...indices.shape, ...trailingOutputShape];
-
-    const inputReshaped = input.asShape(inputNewShape);
-    const indicesReshaped = indices.asShape(indicesNewShape);
-    const output = gatherMultiaxis(inputReshaped, indicesReshaped, [axis]);
+    const inputReshaped = input.asShape(newInputShape);
+    const indicesReshaped = indices.asShape(newIndicesShape);
+    const axes = [axis];
+    const output = gatherMultiaxis(inputReshaped, indicesReshaped, axes);
     return output.asShape(outputShape);
 }
 ```
@@ -457,27 +471,53 @@ function gatherNdBlocks(input, indices, batchDimensionCount)
     console.assert(batchDimensionCount >= 0);
     console.assert(batchDimensionCount <= input.rank);
     console.assert(batchDimensionCount <= indices.rank);
+    console.assert(indices.shape.at(-1) >= 0); // 0 is allowed.
+    console.assert(batchDimensionCount + indices.shape.at(-1) <= input.rank); // Can't touch elements that don't exist.
 
     const coordinateSize = indices.shape.at(-1);
-    const leadingIndicesSize = indices.shape.length - 1; // Including the batch dimension.
-    const leadingInputSize = batchDimensionCount + coordinateSize;
-    const trailingInputSize = input.shape.length - leadingInputSize;
-    // TODO: Reshape input and indices to be output compatible.
-    //       Determine whether input or indices is bigger.
-    const newLeadingLength = Math.max(leadingInputSize, leadingIndicesSize);
-    const newTotalLength = newLeadingLength + trailingInputSize;
-    const inputShapeLeading = input.shape.slice(0, leadingInputSize);
-    const inputShapeFiller = new Array(newLeadingLength - leadingInputSize).fill(1);
-    const inputShapeTrailing = input.shape.slice(leadingInputSize);
-    const newInputShape = [...inputShapeLeading, ...inputShapeFiller, ...inputShapeTrailing];
-    const indicesShapeLeading = indices.shape.slice(0, leadingIndicesSize);
-    const indicesShapeFiller = new Array(newTotalLength - leadingIndicesSize)
-    const newIndicesShape = [...indicesShapeLeading, ...indicesShapeFiller];
+    const axes = Array.from({length: coordinateSize}, (_, i) => batchDimensionCount + i); // Sequence. e.g. 0,1,2
+
+    // Split the input shape into leading/trailing parts.
+    //
+    // input shape [ batch dimensions..., indexable input dimensions..., non-indexed input dimensions...]
+    //             <-----------------leading part--------------------->  <------- trailing part ------->
+    //
+    // Split the indices shape into leading/trailing parts (the trailing part is chopped off and multiplied back later
+    // as coordinateSize).
+    //
+    // indices shape [ batch dimensions..., index dimensions..., coordinate tuple size dimension]
+    //                <--------------leading part------------->  <------- trailing part ------->
+    //
+    const leadingInputShape = input.shape.slice(0, batchDimensionCount + coordinateSize); // Exclude trailing non-indexed dimensions.
+    const trailingInputShape = input.shape.slice(batchDimensionCount + coordinateSize); // Exclude batch and indexed dimensions.
+    const leadingIndicesShape = indices.shape.slice(0, -1); // Exclude last dimension.
+
+    // Align the shape fragments, so that the indexable input dimensions and the index dimensions are consistent.
+    // Insert filler as needed to make them correspondent and broadcastable to the output.
+    //
+    // input shape   [ batch, indexable dimensions, <--- filler here --->, non-indexable dimensions]
+    // indices shape [ batch, indices dimensions,   <---------------- filler here ---------------->]
+    //
+    const maxLeadingShapingLength = Math.max(leadingInputShape.length, leadingIndicesShape.length);
+    const newShapeLength = maxLeadingShapingLength + trailingInputShape.length;
+    const inputShapeFiller = new Array(maxLeadingShapingLength - leadingInputShape.length).fill(1);
+    const indicesShapeFiller = new Array(newShapeLength - leadingIndicesShape.length).fill(1);
+
+    // The output shape consists of any leading batch dimensions from the indices, intermediate indices dimensions
+    // (excluding the last dimension which is the coordinate size), and any residual input dimensions after consuming
+    // the number of coordinates from the leading side.
+    //
+    //      output.shape = [ batch dimensions ... indices dimensions ... residual input dimensions]
+
+    const newInputShape   = [...leadingInputShape,   ...inputShapeFiller,   ...trailingInputShape];
+    let   newIndicesShape = [...leadingIndicesShape, ...indicesShapeFiller, /* set below */      ];
+    const outputShape     = [...leadingIndicesShape, /* no filler */        ...trailingInputShape];
+    newIndicesShape[newIndicesShape.length - 1] *= coordinateSize;
 
     const inputReshaped = input.asShape(newInputShape);
     const indicesReshaped = indices.asShape(newIndicesShape);
-    const axes = iota(batchDimensionCount, leadingInputSize); // So 3D would yield axes [0,1,2].
-    return gatherMultiaxis(inputReshaped, indicesReshaped, axes);
+    const output = gatherMultiaxis(inputReshaped, indicesReshaped, axes);
+    return output.asShape(outputShape);
 }
 ```
 
