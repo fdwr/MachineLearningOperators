@@ -13,7 +13,12 @@ date: 2025-02-19
 
 ML libraries have a confusing zoo of various gather/scatter operators, and it always takes me a few minutes to recall the brain-bending differences between every `gather*` variant out there, even just in ONNX ([Gather](https://onnx.ai/onnx/operators/onnx__Gather.html), [GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html), [GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)) let alone all the other ML libraries. Many are woefully underdocumentated on behavior too (e.g. [TOSA gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop) and [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)).
 
-It always bothered me after implementing `DML_OPERATOR_GATHER`, `DML_OPERATOR_GATHER_ELEMENTS`, and `DML_OPERATOR_GATHER_ND` (for the corresponding ONNX `Gather`, `GatherElements`, and `GatherND` operators) that there wasn't a more elegant DML operator to encompass them all at the *API level*, because at the GPU implementation level, every operator used the *same shader* after normalizing the tensor ranks/strides. So surely there was a more general API form too hiding behind those differences, after some massaging (1) normalizing input and indices tensor ranks consistently, (2) passing `axes` explicitly (like how `reduce*` and `resample` take axes) instead of letting them be partially *inferred* from shapes, and (3) utilizing existing broadcasting definitions like those used by elementwise operators. With that, you don't need to re-remember the divergences between each of them, nor need hacks like an extra `batch_dims` parameter.
+It always bothered me after implementing `DML_OPERATOR_GATHER`, `DML_OPERATOR_GATHER_ELEMENTS`, and `DML_OPERATOR_GATHER_ND` (for the corresponding ONNX `Gather`, `GatherElements`, and `GatherND` operators) that there wasn't a more elegant DML operator to encompass them all at the *API level*, because at the GPU implementation level, every operator used the *same shader* after normalizing the tensor ranks/strides to be rank-compatible and broadcastable (which made the implementation much simpler and reusable). So surely there was a more general API form too hiding behind those differences, after some massaging:
+- (1) set input and indices tensor ranks consistently, padding with 1's where needed
+- (2) pass `axes` explicitly (like how `reduce*` and `resample` take axes) instead of letting them be partially *inferred* from shapes
+- (3) use existing broadcasting definitions like those from elementwise operators.
+
+With those normalizations, you don't need to re-remember the divergences between each of them, nor need hacks like an extra `batch_dims` parameter.
 
 ## Equivalence Classes
 
@@ -21,13 +26,15 @@ Gather operators can be grouped so:
 
 | Category                                                             | Library Names | Notes        |
 |----------------------------------------------------------------------|---------------|--------------|
-| Single axis element gather             | [ONNX GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html)<br/>[PyTorch gather](https://pytorch.org/docs/stable/generated/torch.gather.html)<br/>[PyTorch take_along_dim](https://pytorch.org/docs/stable/generated/torch.take_along_dim.html)<br/>[numpy.take_along_axis](https://numpy.org/doc/stable/reference/generated/numpy.take_along_axis.html)<br/>[CoreML gather_along_axis](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_along_axis) | All tensors have the same rank. All dimensions in input and indices have the same size except the active axis.
-| Single axis element gather 1D          | [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html) | Same as above, but tensors are flattened to 1D first.
-| Single axis block gather               | [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)<br/>[numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)<br/>[TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)<br/>[CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather) | Dimensions are selected at a given axis and any trailing dimensions copy entire blocks to the output (as if those dimensions in indices were broadcast to the input shape).
-| Multiple axes block gather             | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes and the last dimension of indices. Axes start at 0 in the input or after the batch dimension count if provided.
+| Single axis element gather             | [ONNX GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html)<br/>[PyTorch gather](https://pytorch.org/docs/stable/generated/torch.gather.html)<br/>[PyTorch take_along_dim](https://pytorch.org/docs/stable/generated/torch.take_along_dim.html)<br/>[numpy.take_along_axis](https://numpy.org/doc/stable/reference/generated/numpy.take_along_axis.html)<br/>[CoreML gather_along_axis](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_along_axis) | All tensors have the same rank. All dimensions in input and indices have the same size except the active axis.<br/>`input.shape = [leading dimensions..., input axis dimension, trailing dimensions...]`<br/>`indices.shape = [leading dimensions..., output axis dimension, trailing dimensions...]`<br/>`axis = 0..(input.rank - 1)`<br/>`output.shape = [leading dimensions..., output axis dimension, trailing dimensions...]`<br/>`output.shape[axis] = indices.shape[axis]`
+| Single axis element gather 1D          | [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html) | Same as above, but tensors are flattened to 1D first.<br/>`input.shape = [input axis dimension]`<br/>`indices.shape = [output axis dimension]`<br/>`axis = always 0`<br/>`output.shape = [output axis dimension]`
+| Single axis block gather               | [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)<br/>[numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)<br/>[TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)<br/>[CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather) | Dimensions are selected at a given axis and any trailing dimensions copy entire blocks to the output (as if those dimensions in indices were broadcast to the input.shape).<br/>`input.shape = [leading dimensions..., input axis dimension, trailing dimensions...]`<br/>`indices.shape = [index dimensions...]`<br/>`axis = 0..(input.rank - 1)`<br/>`output.shape = [leading dimensions..., index dimensions..., trailing dimensions...]`<br/>`output.shape = input.shape[0..axis] ~ indices.shape ~ input.shape[axis+1..input.rank]`
+| Multiple axes block gather             | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes, the batch dimension count, and the size of the last dimension in indices (the lookup coordinate size). Axes start at dimension 0 in the input or after the batch dimension count if nonzero, and the number of indexable input dimensions depends on the coordinate size.<br/>`input.shape = [batch dimensions..., indexable dimensions..., trailing dimensions...]`<br/>`indices.shape = [batch dimensions..., index dimensions..., coordinate size]`<br/>`block dimension count < min(input.rank, indices.rank)`<br/>`output.shape = [batch dimensions..., index dimensions..., trailing dimensions...]`
 | Indeterminate from documentation 🤷‍♂️    | [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)<br/>[TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)<br/>[StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md) | TOSA's gather is probably equivalent to one of the above, but the docs lack insight. StableHLO's gather looks monstrous, like some hybrid slice/gather chimera 😯 - it's out of scope.
 
-## API
+## Multigather Operator API
+
+This function implements the above:
 
 ```javascript
 partial interface MLGraphBuilder
@@ -45,20 +52,22 @@ const output = graphBuilder.gatherMultiaxis(input, indices, axes);
 
 ## Example
 
-Given `axes` `[1]` and tensor shapes below, the `input` shape `[4,X,1,2]` (note axis 1 is ignorable here since it's replaced later anyway) is broadcastable with `indices` shape `[1,X,2,2]` to form `[4,X,2,2]`. Then axis 1 is taken from `indices` shape `[X,3,X,X]` to form the final `output` shape `[4,3,2,2]`.
+Given the following...
 
 | Parameter         | Value                  |
 |-------------------|------------------------|
-| axes              | `[1]` (1D coordinates) |
 | input shape       | `[4,2,1,2]`            |
 | indices shape     | `[1,3,2,2]`            |
+| axes              | `[1]` (1D coordinates) |
 | output shape      | `[4,3,2,2]`            |
+
+...the `input` shape `[4,_,1,2]` is broadcastable with `indices` shape `[1,_,2,2]` to form `[4,_,2,2]` (note the ignorable `_`'s in place of dimensions in `axes`, since those are replaced later anyway). Then axis 1 is taken from `indices` shape `[_,3,_,_]` to form the final `output` shape `[4,3,2,2]`.
 
 ### Alternate design considerations
 
 For multiple axes (2D/3D/ND coordinates where `axes.length > 1`), shape computation is more complex since each coordinate consumes multiple index elements. There are a few possible approaches:
-  - **indices.rank = input.rank + 1**: Append *another* trailing dimension onto the indices. So `indices` logical shape `[2,4]` with 3D coordinates yield an actual shape `[2,4,3]`.
-  - **indices.rank = input.rank and fold last dimension**: Fold the coordinate size into the last dimension. So `indices` logical shape `[2,4]` with 3D coordinates yield an actual shape `[2,4*3]` (the last dimension is always an exact multiple of `axes.length`).
+  - **indices.rank = input.rank + 1**: Append *another* trailing dimension onto the indices. So an `indices` logical shape `[2,4]` with 3D coordinates yield an actual shape `[2,4,3]`.
+  - **indices.rank = input.rank and fold last dimension**: Fold the coordinate size into the last dimension. So an `indices` logical shape `[2,4]` with 3D coordinates yield an actual shape `[2,4*3]` (the last dimension is always an exact multiple of `axes.length`).
 
 | Consideration                                                                       | input.rank + 1  | input.rank and fold last dimension |
 |-------------------------------------------------------------------------------------|-----------------|--------------------------------------|
@@ -66,7 +75,7 @@ For multiple axes (2D/3D/ND coordinates where `axes.length > 1`), shape computat
 | Avoids rank limitation issues.                                                      | ❌              | ✅                                  |
 | Implementation correspondence between tensor coordinates is straight-forward.       | ✅              | ✅ (one extra multiply)             |
 
-No approach is ideal, but the latter enables you to change existing dimension sizes, enables full rank usage up to backend limits, has a simple rank consistency validation rule (`input.rank == indices.rank == output.rank`), and is fairly easy for the implementation when mapping coordinates between output/indices/input.
+No approach is ideal, but the latter enables you to change existing dimension sizes, enables full rank usage up to backend limits (in other words, a `gatherElements` that already worked up to 5D in an implementation could be implemented by this operator), has a simple rank consistency validation rule (`input.rank == indices.rank == output.rank`), and is fairly easy for the implementation when mapping coordinates between output/indices/input.
 
 ## Possible implementation
 
