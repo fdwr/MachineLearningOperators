@@ -3596,7 +3596,7 @@ function transpose(input, permutationAxes /*gather semantics*/)
     rank = input.rank
     for i=0..&lt;rank do output.dimensions[i] = input.dimensions[permutationAxes[i]]
     outputCoordinate = repeat(rank, 0)
-    for each inputCoordinate in input coordinates
+    for each inputCoordinate in input.coordinates
         for i=0..&lt;rank do outputCoordinate[i] = inputCoordinate[permutationAxes[i]]
         output[outputCoordinate] = input[inputCoordinate]
     endfor
@@ -3633,7 +3633,7 @@ Similar to <a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.b
 function broadcast(input, targetDimensions)
     output.dimensions = broadcastDimensions(input.dimensions, targetDimensions)
     inputShape = padLeadingValues(input.dimensions, output.rank, 1)
-    for each outputCoordinate in output coordinates
+    for each outputCoordinate in output.coordinates
         for i=0..&lt;output.rank do inputCoordinate[i] = iif(inputShape[i] &gt; 1), outputCoordinate[i], 0)
         output[outputCoordinate] = inputData[inputCoordinate]
     endfor
@@ -4686,7 +4686,7 @@ endfunction
     output = new Tensor(input.type, outputDimensions)
 
     // Reduce input along active axes.
-    for each outputCoordinate in output coordinates
+    for each outputCoordinate in output.coordinates
         // For each input in the window, apply the reduction function
         outputValue = initialValue
         for each (inputCoordinate, inputValue) in local input window
