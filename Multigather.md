@@ -26,11 +26,28 @@ Gather operators can be grouped so:
 
 | Category                                                             | Library Names | Notes        |
 |----------------------------------------------------------------------|---------------|--------------|
-| Single axis element gather             | [ONNX GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html)<br/>[PyTorch gather](https://pytorch.org/docs/stable/generated/torch.gather.html)<br/>[PyTorch take_along_dim](https://pytorch.org/docs/stable/generated/torch.take_along_dim.html)<br/>[numpy.take_along_axis](https://numpy.org/doc/stable/reference/generated/numpy.take_along_axis.html)<br/>[CoreML gather_along_axis](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_along_axis) | All tensors have the same rank. All dimensions in input and indices have the same size except the active axis.<br/><sup>`input.shape = [leading dimensions..., input axis dimension, trailing dimensions...]`<br/>`indices.shape = [leading dimensions..., output axis dimension, trailing dimensions...]`<br/>`axis = 0..(input.rank - 1)`<br/>`output.shape = [leading dimensions..., output axis dimension, trailing dimensions...]`<br/>`output.shape[axis] = indices.shape[axis]`</sup>
+| Single axis element gather             | [ONNX GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html)<br/>[PyTorch gather](https://pytorch.org/docs/stable/generated/torch.gather.html)<br/>[PyTorch take_along_dim](https://pytorch.org/docs/stable/generated/torch.take_along_dim.html)<br/>[numpy.take_along_axis](https://numpy.org/doc/stable/reference/generated/numpy.take_along_axis.html)<br/>[CoreML gather_along_axis](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_along_axis) | All tensors have the same rank. All dimensions in input and indices have the same size except the active axis.<br/><sup>`input.rank == indices.rank == output.rank`<br/>`input.shape = [leading dimensions..., input axis dimension, trailing dimensions...]`<br/>`indices.shape = [leading dimensions..., output axis dimension, trailing dimensions...]`<br/>`axis = 0..(input.rank - 1)`<br/>`output.shape = [leading dimensions..., output axis dimension, trailing dimensions...]`<br/>`output.shape[axis] = indices.shape[axis]`</sup>
 | Single axis element gather 1D          | [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html) | Same as above, but tensors are flattened to 1D first.<br/><sup>`input.shape = [input axis dimension]`<br/>`indices.shape = [output axis dimension]`<br/>`axis = always 0`<br/>`output.shape = [output axis dimension]`</sup>
 | Single axis block gather               | [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)<br/>[numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)<br/>[TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)<br/>[CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather) | Dimensions are selected at a given axis and any trailing dimensions copy entire blocks to the output (as if those dimensions in indices were broadcast to the input.shape).<br/><sup>`input.shape = [leading dimensions..., input axis dimension, trailing dimensions...]`<br/>`indices.shape = [index dimensions...]`<br/>`axis = 0..(input.rank - 1)`<br/>`output.shape = [leading dimensions..., index dimensions..., trailing dimensions...]`<br/>`output.shape = input.shape[0..axis] ~ indices.shape ~ input.shape[axis+1..input.rank]`</sup>
-| Multiple axes block gather             | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes, the batch dimension count, and the size of the last dimension in indices (the lookup coordinate size). Axes start at dimension 0 in the input or after the batch dimension count if nonzero, and the number of indexable input dimensions depends on the coordinate size.<br/><sup>`input.shape = [batch dimensions..., indexable dimensions..., trailing dimensions...]`<br/>`indices.shape = [batch dimensions..., index dimensions..., coordinate size]`<br/>`block dimension count < min(input.rank, indices.rank)`<br/>`output.shape = [batch dimensions..., index dimensions..., trailing dimensions...]`</sup>
-| Indeterminate from documentation 🤷‍♂️    | [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)<br/>[TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)<br/>[StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md) | TOSA's gather is probably equivalent to one of the above, but the docs lack insight. StableHLO's gather looks monstrous, like some hybrid slice/gather chimera 😯 - it's out of scope.
+| Multiple contiguous axes block gather  | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes, the batch dimension count, and the size of the last dimension in indices (the lookup coordinate size). Axes start at dimension 0 in the input or after the batch dimension count if nonzero, and the number of indexable input dimensions depends on the coordinate size.<br/><sup>`input.shape = [batch dimensions..., indexable dimensions..., trailing dimensions...]`<br/>`indices.shape = [batch dimensions..., index dimensions..., coordinate size]`<br/>`block dimension count < min(input.rank, indices.rank)`<br/>`output.shape = [batch dimensions..., index dimensions..., trailing dimensions...]`</sup>
+| Multiaxis gather                       | None known, emulatable via reshape + transpose + gatherND | Multiple noncontiguous axes are supported to gather from the input.<br/><sup>`input.shape = [batch dimensions..., indexable dimensions..., trailing dimensions...]`<br/>`indices.shape = [batch dimensions..., index dimensions..., coordinate size]`<br/>`block dimension count < min(input.rank, indices.rank)`<br/>`output.shape = [batch dimensions..., index dimensions..., trailing dimensions...]`</sup>
+| Indeterminate from documentation 🤷‍♂️    | [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)<br/>[TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)<br/>[StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md) | TOSA's gather is probably equivalent to one of the above, but the docs lack insight. StableHLO's gather looks quite complex, like some hybrid slice/gather chimera 😯 - it's out of scope.
+
+They have the following properties:
+
+| Category                                                             | GatherElements | Gather(blocks) | GatherND(blocks) | Gather Axes |
+|----------------------------------------------------------------------|----------------|----------------|------------------|-------------|
+| Multiple axes                                                        | ❌             | ❌            | ✅               | ✅         |
+| Non-contiguous axes (like N and C in NHWC layout)                    | ❌             | ❌            | ❌               | ✅         |
+| Custom coordinate ordering (like [x,y] or [y,x])                     | ❌             | ❌            | ❌               | ✅         |
+| Supports input < indices broadcasting before axes                    | ❌             | ❌            | ✅               | ✅         |
+| Supports indices < input broadcasting before axes¹                   | ❌             | ✅            | ❌               | ✅         |
+| Supports indices < input broadcasting after axes                     | ❌             | ✅            | ✅               | ✅         |
+| Supports trailing broadcasting (after axes)                          | ❌             | ✅            | ✅               | ✅         |
+| Trivial implementation²                                              | ✅             | ❌            | ❌               | ✅         |
+
+- ¹ Unsure if it's supposed to or not, but ORT 2024-11-26 crashes with a divizion by zero when trying.
+- ² Trivial implementations reduce the chances of bugs.
 
 ## Multigather Operator API
 
@@ -45,10 +62,11 @@ partial interface MLGraphBuilder
 const output = graphBuilder.gatherMultiaxis(input, indices, axes);
 ```
 
-- The `input`, `indices`, and `output` tensors all have the same rank.
-- The `input` shape and `indices` logical shape may differ for any dimensions in `axes`, but they must be bidirectionally broadcastable for any other dimensions.
-- The `indices` have an *actual shape* and a *logical shape*, as the last dimension of `indices` must be a multiple of the `axes` length since the coordinates are folded into that dimension. For 1D cases (`axes.length == 1`), the logical and actual shapes are identical anyway, and this is directly equivalent to {`ONNX GatherElements`, `take_along_axis`, `gather_along_axis`}. For 2D/3D/ND cases (`axes.length > 1`), the logical shape has the last dimension divided by `axes` length. e.g An `indices` logical shape `[2,4]` with 3D coordinates would have an actual shape `[2,4*3]`.
-- The output tensor shape takes dimensions of `indices` logical shape that are in `axes`, and any other dimensions are taken from `input` broadcasted with `indices`.
+- **Consistent rank**: `input.rank` == `indices.rank` == `output.rank`.
+- **Broadcastability**: The `input` shape and `indices` logical shape may differ for any dimensions in `axes`, but they must be bidirectionally broadcastable for any other dimensions.
+- **Logical indices shape**: The `indices` have an *actual shape* and a *logical shape*, as the last dimension of `indices` must be a multiple of the `axes` length since the coordinates are folded into that dimension. For 1D cases (`axes.length == 1`), the logical and actual shapes are identical anyway, and this is directly equivalent to {`ONNX GatherElements`, `take_along_axis`, `gather_along_axis`}. For 2D/3D/ND cases (`axes.length > 1`), the logical shape has the last dimension divided by `axes` length. e.g An `indices` logical shape `[2,4]` with 3D coordinates would have an actual shape `[2,4*3]`.
+- **Output shape**: The output tensor shape takes dimensions of `indices` logical shape that are in `axes`, and any other dimensions are taken from `input` broadcasted with `indices`.
+- **Axes**: Axes do not need to be contiguous and strictly in order, unlike ONNX Gather and ONNX GatherND. For example, a 2D coordinate [1,2] could be mapped to y=1 and x=2 dimensions respectively, or mapped to the (more commonly found in graphics) the x=1 and y=2 dimensions. GatherND is unable to accomodate this without either transposes on the input or reversal of the indices.
 
 ## Example
 
@@ -609,6 +627,15 @@ input shape   = [2,2,2]
 indices shape = [5,1,1*3]
 output shape  = [5,1,1]
 axes          = [0,1,2]
+
+// Demonstrates broadcasting of leading input dimensions (since 1, not 2)
+batch_dims = 1
+input of shape [1,3]
+  [[0,1,2]]
+indices of shape [2,1]
+  [[1],[2]],
+output of shape [2]
+  [1,2],
 ```
 
 ## Unknown behavior
