@@ -35,7 +35,7 @@ flowchart-elk TB
         Microsoft_ONNX_Runtime[<a href='https://github.com/microsoft/onnxruntime'>Microsoft <abbr title='Open Neural Network Exchange'>ONNX</abbr> Runtime</a>]
         PyTorch
         Google_TensorFlow
-        Apple_CoreML[<a href='https://developer.apple.com/documentation/coreml'>Microsoft <abbr title='Apple Core Machine Learning'>Apple CoreML</abbr></a>]
+        Apple_CoreML[<a href='https://developer.apple.com/documentation/coreml'>Apple <abbr title='Core Machine Learning'>CoreML</abbr></a>]
         subgraph ORT_EP_subgraph[ ]
             ORT_EPs[EPs: CPU DML CUDA OpenVINO ROCM WebNN WebGPU QNN CoreML]
         end
