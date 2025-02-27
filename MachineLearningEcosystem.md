@@ -7,8 +7,6 @@ cd d:\src\MachineLearningOperators\
 mmdc -i .\MachineLearningEcosystem.md -o .\MachineLearningEcosystem.svg
 -->
 
-Mermaid diagrams appear broken now on GitHub since some backend change. So this diagram is all messed up.
-
 This may have typos, incorrect connections, and incomplete nodes.
 
 ```mermaid
