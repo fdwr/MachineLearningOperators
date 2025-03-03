@@ -11,16 +11,16 @@ date: 2025-02-19
 
 > *"One operator to gather them all, to bring them together, and in the darkness bind them."*
 
-ML libraries have a confusing zoo of various gather/scatter operators, and it always takes me a few minutes to recall the brain-bending differences between every `gather*` variant out there, even just in ONNX ([Gather](https://onnx.ai/onnx/operators/onnx__Gather.html), [GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html), [GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)) let alone all the other ML libraries. Many are woefully underdocumentated on behavior too (e.g. [TOSA gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop) and [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)).
+ML libraries have a confusing mix of various gather/scatter operators, and it always takes me a few minutes to recall the brain-bending differences between every `gather*` variant out there, even just in ONNX ([Gather](https://onnx.ai/onnx/operators/onnx__Gather.html), [GatherElements](https://onnx.ai/onnx/operators/onnx__GatherElements.html), [GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)) let alone other ML libraries. Many are underdocumented too (e.g. [TOSA gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop) and [StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md)). Is there a more fundamental expression of a gathering operation that is more generic while also being simpler to document and implement?
 
-It always bothered me after implementing `DML_OPERATOR_GATHER`, `DML_OPERATOR_GATHER_ELEMENTS`, and `DML_OPERATOR_GATHER_ND` (for the corresponding ONNX `Gather`, `GatherElements`, and `GatherND` operators) that there wasn't a more elegant DML operator to encompass them all at the *API level*, because at the GPU implementation level, every operator used the *same shader* after normalizing the tensor ranks/strides to be rank-compatible and broadcastable (which made the implementation much simpler and reusable). So surely there was a more general API form too hiding behind those differences, after some massaging:
+It always bothered me after implementing `DML_OPERATOR_GATHER`, `DML_OPERATOR_GATHER_ELEMENTS`, and `DML_OPERATOR_GATHER_ND` (for the corresponding ONNX operators) that there wasn't a more elegant DML operator to encompass them all at the *API level*, because at the GPU implementation level, every operator used the *same shader* after normalizing the tensor ranks/strides to be rank-compatible and broadcastable (which made the implementation much simpler and reusable). So after some massaging...
 - (1) set input and indices tensor ranks consistently, padding with 1's where needed
 - (2) pass `axes` explicitly (like how `reduce*` and `resample` take axes) instead of letting them be partially *inferred* from shapes
 - (3) use existing broadcasting definitions like those from elementwise operators
 
-With those normalizations, you don't need to re-remember the divergences between each of them, nor need hacks like an extra `batch_dims` parameter.
+...you have one operator that can implement each, and you don't need to re-remember the divergences between each of them, nor need hacks like an extra `batch_dims` parameter.
 
-## Equivalence Classes
+## Operator Equivalence Classes
 
 Gather operators can be grouped so:
 
@@ -30,7 +30,7 @@ Gather operators can be grouped so:
 | Single axis element gather (1D input absolute indices)    | [PyTorch take](https://pytorch.org/docs/stable/generated/torch.take.html) | Same as above, but the input tensor is flattened to 1D first, meaning all indices are linearly unique to each input element.<br/><sup>`input.shape = [indexable dimension as 1D]`<br/>`indices.shape = [index dimensions...]`<br/>`axis = implicitly 0`<br/>`output.shape = [index dimensions...]`<br/>`input.rank == 1 after flattening to 1D`<br/>`output.shape == indices.shape`<br/></sup>
 | Single axis block gather               | [ONNX Gather](https://onnx.ai/onnx/operators/onnx__Gather.html)<br/>[numpy.take](https://numpy.org/doc/stable/reference/generated/numpy.take.html)<br/>[TensorFlow gather](https://www.tensorflow.org/api_docs/python/tf/gather)<br/>[CoreML gather](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather) | Dimensions are selected at a given axis and any trailing dimensions copy entire blocks to the output (as if those dimensions in indices were broadcast to the input.shape).<br/><sup>`input.shape = [leading dimensions..., input axis dimension, trailing dimensions...]`<br/>`indices.shape = [index dimensions...]`<br/>`axis = 0..(input.rank - 1)`<br/>`output.shape = [leading dimensions..., index dimensions..., trailing dimensions...]`<br/>`output.shape = input.shape[0..axis] ~ indices.shape ~ input.shape[axis+1..input.rank]`</sup>
 | Multiple contiguous axes block gather  | [ONNX GatherND](https://onnx.ai/onnx/operators/onnx__GatherND.html)<br/>[ONNX gather_nd](https://www.tensorflow.org/api_docs/python/tf/gather_nd)<br/>[CoreML gather_nd](https://apple.github.io/coremltools/source/coremltools.converters.mil.mil.ops.defs.html#coremltools.converters.mil.mil.ops.defs.iOS17.scatter_gather.gather_nd) | Axes are indirectly implied by correspondence of input and indices shapes, the batch dimension count, and the size of the last dimension in indices (the lookup coordinate size). Axes start at dimension 0 in the input or after the batch dimension count if nonzero, and the number of indexable input dimensions depends on the coordinate size.<br/><sup>`input.shape = [batch dimensions..., indexable dimensions..., trailing dimensions...]`<br/>`indices.shape = [batch dimensions..., index dimensions..., coordinate size]`<br/>`batch dimension count < min(input.rank, indices.rank)`<br/>`output.shape = [batch dimensions..., index dimensions..., trailing dimensions...]`</sup>
-| Multiaxis gather                       | None known, emulatable via reshape + transpose + gatherND | Multiple noncontiguous axes are supported to gather from the input.<br/><sup>`input.shape = [mix of indexable and broadcastable dimensions...]`<br/>`indices.shape = [mix of index and broadcastable dimensions]`<br/>`output.shape = [mix of indexed and broadcasted dimensions]`<br/>`axes = [any unique dimensions < input.rank ...]`<br/>`broadcastShape = broadcast(input.shape, indices.shape)`<br/>`broadcastShape[axes[∀i]] = indices.shape[axes[∀i]]`<br/>`output.shape = broadcastShape`<br/>`input.rank == indices.rank == output.rank`</sup>
+| Multiaxis gather                       | None known, but emulatable via reshape + transpose + gatherND | Multiple noncontiguous axes are supported to gather from the input.<br/><sup>`input.shape = [mix of indexable and broadcastable dimensions...]`<br/>`indices.shape = [mix of index and broadcastable dimensions]`<br/>`output.shape = [mix of indexed and broadcasted dimensions]`<br/>`axes = [any unique dimensions < input.rank ...]`<br/>`broadcastShape = broadcast(input.shape, indices.shape)`<br/>`broadcastShape[axes[∀i]] = indices.shape[axes[∀i]]`<br/>`output.shape = broadcastShape`<br/>`input.rank == indices.rank == output.rank`</sup>
 | Indeterminate from documentation 🤷‍♂️    | [TOSA linalg gather](https://mlir.llvm.org/docs/Dialects/TOSA/#tosagather-mlirtosagatherop)<br/>[TOSA tensor gather](https://mlir.llvm.org/docs/Dialects/TensorOps/#tensorgather-tensorgatherop)<br/>[StableHLO gather](https://github.com/openxla/stablehlo/blob/main/docs/spec.md) | TOSA's gather is probably equivalent to one of the above, but the docs lack insight. StableHLO's gather looks quite complex, like some hybrid slice/gather chimera 😯 - it's out of scope.
 
 They have the following properties:
@@ -39,7 +39,7 @@ They have the following properties:
 |----------------------------------------------------------------------|----------------|----------------|------------------|------------------|
 | Multiple axes                                                        | ❌             | ❌            | ✅               | ✅              |
 | Non-contiguous axes (like N and C in NHWC layout)                    | ❌             | ❌            | ❌               | ✅              |
-| Custom coordinate ordering (like [x,y] or [y,x])                     | ❌             | ❌            | ❌               | ✅              |
+| Custom coordinate ordering (like \[x,y\] or \[y,x\])                 | ❌             | ❌            | ❌               | ✅              |
 | Supports input < indices broadcasting before axes                    | ❌             | ❌            | ✅               | ✅              |
 | Supports indices < input broadcasting before axes¹                   | ❌             | ✅            | ❌               | ✅              |
 | Supports indices < input broadcasting after axes                     | ❌             | ✅            | ✅               | ✅              |
@@ -50,8 +50,6 @@ They have the following properties:
 - ² Trivial implementations reduce the chances of bugs.
 
 ## Multigather Operator API
-
-This function implements the above:
 
 ```javascript
 partial interface MLGraphBuilder
