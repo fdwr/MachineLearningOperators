@@ -3748,6 +3748,38 @@ endfunction</code></td>
   </tr>
   <tr class="reorganizationOperator">
     <td>Data reorganization</td>
+    <td>Reshape To 1D</td>
+    <td class="detailsColumn">Reinterpret the view of the tensor, flattening into a long 1D tensor.
+
+<code>function flattenTo1D(input, axis)
+    output = input
+    output.dimensions = reduceProduct(input.dimensions)
+    return output
+endfunction</code></td>
+    <td class="webnnColumn">reshape (plus caller logic)</td>
+    <td class="onnxColumn">?</td>
+    <td class="dmlColumn">NA, no actual data change, just update the TENSOR_DESC</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Exact</td>
+  </tr>
+  <tr class="reorganizationOperator">
+    <td>Data reorganization</td>
     <td>Reshape To 2D</td>
     <td class="detailsColumn">Reinterpret the view of the tensor, reducing the dimensions from N to 2.
 e.g. [1,2,3,4,5] with a split at axis 3 yields [1*2*3,4*5] -&gt; [6,20])
@@ -4858,11 +4890,11 @@ endfunction</code></td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Pool Maximum Spatial Dimensions Global</td>
-    <td class="detailsColumn"><code><code>function poolMaximumSpatialDimensionsGlobal(input)
+    <td class="detailsColumn"><code>function poolMaximumSpatialDimensionsGlobal(input)
     axes = increasingSequence(2, input.rank) // Skip N and C dimensions.
     return reduceMax(input, axes, keepDimensions=true)
     // Alternately poolMaximum with windowDimensions equal to the input sizes after N,C.
-endfunction</code></code></td>
+endfunction</code></td>
     <td class="webnnColumn">maxPool2d / reduceMax</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#GlobalMaxPool">GlobalMaxPool</a></td>
     <td class="dmlColumn">DML_OPERATOR_MAX_POOLING with output being 1 element</td>
@@ -4888,9 +4920,17 @@ endfunction</code></code></td>
   <tr class="poolingOperator">
     <td>Pooling</td>
     <td>Unpool Maximum</td>
-    <td class="detailsColumn">Opposite of MaxPool.
+    <td class="detailsColumn">Partial opposite of MaxPool.
 Fill the output tensor of the given shape (either explicit or the input shape plus padding) with zeros.
-Then write each value from the input tensor into the output tensor at the element offset from the corresponding indices array.</td>
+Then write each value from the input tensor into the output tensor at the element offset from the corresponding indices array.
+    
+<code>function unpool(input, indices, kernelShape, padding, strides)
+    outputDimensions = ... TODO: compute shape
+    output = zeros(input.dataType, outputDimensions)
+    inputFlattened = flattenTo1D(input)
+    indicesFlattened = flattenTo1D(indices)
+    return scatterElements(output, indicesFlattened, input, axis=0)
+endfunction</code></td>
     <td class="webnnColumn">?</td>
     <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/rel-1.4.0/docs/Operators.md#MaxUnpool">MaxUnpool</a></td>
     <td class="dmlColumn">---</td>
