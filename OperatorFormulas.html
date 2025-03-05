@@ -3669,9 +3669,11 @@ Any single size dimensions are stretched to the output dimension size.
 <code>
 function broadcastDimensions(dimensionsList...)
     outputRank = 0
-    for each dimensions in dimensionsList do outputRank = max(outputRank, dimensions.size) // Determine the largest rank
+    for each dimensions in dimensionsList
+        outputRank = max(outputRank, dimensions.size) // Determine the largest rank
+    endfor
     broadcastedDimensions = ones([outputRank]) // [1,1,...]
-    for each dimension in dimensions // Take the max of all dimensions.
+    for each dimensions in dimensionsList
         paddedDimensions = padLeadingValues(dimensions, outputRank, 1)
         for i=0..&lt;outputRank do
             assert(paddedDimensions[i] == broadcastedDimensions[i] || paddedDimensions[i] == 1 || broadcastedDimensions[i] == 1))
