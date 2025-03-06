@@ -132,6 +132,7 @@ function gatherMultiaxis(/*Tensor*/ input, /*Tensor*/ indices, /*Array*/ axes)
     // e.g. Given input shape [10,9,8], indices shape [1,5,6*2], and axes = [1,2],
     //      first broadcast the input with logical indices shape to make [10,_,_],
     //      then take axes [1,2] from logical shape [_,5,6] to yield [10,5,6].
+    //
     let logicalIndicesShape = [...indices.shape];
     logicalIndicesShape[logicalIndicesShape.length - 1] /= coordinateSize;
     let outputShape = broadcastShapeWith(input.shape, logicalIndicesShape);
@@ -139,7 +140,7 @@ function gatherMultiaxis(/*Tensor*/ input, /*Tensor*/ indices, /*Array*/ axes)
     let output = new Tensor(outputShape);
 
     // Create broadcasting masks to avoid creating large broadcasted temporaries
-    // wastes memory and time.
+    // that would waste memory and time.
     const inputCoordinateMask = makeBroadcastingMask(input.shape);
     const indicesCoordinateMask = makeBroadcastingMask(logicalIndicesShape);
 
@@ -161,6 +162,16 @@ function gatherMultiaxis(/*Tensor*/ input, /*Tensor*/ indices, /*Array*/ axes)
     }
 
     return output;
+}
+
+// Bidirectional broadcasting between two shapes.
+// Any dimensions of size 1 in the first tensor will be broadcast to the dimension of the other tensor.
+// e.g. first [1,3,1] with second [2,1,4] yields shape [2,3,4].
+// If two corresponding coordinates are > 1, the first one wins (not an error). e.g. [2,1] and [3,4] yield [2,4].
+function broadcastShapeWith(first, second)
+{
+    console.assert(first.length == second.length);
+    return first.slice().map((value, index) => (value == 1) ? second[index] : value);
 }
 
 // Mask any dimensions of length 1 to 0, so that when coordinates are masked via getMaskedCoordinate
@@ -191,7 +202,7 @@ function getMaskedCoordinate(/*Array*/ coordinate, /*Array*/ mask)
 
 ### Mapping
 ```javascript
-// GatherElements is basically directly compatible with multiaxis gather.
+// GatherElements is directly compatible with multiaxis gather (just wrap the axis).
 function gatherSingleAxisElements(input, indices, axis)
 {
     return gatherMultiaxis(input, indices, [axis]);
