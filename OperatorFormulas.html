@@ -2816,6 +2816,32 @@ endfunction</code></td>
   </tr>
   <tr class="activationOperator elementwiseOperator">
     <td>Activation, Elementwise</td>
+    <td>Swish</td>
+    <td class="detailsColumn"><code>function swish(input) = x * sigmoid(alpha * x)$.</code></td>
+    <td class="webnnColumn">?</td>
+    <td class="onnxColumn"><a href="https://github.com/onnx/onnx/blob/master/docs/Operators.md#Swish">Swish</a></td>
+    <td class="dmlColumn">?</td>
+    <td class="xnnPackColumn">?</td>
+    <td class="stableHloColumn">?</td>
+    <td class="tosaColumn">?</td>
+    <td class="numpyColumn">?</td>
+    <td class="tensorFlowColumn">?</td>
+    <td class="tensorFlowLiteColumn">?</td>
+    <td class="pytorchColumn">?</td>
+    <td class="coreMlColumn">?</td>
+    <td class="bnnsColumn">?</td>
+    <td class="mpsColumn">?</td>
+    <td class="mlxColumn">?</td>
+    <td class="ncnnColumn">?</td>
+    <td class="cntkColumn">?</td>
+    <td class="openVinoColumn">?</td>
+    <td class="oneDnnColumn">?</td>
+    <td class="annColumn">?</td>
+    <td class="futureColumn"></td>
+    <td>Precision TBD</td>
+  </tr>
+  <tr class="activationOperator elementwiseOperator">
+    <td>Activation, Elementwise</td>
     <td>Clamp Positive (Rectified Linear Unit)</td>
     <td class="detailsColumn"><code>function clampPositive(input) = max(input, 0)</code>
 <code>// OR elementwise if x &gt;= 0 then x else 0</code></td>
