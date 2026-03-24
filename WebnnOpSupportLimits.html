@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebNN opSupportLimits Viewer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    padding: 24px;
+    line-height: 1.5;
+  }
+
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 0.85rem; margin-bottom: 16px; }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .controls label { font-weight: 600; font-size: 0.9rem; }
+
+  select, button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  select {
+    border: 1px solid #ccc;
+    background: #fff;
+  }
+
+  button {
+    border: none;
+    background: #0078d4;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  button:hover { background: #106ebe; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  #status {
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: none;
+  }
+
+  #status.visible { display: block; }
+  #status.error { background: #fde8e8; color: #c00; border: 1px solid #f5c6c6; }
+  #status.info { background: #e8f0fe; color: #174ea6; border: 1px solid #c6dafc; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #ddd;
+    font-size: 0.85rem;
+  }
+
+  thead th {
+    background: #f0f0f0;
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 2px solid #ccc;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+
+  tbody tr:hover { background: #fafafa; }
+
+  .op-name { font-weight: 600; }
+
+  .operand-row td { padding-left: 30px; color: #555; }
+  .operand-label { font-style: italic; }
+
+  .datatypes { font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 0.8rem; }
+  .no-data { color: #999; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>WebNN opSupportLimits Viewer</h1>
+<p class="subtitle">Inspect operator data type support for each WebNN device backend</p>
+
+<div class="controls">
+  <label for="deviceSelect">Device:</label>
+  <select id="deviceSelect">
+    <option value="cpu">CPU</option>
+    <option value="gpu">GPU</option>
+    <option value="npu">NPU</option>
+  </select>
+  <button id="queryBtn">Query opSupportLimits</button>
+</div>
+
+<div id="status"></div>
+<div id="results"></div>
+
+<script>
+function showStatus(msg, type)
+{
+    const element = document.getElementById('status');
+    element.className = 'visible ' + type;
+    element.textContent = msg;
+}
+
+function hideStatus()
+{
+    document.getElementById('status').className = '';
+    document.getElementById('status').textContent = '';
+}
+
+document.getElementById('queryBtn').addEventListener(
+    'click',
+    async () =>
+    {
+        const button = document.getElementById('queryBtn');
+        const device = document.getElementById('deviceSelect').value;
+        button.disabled = true;
+
+        try
+        {
+            if (!navigator.ml)
+            {
+                showStatus('WebNN is not supported in this browser. Try Chrome/Edge 130+ with appropriate flags.', 'error');
+                button.disabled = false;
+                return;
+            }
+
+            showStatus('Creating MLContext for ' + device + '…', 'info');
+            const context = await navigator.ml.createContext({ deviceType: device });
+
+            showStatus('Querying opSupportLimits…', 'info');
+            const limits = context.opSupportLimits();
+
+            hideStatus();
+            renderTable(limits);
+        }
+        catch (error)
+        {
+            showStatus('Error: ' + error.message, 'error');
+            console.error(error);
+        }
+        finally
+        {
+            button.disabled = false;
+        }
+    }
+);
+
+function renderTable(limits)
+{
+    const container = document.getElementById('results');
+    container.innerHTML = '';
+
+    // Collect operator keys (objects with nested operand info)
+    const operatorNames = Object.keys(limits).filter(
+        key =>
+        {
+            const v = limits[key];
+            return v && typeof v === 'object' && !Array.isArray(v);
+        }
+    ).sort();
+
+    if (operatorNames.length === 0)
+    {
+        container.innerHTML = '<p class="no-data">No operator limits returned.</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>Operator</th><th>Operand</th><th>Supported Data Types</th></tr>';
+    table.appendChild(thead);
+
+    const tableBody = document.createElement('tbody');
+
+    for (const operatorName of operatorNames)
+    {
+        const opLimits = limits[operatorName];
+        const operands = Object.entries(opLimits).filter(([_, v]) => v && typeof v === 'object');
+
+        if (operands.length === 0)
+        {
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML =
+                '<td class="op-name">' + operatorName + '</td>' +
+                '<td class="no-data" colspan="2">No operand data</td>';
+            tableBody.appendChild(tableRow);
+            continue;
+        }
+
+        for (let i = 0; i < operands.length; i++)
+        {
+            const [operandName, limit] = operands[i];
+            const tableRow = document.createElement('tr');
+
+            // Only show operator name on first row, rowspan the rest
+            if (i === 0)
+            {
+                const tdOp = document.createElement('td');
+                tdOp.className = 'op-name';
+                tdOp.textContent = operatorName;
+                if (operands.length > 1) tdOp.rowSpan = operands.length;
+                tableRow.appendChild(tdOp);
+            }
+
+            const tdOperand = document.createElement('td');
+            tdOperand.className = 'operand-label';
+            tdOperand.textContent = operandName;
+            tableRow.appendChild(tdOperand);
+
+            const tdTypes = document.createElement('td');
+            tdTypes.className = 'datatypes';
+            if (limit.dataTypes && limit.dataTypes.length > 0)
+            {
+                tdTypes.textContent = limit.dataTypes.join(', ');
+            }
+            else
+            {
+                tdTypes.innerHTML = '<span class="no-data">none</span>';
+            }
+            tableRow.appendChild(tdTypes);
+
+            tableBody.appendChild(tableRow);
+        }
+    }
+
+    table.appendChild(tableBody);
+    container.appendChild(table);
+}
+</script>
+</body>
+</html>
