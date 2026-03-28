@@ -227,7 +227,7 @@ summary::after {
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
-      <td class="mpsColumn">x</td>
+      <td class="mpsColumn">MPSDataType.unorm1</td>
       <td class="mlxColumn">x</td>
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">?</td>
@@ -8244,4 +8244,117 @@ Add MindSpore op list https://www.mindspore.cn/docs/en/r2.6.0/api_python/mindspo
 <!--
 Add pad mode table somewhere:
 https://github.com/webmachinelearning/webnn/issues/739#issuecomment-2840349698
+-->
+
+<!--
+TODO: Add llama GGML list:
+This list just enumerates backend support, not behavior: https://github.com/ggml-org/llama.cpp/blob/master/docs/ops.md
+It seems the "code is the spec" 🙄. So, maybe I won't add this one, if I can't even tell what other ops they map too. 🤷‍♂️
+
+ABS
+ACC
+ADD
+ADD1
+ADD_ID
+ARANGE
+ARGMAX
+ARGSORT
+CEIL
+CLAMP
+CONCAT
+CONT
+CONV_2D
+CONV_2D_DW
+CONV_3D
+CONV_TRANSPOSE_1D
+CONV_TRANSPOSE_2D
+COS
+COUNT_EQUAL
+CPY
+CROSS_ENTROPY_LOSS
+CROSS_ENTROPY_LOSS_BACK
+CUMSUM
+DIAG
+DIAG_MASK_INF
+DIV
+DUP
+ELU
+EXP
+EXPM1
+FILL
+FLASH_ATTN_EXT
+FLOOR
+GATED_DELTA_NET
+GATED_LINEAR_ATTN
+GEGLU
+GEGLU_ERF
+GEGLU_QUICK
+GELU
+GELU_ERF
+GELU_QUICK
+GET_ROWS
+GET_ROWS_BACK
+GROUP_NORM
+HARDSIGMOID
+HARDSWISH
+IM2COL
+IM2COL_3D
+L2_NORM
+LEAKY_RELU
+LOG
+MEAN
+MUL
+MUL_MAT
+MUL_MAT_ID
+NEG
+NORM
+OPT_STEP_ADAMW
+OPT_STEP_SGD
+OUT_PROD
+PAD
+PAD_REFLECT_1D
+POOL_1D
+POOL_2D
+REGLU
+RELU
+REPEAT
+REPEAT_BACK
+RMS_NORM
+RMS_NORM_BACK
+ROLL
+ROPE
+ROPE_BACK
+ROUND
+RWKV_WKV6
+RWKV_WKV7
+SCALE
+SET
+SET_ROWS
+SGN
+SIGMOID
+SILU
+SILU_BACK
+SIN
+SOFTPLUS
+SOFT_MAX
+SOFT_MAX_BACK
+SOLVE_TRI
+SQR
+SQRT
+SSM_CONV
+SSM_SCAN
+STEP
+SUB
+SUM
+SUM_ROWS
+SWIGLU
+SWIGLU_OAI
+TANH
+TIMESTEP_EMBEDDING
+TOP_K
+TRI
+TRUNC
+UPSCALE
+XIELU
+
 -->
