@@ -198,7 +198,7 @@ summary::after {
       <th class="tosaColumn"><span title="Updated 2024-01-19"><a href="https://www.mlplatform.org/tosa/tosa_spec.html">TOSA</a></span></th>
       <th class="numpyColumn"><span title="Updated 2024-01-19"><a href="https://numpy.org/devdocs/user/basics.types.html">NumPy</a></span></th>
       <th class="tensorFlowColumn"><span title="Updated 2024-01-19"><a href="https://www.tensorflow.org/api_docs/python/tf/dtypes">TensorFlow</a></span></th>
-      <th class="tensorFlowLiteColumn"><span title="Updated 2024-08-01"><a href="https://www.tensorflow.org/api_docs/python/tf/dtypes">TensorFlow Lite</a></span></th>
+      <th class="tensorFlowLiteColumn"><span title="Updated 2024-08-01"><a href="https://github.com/google-ai-edge/LiteRT/blob/57f0236b50e80c17d6767e3309802b69933b4ecb/tflite/converter/core/c/tflite_types.h#L46">TensorFlow Lite/LiteRT</a></span></th>
       <th class="pytorchColumn"><span title="Updated 2024-01-19"><a href="https://pytorch.org/docs/stable/tensor_attributes.html">PyTorch</a></span></th>
       <th class="coreMlColumn"><span title="Updated 2024-01-19"><a href="https://chromium-review.googlesource.com/c/chromium/src/+/5075312/12/services/webnn/coreml/ModelFormat/FeatureTypes.proto">CoreML</a></span></th>
       <th class="bnnsColumn"><span title="Updated 2024-01-19"><a href="https://github.com/alexey-lysiuk/macos-sdk/blob/6c1513f5b0667b76e24aaadcad130e90c545f046/MacOSX14.0.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/BNNS/bnns_constants.h#L33-L91">BNNS</a></span></th>
@@ -238,6 +238,31 @@ summary::after {
     </tr>
     <tr>
       <td>Integer Unsigned</td>
+      <td>uint2</td>
+      <td class="detailsColumn"></td>
+      <td class="webnnColumn">x</td>
+      <td class="onnxColumn">x</td>
+      <td class="dmlColumn">x</td>
+      <td class="xnnPackColumn">x</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">x</td>
+      <td class="numpyColumn">x</td>
+      <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">x</td>
+      <td class="pytorchColumn">x</td>
+      <td class="coreMlColumn">x</td>
+      <td class="bnnsColumn">x</td>
+      <td class="mpsColumn">x</td>
+      <td class="mlxColumn">x</td>
+      <td class="ncnnColumn">x</td>
+      <td class="cntkColumn">?</td>
+      <td class="openVinoColumn">?</td>
+      <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
+      <td class="futureColumn">?</td>
+    </tr>
+    <tr>
+      <td>Integer Unsigned</td>
       <td>uint4</td>
       <td class="detailsColumn"></td>
       <td class="webnnColumn">x</td>
@@ -248,7 +273,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
-      <td class="tensorFlowLiteColumn">x</td>
+      <td class="tensorFlowLiteColumn">kTfLiteUInt4</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -273,7 +298,7 @@ summary::after {
       <td class="tosaColumn">tosa.uint8_t</td>
       <td class="numpyColumn">numpy.uint8 / ubyte</td>
       <td class="tensorFlowColumn">tensorflow.uint8</td>
-      <td class="tensorFlowLiteColumn">tensorflow.uint8</td>
+      <td class="tensorFlowLiteColumn">kTfLiteUInt8</td>
       <td class="pytorchColumn">torch.uint8</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt8</td>
@@ -298,7 +323,7 @@ summary::after {
       <td class="tosaColumn">tosa.uint16_t</td>
       <td class="numpyColumn">numpy.uint16 / ushort</td>
       <td class="tensorFlowColumn">tensorflow.uint16</td>
-      <td class="tensorFlowLiteColumn">tensorflow.uint16</td>
+      <td class="tensorFlowLiteColumn">kTfLiteUInt16</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt16</td>
@@ -323,7 +348,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.uint32 / uintc</td>
       <td class="tensorFlowColumn">tensorflow.uint32</td>
-      <td class="tensorFlowLiteColumn">tensorflow.uint32</td>
+      <td class="tensorFlowLiteColumn">kTfLiteUInt32</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt32</td>
@@ -373,7 +398,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.uint64 / uint</td>
       <td class="tensorFlowColumn">tensorflow.uint64</td>
-      <td class="tensorFlowLiteColumn">tensorflow.uint64</td>
+      <td class="tensorFlowLiteColumn">kTfLiteUInt64</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeUInt64</td>
@@ -382,6 +407,31 @@ summary::after {
       <td class="ncnnColumn">x</td>
       <td class="cntkColumn">x</td>
       <td class="openVinoColumn">ov::element::Type_t::u64</td>
+      <td class="oneDnnColumn">x</td>
+      <td class="annColumn">?</td>
+      <td class="futureColumn">?</td>
+    </tr>
+    <tr>
+      <td>Integer Signed</td>
+      <td>int2</td>
+      <td class="detailsColumn">int=1, sign=1, twos complement</td>
+      <td class="webnnColumn">x</td>
+      <td class="onnxColumn">x</td>
+      <td class="dmlColumn">x</td>
+      <td class="xnnPackColumn">x</td>
+      <td class="stableHloColumn">?</td>
+      <td class="tosaColumn">?</td>
+      <td class="numpyColumn">x</td>
+      <td class="tensorFlowColumn">x</td>
+      <td class="tensorFlowLiteColumn">kTfLiteInt2</td>
+      <td class="pytorchColumn">x</td>
+      <td class="coreMlColumn">x</td>
+      <td class="bnnsColumn">x</td>
+      <td class="mpsColumn">x</td>
+      <td class="mlxColumn">x</td>
+      <td class="ncnnColumn">x</td>
+      <td class="cntkColumn">x</td>
+      <td class="openVinoColumn">?</td>
       <td class="oneDnnColumn">x</td>
       <td class="annColumn">?</td>
       <td class="futureColumn">?</td>
@@ -398,7 +448,7 @@ summary::after {
       <td class="tosaColumn">tosa.int4_t</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">x</td>
-      <td class="tensorFlowLiteColumn">x</td>
+      <td class="tensorFlowLiteColumn">kTfLiteInt4</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -423,7 +473,7 @@ summary::after {
       <td class="tosaColumn">tosa.int8_t</td>
       <td class="numpyColumn">numpy.int8 / byte</td>
       <td class="tensorFlowColumn">tensorflow.int8</td>
-      <td class="tensorFlowLiteColumn">tensorflow.int8</td>
+      <td class="tensorFlowLiteColumn">kTfLiteInt8</td>
       <td class="pytorchColumn">torch.int8</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeInt8</td>
@@ -448,7 +498,7 @@ summary::after {
       <td class="tosaColumn">tosa.int16_t</td>
       <td class="numpyColumn">numpy.int16 / short</td>
       <td class="tensorFlowColumn">tensorflow.int16</td>
-      <td class="tensorFlowLiteColumn">tensorflow.int16</td>
+      <td class="tensorFlowLiteColumn">kTfLiteInt16</td>
       <td class="pytorchColumn">torch.int16 / short</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeInt16</td>
@@ -473,7 +523,7 @@ summary::after {
       <td class="tosaColumn">tosa.int32_t</td>
       <td class="numpyColumn">numpy.int32 / intc</td>
       <td class="tensorFlowColumn">tensorflow.int32</td>
-      <td class="tensorFlowLiteColumn">tensorflow.int32</td>
+      <td class="tensorFlowLiteColumn">kTfLiteInt32</td>
       <td class="pytorchColumn">torch.int32 / int</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.INT32</td>
       <td class="bnnsColumn">BNNSDataTypeInt32</td>
@@ -523,7 +573,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.int64 / int_</td>
       <td class="tensorFlowColumn">tensorflow.int64</td>
-      <td class="tensorFlowLiteColumn">tensorflow.int64</td>
+      <td class="tensorFlowLiteColumn">kTfLiteInt64</td>
       <td class="pytorchColumn">torch.int64 / long</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeInt64</td>
@@ -723,7 +773,7 @@ summary::after {
       <td class="tosaColumn">tosa.fp16_t</td>
       <td class="numpyColumn">numpy.float16 / half</td>
       <td class="tensorFlowColumn">tensorflow.float16 / half</td>
-      <td class="tensorFlowLiteColumn">tensorflow.float16 / half</td>
+      <td class="tensorFlowLiteColumn">kTfLiteFloat16</td>
       <td class="pytorchColumn">torch.float16 / half</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.FLOAT16</td>
       <td class="bnnsColumn">BNNSDataTypeFloat16</td>
@@ -748,7 +798,7 @@ summary::after {
       <td class="tosaColumn">tosa.bf16_t</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">tensorflow.bfloat16</td>
-      <td class="tensorFlowLiteColumn">tensorflow.bfloat16</td>
+      <td class="tensorFlowLiteColumn">kTfLiteBFloat16</td>
       <td class="pytorchColumn">torch.bfloat16</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeBFloat16</td>
@@ -773,7 +823,7 @@ summary::after {
       <td class="tosaColumn">tosa.fp32_t</td>
       <td class="numpyColumn">numpy.float32 / single</td>
       <td class="tensorFlowColumn">tensorflow.float32 / float</td>
-      <td class="tensorFlowLiteColumn">tensorflow.float32 / float</td>
+      <td class="tensorFlowLiteColumn">kTfLiteFloat32</td>
       <td class="pytorchColumn">torch.float32 / float</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.FLOAT32</td>
       <td class="bnnsColumn">BNNSDataTypeFloat32</td>
@@ -798,7 +848,7 @@ summary::after {
       <td class="tosaColumn">tosa.fp64_t</td>
       <td class="numpyColumn">numpy.float64 / double / float_</td>
       <td class="tensorFlowColumn">tensorflow.float64 / double</td>
-      <td class="tensorFlowLiteColumn">tensorflow.float64 / double</td>
+      <td class="tensorFlowLiteColumn">kTfLiteFloat64</td>
       <td class="pytorchColumn">torch.float64 / double</td>
       <td class="coreMlColumn">ArrayFeatureType.ArrayDataType.DOUBLE</td>
       <td class="bnnsColumn">x</td>
@@ -848,7 +898,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.complex64 / singlecomplex</td>
       <td class="tensorFlowColumn">tensorflow.complex64</td>
-      <td class="tensorFlowLiteColumn">tensorflow.complex64</td>
+      <td class="tensorFlowLiteColumn">kTfLiteComplex64</td>
       <td class="pytorchColumn">torch.complex64 / cfloat</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -873,7 +923,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">numpy.complex128 / doublecomplex</td>
       <td class="tensorFlowColumn">tensorflow.complex128</td>
-      <td class="tensorFlowLiteColumn">tensorflow.complex128</td>
+      <td class="tensorFlowLiteColumn">kTfLiteComplex128</td>
       <td class="pytorchColumn">torch.complex128 / cdouble</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
@@ -898,7 +948,7 @@ summary::after {
       <td class="tosaColumn">tosa.bool_t</td>
       <td class="numpyColumn">numpy.bool</td>
       <td class="tensorFlowColumn">tensorflow.bool</td>
-      <td class="tensorFlowLiteColumn">tensorflow.bool</td>
+      <td class="tensorFlowLiteColumn">kTfLiteBool</td>
       <td class="pytorchColumn">torch.bool</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">BNNSDataTypeBoolean (bit size?)</td>
@@ -923,7 +973,7 @@ summary::after {
       <td class="tosaColumn">x</td>
       <td class="numpyColumn">x</td>
       <td class="tensorFlowColumn">tensorflow.string</td>
-      <td class="tensorFlowLiteColumn">tensorflow.string</td>
+      <td class="tensorFlowLiteColumn">kTfLiteString</td>
       <td class="pytorchColumn">x</td>
       <td class="coreMlColumn">x</td>
       <td class="bnnsColumn">x</td>
