@@ -8434,3 +8434,8 @@ CUDNN_DATA_UINT8	8-bit unsigned integer	Quantized inference (unsigned)
 CUDNN_DATA_UINT8x4	Packed 4×UINT8 in 32 bits	Optimized unsigned INT8 convolution
 CUDNN_DATA_BFLOAT16	16-bit Brain Floating Point	Mixed precision training (better range than FP16) 
 -->
+
+<!-- TODO: Add
+          inputSkipBiasSum = X + skip + bias (bias is optional, input index 4)
+          output = layerNormalization(inputSkipBiasSum) with scale (gamma) and bias (beta).
+-->
